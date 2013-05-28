@@ -1,3 +1,1 @@
-" Disable nerdommenter and use tComment instead. It's better!
-call janus#disable_plugin('nerdcommenter')
-
+../vim/.vimrc.before
