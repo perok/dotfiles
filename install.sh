@@ -11,12 +11,3 @@ else
     echo "If that is the case; Run 'rake update' inside it if you wish."
     echo "But if that is not the case.. Check out '~/.dotfiles/', delete it and try again."
 fi
-
-
-#Setup janus
-mkdir ~/.janus
-cd ~/.janus
-git clone https://github.com/tomtom/tcomment_vim
-TagHighlight
-git clone https://github.com/altercation/vim-colors-solarized
-
