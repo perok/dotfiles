@@ -5,7 +5,9 @@ require 'rake'
 task :test do
 end
 
-task :install  => [:submodule_init, :submodules] do 
+task :default => ["install"]
+
+task :install  => [:submodule_init, :submodules] do
 	puts
 	puts_cool("Welcome to the dotfiles install procedure")
 	puts "This is intended for linux based OS. Please, only continue if you're a silly adventurer-" if not RUBY_PLATFORM.downcase.include?("linux")
@@ -62,7 +64,9 @@ task :submodules do
 end
 
 task :symlink_dotfiles do
-	puts "IMPLEMENT IT JACKASS"
+	puts "Symlinking the files in symlinks/ to $HOME"
+	file_operation(Dir.glob('symlinks/*'))
+	puts
 end
 
 def install_binaries
@@ -167,7 +171,6 @@ end
 def want_to_install_anyways? (section)
 	puts "Would you like to install configuration files for: #{section}? [y]es, [n]o"
 	STDIN.gets.chomp == 'y'
-  end
 end
 
 def file_operation(files, method = :symlink)
