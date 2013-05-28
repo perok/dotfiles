@@ -1,0 +1,21 @@
+[submodule "zsh/z"]
+	path = zsh/z
+	url = https://github.com/rupa/z.git
+[submodule "vim/.janus/TagHighlight"]
+	path = vim/.janus/TagHighlight
+	url = https://github.com/Lokaltog/TagHighlight.git
+[submodule "zsh/color/dircolors-solarized"]
+	path = zsh/color/dircolors-solarized
+	url = https://github.com/seebi/dircolors-solarized
+[submodule "tmux/color/tmux-colors-solarized"]
+	path = tmux/color/tmux-colors-solarized
+	url = https://github.com/seebi/tmux-colors-solarized.git
+[submodule "other/sublime2/flatland"]
+	path = other/sublime2/flatland
+	url = https://github.com/thinkpixellab/flatland
+[submodule "vim/.janus/vim-colors-solarized"]
+	path = vim/.janus/vim-colors-solarized
+	url = https://github.com/altercation/vim-colors-solarized
+[submodule "vim/.janus/tcomment_vim"]
+	path = vim/.janus/tcomment_vim
+	url = https://github.com/tomtom/tcomment_vim

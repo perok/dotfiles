@@ -56,11 +56,11 @@
 # }}}
 #  Other {{{
   # Source modules {{{
-    source $DOTFILES/modules/z/z.sh
+    source $DOTFILES/zsh/z/z.sh
   # }}}
   # Use dircolors {{{
     if [ -x /usr/bin/dircolors ]; then
-        test -r $DOTFILES/colorschemes/dircolors-solarized/dircolors.256dark && eval "$(dircolors -b $DOTFILES/colorschemes/dircolors-solarized/dircolors.256dark)" || eval "$(dircolors -b)"
+        test -r $DOTFILES/zsh/color/dircolors-solarized/dircolors.256dark && eval "$(dircolors -b $DOTFILES/zsh/color/dircolors-solarized/dircolors.256dark)" || eval "$(dircolors -b)"
 
     fi
   # }}}

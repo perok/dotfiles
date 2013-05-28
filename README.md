@@ -76,11 +76,3 @@ Swap caps lock with escape. Add to startup:
 * Use powerline
 
 * Submodules e fucked. Redo hele repoet og start på nytt. Success..
-
-
-#Setup janus
-mkdir ~/.janus
-cd ~/.janus
-git clone https://github.com/tomtom/tcomment_vim
-TagHighlight
-git clone https://github.com/altercation/vim-colors-solarized
