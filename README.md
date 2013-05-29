@@ -74,5 +74,3 @@ Swap caps lock with escape. Add to startup:
 
 * bin/ added to path 
 * Use powerline
-
-* Submodules e fucked. Redo hele repoet og start på nytt. Success..
