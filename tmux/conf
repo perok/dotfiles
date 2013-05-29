@@ -134,8 +134,8 @@ set -g set-titles on
 # enable auto renaming
 setw -g automatic-rename on
 
-# start window indexing at one instead of zero
-set -g base-index 1
+set -g base-index 1 #  start window indexing at one instead of zero
+setw -g pane-base-index 1 #  make pane numbering consistent with windows
 
 # scrollback buffer n lines
 set -g history-limit 5000

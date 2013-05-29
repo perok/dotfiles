@@ -129,7 +129,7 @@ def install_oh_my_zsh
 	puts_cool("oh-my-zsh install procedure complete")
 	puts
 	puts "Linking oh-my-zsh with the dotfiles"
-	run %{echo 'source $HOME/.dotfiles/default.zsh' >> ~/.zshrc}
+	run %{echo 'source $HOME/.dotfiles/zsh/zshrc.zsh' >> ~/.zshrc}
 	puts
 end
 

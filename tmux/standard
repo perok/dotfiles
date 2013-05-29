@@ -6,9 +6,9 @@
 # The standard sessions to be initialized
 # Ranger, mosh, 
 # session initialization
-new -s Standard -n Tyrs tyrs
-neww -n RSS newsbeuter
-neww -n vifm/ncmpcpp vifm
+new -s Standard -n Tyrs
+neww -n RSS #Start something cpool
+neww -n vifm/ncmpcpp ranger
 splitw -h -p 50 -t 0 music
-neww bash
+neww zsh
 selectw -t 1

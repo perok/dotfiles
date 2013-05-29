@@ -1,8 +1,5 @@
-# Scripts 
 # Source: https://github.com/kooothor/.dotfiles/blob/master/.zshrc
-#
 
-# extract command
 function extract () {
     if [ -f $1 ] ; then
         case $1 in
