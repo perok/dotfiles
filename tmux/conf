@@ -20,8 +20,8 @@ set-option -g default-shell $SHELL
 unbind C-b
 set -g prefix C-a
 
-# reload config without killing server
-bind R source-file $HOME/.tmux.conf \; display-message "  Config reloaded..".
+# environment
+set -g update-environment "DISPLAY SSH_ASKPASS SSH_AUTH_SOCK SSH_AGENT_PID SSH_CONNECTION WINDOWID XAUTHORITY"
 
 # more intuitive keybindings for splitting
 unbind %
@@ -45,11 +45,11 @@ bind Right select-pane -R
 bind Up select-pane -U
 bind Down select-pane -D
 
+# -- copy mode ---------------------------------------------
 
 unbind [
 bind Escape copy-mode
 
-# -- Pasting --
 unbind p
 bind p paste-buffer  # Paste from top buffer
 bind P choose-buffer # choose which buffer to paste from
@@ -67,15 +67,26 @@ bind C-y run "tmux show-buffer | xsel -b"
 # move x clipboard into tmux paste buffer
 bind C-p run "tmux set-buffer \"$(xsel -o)\"; tmux paste-buffer"
 
-# pane/window movement
+# -- pane/window control  -------------------------------------
 bind-key j command-prompt -p "join pane from:" "join-pane -s '%%'"
 bind-key s command-prompt -p "send pane to:" "join-pane -t '%%'"
 bind-key w command-prompt -p "swap window with:" "swap-window -t ':%%'"
 bind-key m command-prompt -p "move window to:" "move-window -t ':%%'"
 bind-key , command-prompt -p "rename window to:" "rename-window '%%'"
 
-# quick view of processes
-bind '~' split-window "exec htop"
+# ctrl+left/right cycles thru windows
+bind-key -n C-right next
+bind-key -n C-left prev
+
+# pane resizing. Currently not compatible
+# bind -r H resize-pane -L 2
+# bind -r J resize-pane -D 2
+# bind -r K resize-pane -U 2
+# bind -r L resize-pane -R 2
+
+# -- key bindings ---------------------------------------------
+
+bind '~' split-window "exec htop" #  quick view of processes
 
 # open {tmux,mutt,vim} man page
 bind-key T neww -n "Tmux manual" "exec man tmux"
@@ -101,31 +112,6 @@ bind-key K confirm kill-server
 # toggle statusbar
 bind-key b set-option status
 
-# ctrl+left/right cycles thru windows
-bind-key -n C-right next
-bind-key -n C-left prev
-
-# scrollback buffer n lines
-set -g history-limit 5000
-
-# allow terminal scrolling
-set-option -g terminal-overrides 'xterm*:smcup@:rmcup@'
-
-# listen for activity on all windows
-set -g bell-action any
-
-# on-screen time for display-panes in ms
-set -g display-panes-time 2000
-
-# start window indexing at one instead of zero
-set -g base-index 1
-
-# enable wm window titles
-set -g set-titles on
-
-# enable auto renaming
-setw -g automatic-rename on
-
 # border colours
 #set -g pane-border-fg magenta
 #set -g pane-active-border-fg magenta
@@ -138,8 +124,30 @@ set -g set-titles-string "tmux:#I [ #W ]"
 bind S source-file $DOTFILES/tmux/standard
 bind I source-file $DOTFILES/tmux/irssi
 
-# environment
-set -g update-environment "DISPLAY SSH_ASKPASS SSH_AUTH_SOCK SSH_AGENT_PID SSH_CONNECTION WINDOWID XAUTHORITY"
+# reload config without killing server
+bind R source-file $HOME/.tmux.conf \; display-message "  Config reloaded..".
+
+# -- window behaviour ----------------------------------------
+# enable wm window titles
+set -g set-titles on
+
+# enable auto renaming
+setw -g automatic-rename on
+
+# start window indexing at one instead of zero
+set -g base-index 1
+
+# scrollback buffer n lines
+set -g history-limit 5000
+
+# allow terminal scrolling
+set-option -g terminal-overrides 'xterm*:smcup@:rmcup@'
+
+# listen for activity on all windows
+set -g bell-action any
+
+# on-screen time for display-panes in ms
+set -g display-panes-time 2000
 
 #--------------------------------------------------------------
 # statusbar
