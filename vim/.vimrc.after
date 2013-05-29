@@ -217,7 +217,7 @@ if has('gui_running')
   autocmd vimenter * wincmd p
 else
     set background=dark
-    set mouse=a
+    "set mouse=a
 endif
 
 " Yank text to the OS X clipboard

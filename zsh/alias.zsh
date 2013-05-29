@@ -16,6 +16,6 @@
       alias acsh="+ apt-cache show"
   # }}}
   # Tmux {{{
-      alias tmux="tmux -2 -f $DOTFILES/tmux/conf"  # Open tmux with config file
+      alias tmux="tmux -2"
   # }}}
 # }}}
