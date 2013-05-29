@@ -5,87 +5,66 @@
 " Improved by: Garrett Dawson
 " killtheliterate@gmail.com
 "
+" And then more improvements by perok
+"
+""""Default settings""""
+set nocompatible "  Forget compatibility with Vi. Who cares.
 
-"Forget compatibility with Vi. Who cares.
-set nocompatible
-
-"Enable filetypes
+"  Enable filetypes
 filetype on
 filetype plugin on
 filetype indent on
 syntax on
 
-"Write the old file out when switching between files.
-set autowrite
 
-"Display current cursor position in lower right corner.
-set ruler
-
+set autowrite "  Write the old file out when switching between files.
+set ruler "  Display current cursor position in lower right corner.
 set cursorline "  Highlight current line
+let mapleader = "," " Change mapleader from \ to ,
 
-" Change mapleader from \ to ,
-let mapleader = "," 
 
-"Ever notice a slight lag after typing the leader key + command? This lowers
-"the timeout.
-set timeoutlen=500
+set timeoutlen=500 "  Ever notice a slight lag after typing the leader key + command? This lowers the timeout.
+set hidden "  Switch between buffers without saving
 
-"Switch between buffers without saving
-set hidden
-
-"Tab stuff
+"  Tab stuff
 set tabstop=2
 set shiftwidth=2
 set softtabstop=2
 set expandtab
 
-"Show command in bottom right portion of the screen
-set showcmd
+set showcmd "  Show command in bottom right portion of the screen
 
-"Indent stuff
+"  Indent stuff
 set smartindent
 set autoindent
 
 
 set laststatus=2 "  Always show the status line
-
 set linespace=3 "  Prefer a slightly higher line height
 
-"Better line wrapping 
+"  Better line wrapping 
 set wrap
 set textwidth=79
 set formatoptions=qrn1
 
-"Set incremental searching"
-set incsearch
-
-"Highlight searching
-set hlsearch
-
-" case insensitive search
-set ignorecase
+""""Searching""""
+set incsearch "  Set incremental searching"
+set hlsearch "  Highlight searching
+set ignorecase " case insensitive search
 set smartcase
 
-"Hide MacVim toolbar by default, REMOVE
-"set go-=T
 
-"Hard-wrap paragraphs of text
-nnoremap <leader>q gqip
+nnoremap <leader>q gqip "  Hard-wrap paragraphs of text
 
-"Enable code folding
-set foldenable
+set foldenable "  Enable code folding
+set mousehide "  Hide mouse when typing
 
-"Hide mouse when typing
-set mousehide
 
-"Shortcut to fold tags with leader (usually \) + ft
-nnoremap <leader>ft Vatzf
+nnoremap <leader>ft Vatzf "  Shortcut to fold tags with leader (usually \) + ft
 
-"Opens a vertical split and switches over (\v)
-nnoremap <leader>v <C-w>v<C-w>l
+nnoremap <leader>v <C-w>v<C-w>l "  Opens a vertical split and switches over (\v)
 
-"Split windows below the current window.
-set splitbelow
+set splitbelow "  Split windows below the current window.
 
 "Session settings
 set sessionoptions=resize,winpos,winsize,buffers,tabpages,folds,curdir,help
@@ -93,29 +72,33 @@ set sessionoptions=resize,winpos,winsize,buffers,tabpages,folds,curdir,help
 "Set up an HTML5 template for all new .html files
 "autocmd BufNewFile * silent! 0r $VIMHOME/templates/%:e.tpl
 
-"Load the current buffer in Firefox - Mac specific. REMOVE
-"abbrev ff :! open -a firefox.app %:p<cr>
+"""""""""""""""
+""""Mapping""""
+"""""""""""""""
 
-"Map a change directory to the desktop - Mac specific  REMOVE
-"nmap ,d :cd ~/Desktop<cr>:e.<cr>
+"  Map a change directory to the desktop 
+nmap ,d :cd ~/Desktop<cr>:e.<cr>
 
-"Shortcut for editing  vimrc file in a new tab
-nmap ,ev :tabedit $MYVIMRC<cr>
+"  Shortcut for editing  vimrc file in a new tab 
+nmap ,ev :tabedit $MYVIMRC<cr> 
 
-"Change zen coding plugin expansion key to shift + e
-"let g:user_zen_expandabbr_key = '<C-e>' Vetkje ka dette e
+" Faster shortcut for commenting. Requires T-Comment plugin
+map ,c <c-_><c-_> 
 
-"Faster shortcut for commenting. Requires T-Comment plugin
-"map ,c <c-_><c-_>  ikke installert enda
-
-"Saves time; maps the spacebar to colon
+"  Saves time; maps the spacebar to colon
 nmap <space> :
+
+"Map escape key to jj -- much faster
+imap jj <esc>
 
 "Automatically change current directory to that of the file in the buffer
 " autocmd BufEnter * cd %:p:h
 
-"Map code completion to , + tab
-imap ,<tab> <C-x><C-o>
+" Map code completion to , + tab
+imap ,<tab> <C-x><C-o> 
+
+"Change zen coding plugin expansion key to shift + e
+"let g:user_zen_expandabbr_key = '<C-e>' Vetkje ka dette e
 
 " More useful command-line completion
 " set wildmenu
@@ -131,8 +114,7 @@ imap ,<tab> <C-x><C-o>
 " inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
 "   \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
 
-"Map escape key to jj -- much faster
-imap jj <esc>
+
 
 "Delete all buffers (via Derek Wyatt)
 nmap <silent> ,da :exec "1," . bufnr('$') . "bd"<cr>
@@ -207,6 +189,9 @@ se t_Co=16 "16bit
 let g:solarized_termcolors=16
 colorscheme solarized
 
+" GVIM Setting {{{
+    "set go-=T "  Hide GVIM toolbar by default
+" }}}
 if has('gui_running')
   "Using a cool patched font for powerline
   "set guifont=Menlo:h14
@@ -216,7 +201,7 @@ if has('gui_running')
   autocmd VimEnter * NERDTree
   autocmd vimenter * wincmd p
 else
-    set background=dark
+    "set background=dark
     "set mouse=a
 endif
 
