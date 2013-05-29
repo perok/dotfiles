@@ -8,7 +8,7 @@
   HISTFILE=~/.zsh_history
 #}}}
 # Set up variables {{{
-  export TERM=screen-256color #  Set terminal to support 256 colors
+  export TERM=xterm-256color #  Set terminal to support 256 colors
   export EDITOR="vim"
   export PATH=$PATH:/usr/lib/jvm/java-7-oracle/bin:/usr/lib/jvm/java-7-oracle/db/bin:/usr/lib/jvm/java-7-oracle/jre/bin
   export PATH=$PATH:/home/perok/Downloads/devkit/bin #  devkit
