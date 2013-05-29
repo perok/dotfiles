@@ -15,7 +15,4 @@
   #   Extending on oh-my-zsh's debian plugin
       alias acsh="+ apt-cache show"
   # }}}
-  # Tmux {{{
-      alias tmux="tmux -2"
-  # }}}
 # }}}
