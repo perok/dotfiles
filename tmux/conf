@@ -9,7 +9,6 @@
 # -- General ---------------------------------------------------
 # set correct term
 set -g default-terminal "screen-256color"
-
 set -g status-utf8 on                     # expect UTF-8
 setw -g utf8 on
 
@@ -23,11 +22,11 @@ set -g prefix C-a
 # environment
 set -g update-environment "DISPLAY SSH_ASKPASS SSH_AUTH_SOCK SSH_AGENT_PID SSH_CONNECTION WINDOWID XAUTHORITY"
 
-# more intuitive keybindings for splitting
-unbind %
-bind h split-window -v
-unbind '"'
-bind v split-window -h
+# allow Vim to recieve modifier keys: Shift, Control, Alt
+# set -g xterm-keys on
+
+# prevent tmux from catching modifier keys meant for Vim
+# set -s escape-time 1
 
 # -- set vi keys --
 # Need to rewrite from arrows to hjkl
@@ -57,15 +56,19 @@ bind P choose-buffer # choose which buffer to paste from
 bind-key -t vi-copy 'v' begin-selection
 bind-key -t vi-copy 'y' copy-selection
 
-#Mouse integration (sucks)
-#set -g mode-mouse on
-#setw -g mouse-select-window on #untested
-#setw -g mouse-select-pane on #untested
-
 # copy tmux buffer to clipboard
 bind C-y run "tmux show-buffer | xsel -b"
 # move x clipboard into tmux paste buffer
 bind C-p run "tmux set-buffer \"$(xsel -o)\"; tmux paste-buffer"
+
+# -- Mouse interaction -------------------------------------
+
+#Mouse integration (sucks)
+#set -g mode-mouse on
+#set-option -g mouse-select-pane on
+#set-option -g mouse-select-window on
+#setw -g mouse-select-window on #untested
+#setw -g mouse-select-pane on #untested
 
 # -- pane/window control  -------------------------------------
 bind-key j command-prompt -p "join pane from:" "join-pane -s '%%'"
@@ -84,7 +87,13 @@ bind-key -n C-left prev
 # bind -r K resize-pane -U 2
 # bind -r L resize-pane -R 2
 
-# -- key bindings ---------------------------------------------
+# more intuitive keybindings for splitting
+unbind %
+bind h split-window -v
+unbind '"'
+bind v split-window -h
+
+# -- General key bindings ---------------------------------------------
 
 bind '~' split-window "exec htop" #  quick view of processes
 
@@ -140,8 +149,8 @@ setw -g pane-base-index 1 #  make pane numbering consistent with windows
 # scrollback buffer n lines
 set -g history-limit 5000
 
-# allow terminal scrolling
-set-option -g terminal-overrides 'xterm*:smcup@:rmcup@'
+# allow terminal scrolling. Will clear everything from before starting tmux
+set-option -g terminal-overrides 'tmux*:smcup@:rmcup@'
 
 # listen for activity on all windows
 set -g bell-action any

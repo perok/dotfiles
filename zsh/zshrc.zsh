@@ -1,31 +1,25 @@
 #
 # Entry point for ZSH settings. Only sourcing of other files.
-# 
-# ? Make the file move to .zsh/custom/ ?
+#
 
 # Set the default dotfiles location {{{
-	export DOTFILES="$HOME/dotfiles/" #  TODO Add a dot when migrating
+	export DOTFILES="$HOME/Dropbox/Code/dotfiles/" #  TODO Add a dot when migrating
 # }}}
 # Source zsh files {{{
 	# Source https://github.com/aziz/dotfiles/blob/master/bash/bash_it.sh
 	# Load Tab Completion
-	COMPLETION="$DOTFILES/zsh/completion/*.zsh"
-	for config_file in $COMPLETION
-	do
+  setopt EXTENDED_GLOB
+  for config_file in "${DOTFILES}"/zsh/completion/*.zsh(.N); do
 	  source $config_file
 	done
 
 	# Load Plugins
-	PLUGINS="$DOTFILES/zsh/plugins/*.zsh"
-	for config_file in $PLUGINS
-	do
+  for config_file in "${DOTFILES}"/zsh/plugins/*.zsh(.N); do
 	  source $config_file
 	done
 
 	# Load Aliases
-	FUNCTIONS="$DOTFILES/zsh/aliases/*.zsh"
-	for config_file in $FUNCTIONS
-	do
+  for config_file in "${DOTFILES}"/zsh/alias/*.zsh(.N); do
 	  source $config_file
 	done
 

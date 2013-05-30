@@ -11,6 +11,9 @@
       alias a="alias | grep "
       alias c="clear"
   # }}}
+  # Other {{{
+      alias tree='tree -ACF'
+  # }}}
   #  Apt {{{
   #   Extending on oh-my-zsh's debian plugin
       alias acsh="+ apt-cache show"

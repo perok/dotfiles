@@ -74,3 +74,10 @@ Swap caps lock with escape. Add to startup:
 
 * bin/ added to path 
 * Use powerline
+* https://github.com/zsh-users/zsh-history-substring-search
+* https://github.com/dhruvasagar/vim-table-mode
+* https://github.com/zsh-users/zsh-syntax-highlighting
+* https://github.com/zsh-users/zsh-completions
+* Change from oh-my-zsh to prezto:
+  https://github.com/sorin-ionescu/prezto
+* https://github.com/tpope/vim-surround
