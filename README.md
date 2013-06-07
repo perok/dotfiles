@@ -16,6 +16,22 @@ I will try to include cool tips and features here also.
 
 Currently only tested on Linux Mint 14 with xfce4-terminal.
 
+# The core setup
+
+* ZSH
+** Prezto
+** bla blajh
+*** Loading some stuff
+** My stuff
+*** bin/ --> $PATH
+* VIM
+** Janus
+** .janus/
+** My stuff
+* TMUX
+** My stuff
+* Powerline
+
 Installation guide
 -----------------
 
@@ -53,16 +69,20 @@ Solarized is built in on version >= 0.6
 
 ## VIM
 
+* Space --> :
+* jj --> Esc
+
 ### TagHighlight
 
 When much has happened in your codebase, run:
 
-        :UpdateTypesFile 
+* :UpdateTypesFile 
 
 ### Tagbar
 
 http://www.shanestillwell.com/index.php/2012/08/11/improving-my-vim-environment-with-ctags-and-tagbar/
-F8
+
+* Mapped to <F8>
 
 ## General system changes
 
