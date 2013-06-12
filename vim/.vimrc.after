@@ -20,6 +20,7 @@ syntax on
 set autowrite "  Write the old file out when switching between files.
 set ruler "  Display current cursor position in lower right corner.
 set cursorline "  Highlight current line
+set colorcolumn=80 "  Vertical line at 80 chars
 let mapleader = "," " Change mapleader from \ to ,
 
 
@@ -129,10 +130,10 @@ vmap <C-Up> xkP`[V`]
 vmap <C-Down> xp`[V`]
 
 " Source the vimrc file after saving it. This way, you don't have to reload
-" Vim to see the changes.
-if has("autocmd")
-  autocmd bufwritepost .vimrc source $MYVIMRC
-endif
+" Vim to see the changes. Not working so well with janus
+"if has("autocmd")
+"  autocmd bufwritepost .vimrc.after source $MYVIMRC
+"endif
 "
 " easier window navigation
 nmap <C-h> <C-w>h
@@ -185,7 +186,6 @@ let g:acp_behaviorSnipmateLength = 1
 syntax enable
 let g:solarized_termtrans = 1
 set background=dark
-se t_Co=16 "16bit
 let g:solarized_termcolors=16
 colorscheme solarized
 
@@ -205,7 +205,7 @@ else
     "set mouse=a
 endif
 
-" Yank text to the OS X clipboard
+" Yank text to the clipboard
 "set clipboard=unnamed
 noremap <leader>y "+y
 noremap <leader>yy "+yy
@@ -215,3 +215,4 @@ noremap <leader>p :set paste<CR>:put  *<CR>:set nopaste<CR>
 
 " A fancy status bar
 "let g:Powerline_symbols = 'fancy'
+

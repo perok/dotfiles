@@ -184,9 +184,9 @@ def file_operation(files, method = :symlink)
       puts "[Overwriting] #{target}...leaving original at #{target}.backup... [y] or [d]elete"
 
       if STDIN.gets.chomp == 'y'
-      	run %{ mv "$HOME/.#{file}" "$HOME/.#{file}.backup" }
+        run %{ mv "$HOME/.#{file}" "$HOME/.#{file}.backup" }
       else
-      	run %{ rm "$HOME/.#{file}"}
+        run %{ rm "$HOME/.#{file}"}
       end
     end
 

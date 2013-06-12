@@ -1,3 +1,5 @@
 " Disable nerdommenter and use tComment instead. It's better!
 call janus#disable_plugin('nerdcommenter')
 
+" Tell vim that we are running in a good terminal. Some plugins needs this.
+:set t_Co=256
