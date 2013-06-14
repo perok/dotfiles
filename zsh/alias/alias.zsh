@@ -10,6 +10,7 @@
       alias rb="+ reboot"
       alias a="alias | grep "
       alias c="clear"
+      alias vim="vim -X"
   # }}}
   # Other {{{
       alias tree='tree -ACF'

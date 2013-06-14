@@ -17,6 +17,7 @@
   export EDITOR="vim"
   export PATH=$PATH:/usr/lib/jvm/java-7-oracle/bin:/usr/lib/jvm/java-7-oracle/db/bin:/usr/lib/jvm/java-7-oracle/jre/bin
   export PATH=$PATH:/home/perok/Downloads/devkit/bin #  devkit
+  export PATH=$PATH:$DOTFILES/bin #  System binaries
   # Pager {{{
     export PAGER='less'
     export LESS="-FX -R" # If the output is smaller than the screen height is smaller, less will just cat it + support ANSI colors

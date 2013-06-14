@@ -57,6 +57,7 @@ Installation guide
 
 # Other
 
+Bin/ is added to your path.
 ## Ranger
 
 There is a conflict bug in Linux Mint. Another package also named highlight is making ranger act silly. 
@@ -92,7 +93,6 @@ Swap caps lock with escape. Add to startup:
 
 # TODO
 
-* bin/ added to path 
 * Use powerline
 * https://github.com/zsh-users/zsh-history-substring-search
 * https://github.com/dhruvasagar/vim-table-mode

@@ -16,13 +16,11 @@ filetype plugin on
 filetype indent on
 syntax on
 
-
 set autowrite "  Write the old file out when switching between files.
 set ruler "  Display current cursor position in lower right corner.
 set cursorline "  Highlight current line
 set colorcolumn=80 "  Vertical line at 80 chars
 let mapleader = "," " Change mapleader from \ to ,
-
 
 set timeoutlen=500 "  Ever notice a slight lag after typing the leader key + command? This lowers the timeout.
 set hidden "  Switch between buffers without saving
@@ -39,7 +37,6 @@ set showcmd "  Show command in bottom right portion of the screen
 set smartindent
 set autoindent
 
-
 set laststatus=2 "  Always show the status line
 set linespace=3 "  Prefer a slightly higher line height
 
@@ -54,12 +51,10 @@ set hlsearch "  Highlight searching
 set ignorecase " case insensitive search
 set smartcase
 
-
 nnoremap <leader>q gqip "  Hard-wrap paragraphs of text
 
 set foldenable "  Enable code folding
 set mousehide "  Hide mouse when typing
-
 
 nnoremap <leader>ft Vatzf "  Shortcut to fold tags with leader (usually \) + ft
 
@@ -80,11 +75,11 @@ set sessionoptions=resize,winpos,winsize,buffers,tabpages,folds,curdir,help
 "  Map a change directory to the desktop 
 nmap ,d :cd ~/Desktop<cr>:e.<cr>
 
-"  Shortcut for editing  vimrc file in a new tab 
-nmap ,ev :tabedit $MYVIMRC<cr> 
+"  Shortcut for editing  vimrc file in a new tab  No good with janus
+"nmap ,ev :tabedit $MYVIMRC<cr>
 
 " Faster shortcut for commenting. Requires T-Comment plugin
-map ,c <c-_><c-_> 
+map ,c <c-_><c-_>
 
 "  Saves time; maps the spacebar to colon
 nmap <space> :
@@ -96,7 +91,15 @@ imap jj <esc>
 " autocmd BufEnter * cd %:p:h
 
 " Map code completion to , + tab
-imap ,<tab> <C-x><C-o> 
+imap ,<tab> <C-x><C-o>
+
+" Yank text to the clipboard
+"set clipboard=unnamed
+noremap <leader>y "+y
+noremap <leader>yy "+yy
+
+" Preserve indentation while pasting text from the OS X clipboard
+noremap <leader>p :set paste<CR>:put  *<CR>:set nopaste<CR>
 
 "Change zen coding plugin expansion key to shift + e
 "let g:user_zen_expandabbr_key = '<C-e>' Vetkje ka dette e
@@ -108,14 +111,12 @@ imap ,<tab> <C-x><C-o>
 " set wildmode=list:longest
 
 "http://vim.wikia.com/wiki/Make_Vim_completion_popup_menu_work_just_like_in_an_IDE
-" set completeopt=longest,menuone
-" inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-" inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
-"   \ '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
-" inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
-"   \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
-
-
+"set completeopt=longest,menuone
+"inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+"inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
+"  \ '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
+"inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
+"  \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
 
 "Delete all buffers (via Derek Wyatt)
 nmap <silent> ,da :exec "1," . bufnr('$') . "bd"<cr>
@@ -179,39 +180,28 @@ let g:acp_behaviorSnipmateLength = 1
 " Snipmate
 :filetype plugin on
 
-" Scrollbar junk  WUTTFUCK
-"set guioptions=aAce
-
 " Colors and fonts
 syntax enable
 let g:solarized_termtrans = 1
 set background=dark
-let g:solarized_termcolors=16
+"let g:solarized_termcolors=256
 colorscheme solarized
 
 " GVIM Setting {{{
-    "set go-=T "  Hide GVIM toolbar by default
-" }}}
+"set guioptions=aAce
 if has('gui_running')
+  "set go-=T "  Hide GVIM toolbar by default
   "Using a cool patched font for powerline
   "set guifont=Menlo:h14
   "set background transparency and solarized style 
-  set background=dark
+  "set background=dark
   "autopen NERDTree and focus cursor in new document
   autocmd VimEnter * NERDTree
   autocmd vimenter * wincmd p
+" }}}
 else
-    "set background=dark
     "set mouse=a
 endif
-
-" Yank text to the clipboard
-"set clipboard=unnamed
-noremap <leader>y "+y
-noremap <leader>yy "+yy
-
-" Preserve indentation while pasting text from the OS X clipboard
-noremap <leader>p :set paste<CR>:put  *<CR>:set nopaste<CR>
 
 " A fancy status bar
 "let g:Powerline_symbols = 'fancy'
