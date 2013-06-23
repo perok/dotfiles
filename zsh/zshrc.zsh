@@ -3,7 +3,7 @@
 #
 
 # Set the default dotfiles location {{{
-	export DOTFILES="$HOME/Dropbox/Code/.dotfiles/"
+	export DOTFILES="$HOME/.dotfiles/"
 # }}}
 # Source zsh files {{{
 	# Source https://github.com/aziz/dotfiles/blob/master/bash/bash_it.sh
