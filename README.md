@@ -1,26 +1,15 @@
 # Perok's dotfiles
 
-
-        *Author:* Per Øyvind Kanestrøm
-        *Source:*
-        *Version:* 0.1.3.3.7
-        *Updated:* 09-04-2013
-
-# About
-
 My personal setup for tmux, zsh, ranger, and some other stuff. It's based on Janus and Oh-my-zsh with many tweaks and additions.
 
-This repo is the result of procrastination and many dotfiles lying around on the web. I have tried to include the source where it is deserved :)
-
-I will try to include cool tips and features here also.
+This repo is the result of procrastination and many dotfiles lying around on the web.
 
 Currently only tested on Linux Mint 14 with xfce4-terminal.
 
-# The core setup
+# The setup
 
 * ZSH
 ** Prezto
-** bla blajh
 *** Loading some stuff
 ** My stuff
 *** bin/ --> $PATH

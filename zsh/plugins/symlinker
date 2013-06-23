@@ -1,0 +1,3 @@
+#Make this into a script..
+#sudo ln -s /usr/lib32/* /usr/lib/mozart/platform/unknown-unknown/lib && ls -l /usr/lib/mozart/platform/unknown-unknown/lib 
+
