@@ -6,21 +6,6 @@ This repo is the result of procrastination and many dotfiles lying around on the
 
 Currently only tested on Linux Mint 14 with xfce4-terminal.
 
-# The setup
-
-* ZSH
-** Prezto
-*** Loading some stuff
-** My stuff
-*** bin/ --> $PATH
-* VIM
-** Janus
-** .janus/
-** My stuff
-* TMUX
-** My stuff
-* Powerline
-
 Installation guide
 -----------------
 
@@ -72,7 +57,7 @@ When much has happened in your codebase, run:
 
 http://www.shanestillwell.com/index.php/2012/08/11/improving-my-vim-environment-with-ctags-and-tagbar/
 
-* Mapped to <F8>
+* Mapped to \<F8\>
 
 ## General system changes
 
