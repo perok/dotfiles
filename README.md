@@ -1,25 +1,8 @@
 # Perok's dotfiles
 
-My personal setup for tmux, zsh, ranger, and some other stuff. It's based on Janus and Oh-my-zsh with many tweaks and additions.
-
-This repo is the result of procrastination and many dotfiles lying around on the web.
+My personal setup for tmux, zsh, ranger, and some other stuff. It's based on spf13-vim and Oh-my-zsh with many tweaks and additions.
 
 Currently only tested on Linux Mint 14 with xfce4-terminal.
-
-# The setup
-
-* ZSH
-** Prezto
-*** Loading some stuff
-** My stuff
-*** bin/ --> $PATH
-* VIM
-** Janus
-** .janus/
-** My stuff
-* TMUX
-** My stuff
-* Powerline
 
 Installation guide
 -----------------
@@ -47,6 +30,7 @@ Installation guide
 # Other
 
 Bin/ is added to your path.
+
 ## Ranger
 
 There is a conflict bug in Linux Mint. Another package also named highlight is making ranger act silly. 
@@ -82,11 +66,9 @@ Swap caps lock with escape. Add to startup:
 
 # TODO
 
-* Use powerline
 * https://github.com/zsh-users/zsh-history-substring-search
 * https://github.com/dhruvasagar/vim-table-mode
 * https://github.com/zsh-users/zsh-syntax-highlighting
 * https://github.com/zsh-users/zsh-completions
 * Change from oh-my-zsh to prezto:
   https://github.com/sorin-ionescu/prezto
-* https://github.com/tpope/vim-surround

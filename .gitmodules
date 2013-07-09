@@ -13,9 +13,6 @@
 [submodule "other/sublime2/flatland"]
 	path = other/sublime2/flatland
 	url = https://github.com/thinkpixellab/flatland
-[submodule "vim/.janus/vim-colors-solarized"]
-	path = vim/.janus/vim-colors-solarized
-	url = https://github.com/altercation/vim-colors-solarized
 [submodule "vim/.janus/tcomment_vim"]
 	path = vim/.janus/tcomment_vim
 	url = https://github.com/tomtom/tcomment_vim

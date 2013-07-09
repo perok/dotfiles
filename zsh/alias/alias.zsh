@@ -14,6 +14,7 @@
   # }}}
   # Other {{{
       alias tree='tree -ACF'
+      alias diff='colordiff'
   # }}}
   #  Apt {{{
   #   Extending on oh-my-zsh's debian plugin

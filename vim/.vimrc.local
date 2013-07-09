@@ -1,82 +1,43 @@
-" .vimrc File
-" Procured from: Jeffrey Way
-" jeffrey@jeffrey-way.com
-"
-" Improved by: Garrett Dawson
-" killtheliterate@gmail.com
-"
-" And then more improvements by perok
-"
-""""Default settings""""
-set nocompatible "  Forget compatibility with Vi. Who cares.
-
-"  Enable filetypes
-filetype on
-filetype plugin on
-filetype indent on
-syntax on
-
-set autowrite "  Write the old file out when switching between files.
-set ruler "  Display current cursor position in lower right corner.
-set cursorline "  Highlight current line
-set colorcolumn=80 "  Vertical line at 80 chars
-let mapleader = "," " Change mapleader from \ to ,
-
-set timeoutlen=500 "  Ever notice a slight lag after typing the leader key + command? This lowers the timeout.
-set hidden "  Switch between buffers without saving
-
+" .vimrc.local File
+" Written by perok
+" Default settings {
+    set autowrite "  Write the old file out when switching between files.
+    set colorcolumn=80 "  Vertical line at 80 chars
+    let mapleader = "," " Change mapleader from \ to ,
+    set timeoutlen=500 "  Ever notice a slight lag after typing the leader key + command? This lowers the timeout.
+" }
 "  Tab stuff
-set tabstop=2
-set shiftwidth=2
-set softtabstop=2
-set expandtab
+"j"set tabstop=2
+""set shiftwidth=2
+""set softtabstop=2
+""set expandtab
 
-set showcmd "  Show command in bottom right portion of the screen
 
 "  Indent stuff
-set smartindent
-set autoindent
+""set smartindent
 
-set laststatus=2 "  Always show the status line
-set linespace=3 "  Prefer a slightly higher line height
-
-"  Better line wrapping 
-set wrap
-set textwidth=79
-set formatoptions=qrn1
-
-""""Searching""""
-set incsearch "  Set incremental searching"
-set hlsearch "  Highlight searching
-set ignorecase " case insensitive search
-set smartcase
+""set laststatus=2 "  Always show the status line
+""set linespace=3 "  Prefer a slightly higher line height
 
 nnoremap <leader>q gqip "  Hard-wrap paragraphs of text
-
-set foldenable "  Enable code folding
-set mousehide "  Hide mouse when typing
-
 nnoremap <leader>ft Vatzf "  Shortcut to fold tags with leader (usually \) + ft
-
 nnoremap <leader>v <C-w>v<C-w>l "  Opens a vertical split and switches over (\v)
 
-set splitbelow "  Split windows below the current window.
+"j"set splitbelow "  Split windows below the current window.
 
 "Session settings
-set sessionoptions=resize,winpos,winsize,buffers,tabpages,folds,curdir,help
+"j"set sessionoptions=resize,winpos,winsize,buffers,tabpages,folds,curdir,help
 
 "Set up an HTML5 template for all new .html files
 "autocmd BufNewFile * silent! 0r $VIMHOME/templates/%:e.tpl
 
-"""""""""""""""
-""""Mapping""""
-"""""""""""""""
+" Mapping {
 
 "  Map a change directory to the desktop 
 nmap ,d :cd ~/Desktop<cr>:e.<cr>
 
 "  Shortcut for editing  vimrc file in a new tab  No good with janus
-"nmap ,ev :tabedit $MYVIMRC<cr>
+""nmap ,ev :tabedit $MYVIMRC<cr>
 
 " Faster shortcut for commenting. Requires T-Comment plugin
 map ,c <c-_><c-_>
@@ -103,14 +64,9 @@ noremap <leader>p :set paste<CR>:put  *<CR>:set nopaste<CR>
 
 "Change zen coding plugin expansion key to shift + e
 "let g:user_zen_expandabbr_key = '<C-e>' Vetkje ka dette e
-
-" More useful command-line completion
-" set wildmenu
-
 "Auto-completion menu
 " set wildmode=list:longest
 
-"http://vim.wikia.com/wiki/Make_Vim_completion_popup_menu_work_just_like_in_an_IDE
 "set completeopt=longest,menuone
 "inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 "inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
@@ -130,11 +86,6 @@ nmap <C-Down> ddp
 vmap <C-Up> xkP`[V`]
 vmap <C-Down> xp`[V`]
 
-" Source the vimrc file after saving it. This way, you don't have to reload
-" Vim to see the changes. Not working so well with janus
-"if has("autocmd")
-"  autocmd bufwritepost .vimrc.after source $MYVIMRC
-"endif
 "
 " easier window navigation
 nmap <C-h> <C-w>h
@@ -142,25 +93,25 @@ nmap <C-j> <C-w>j
 nmap <C-k> <C-w>k
 nmap <C-l> <C-w>l
 
-"------------------------"
-"TagHighlight
-"------------------------"
-:call pathogen#helptags()
+" }
 
-"------------------------"
-"Tagbar
-"------------------------"
-nmap <F8> :TagbarToggle<CR>
+" Plugins {
+    " Vim-airstrip {
+        let g:airline_powerline_fonts=1
+    " }
+    " TagHighlight {
+        ":call pathogen#helptags()
+    " }
+    " Tagbar {
+        nmap <F8> :TagbarToggle<CR>
+    " }
+    " Nerdtree {
+        nmap ,nt :NERDTreeToggle <enter>
 
-"------------------------"
-"NERDTREE PLUGIN SETTINGS
-"------------------------"
-"Shortcut for NERDTreeToggle
-nmap ,nt :NERDTreeToggle <enter>
-
-"Show hidden files in NerdTree
-let NERDTreeShowHidden=1
-
+        "Show hidden files in NerdTree
+        let NERDTreeShowHidden=1
+    " }
+" }
 
 "Helpeful abbreviations
 iab lorem Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -171,7 +122,7 @@ iab teh the
 iab Teh The
 
 "--------------------------"
-" PERSONAL SETTINGS 
+" PERSONAL SETTINGS
 " -------------------------"
 
 "For autocompletion of Snipmate plugin
@@ -181,28 +132,31 @@ let g:acp_behaviorSnipmateLength = 1
 :filetype plugin on
 
 " Colors and fonts
-syntax enable
-let g:solarized_termtrans = 1
+"j"syntax enable
+"j"let g:solarized_termtrans = 1
 set background=dark
-"let g:solarized_termcolors=256
+""let g:solarized_termcolors=256
 colorscheme solarized
 
 " GVIM Setting {{{
 "set guioptions=aAce
 if has('gui_running')
-  "set go-=T "  Hide GVIM toolbar by default
-  "Using a cool patched font for powerline
-  "set guifont=Menlo:h14
-  "set background transparency and solarized style 
-  "set background=dark
-  "autopen NERDTree and focus cursor in new document
-  autocmd VimEnter * NERDTree
-  autocmd vimenter * wincmd p
-" }}}
+    "Using a cool patched font for powerline
+    "set guifont=Menlo:h14
+    "set background transparency and solarized style
+    "autopen NERDTree and focus cursor in new document
+    autocmd VimEnter * NERDTree
+    autocmd vimenter * wincmd p
 else
     "set mouse=a
 endif
 
 " A fancy status bar
 "let g:Powerline_symbols = 'fancy'
+
+" Source the vimrc file after saving it. This way, you don't have to reload
+" Vim to see the changes.
+if has("autocmd")
+  autocmd bufwritepost .vimrc.local source $MYVIMRC
+endif
 

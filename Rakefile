@@ -5,39 +5,39 @@ require 'rake'
 task :default => ["install"]
 
 task :install  => [:submodule_init, :submodules] do
-	puts
-	puts_cool("Welcome to the dotfiles install procedure")
-	puts "This is intended for linux based OS. Please, only continue if you're a silly adventurer-" if not RUBY_PLATFORM.downcase.include?("linux")
-	puts
+    puts
+    puts_cool("Welcome to the dotfiles install procedure")
+    puts "This is intended for linux based OS. Please, only continue if you're a silly adventurer-" if not RUBY_PLATFORM.downcase.include?("linux")
+    puts
 
-	install_binaries if want_to_install?('Install required and recommended binaries')
-	install_vim_janus if want_to_install?('VIM Janus suite')
-	install_oh_my_zsh if want_to_install?('ZSH oh-my-zsh suite')
-	install_symlinks if want_to_install?('Symlink the dotfiles?')
-	setup_ranger if want_to_install?('Set up ranger')
-	
-	puts
-	success("installed")
+    install_binaries if want_to_install?('Install required and recommended binaries')
+    install_vim_spf13 if want_to_install?('VIM Janus suite')
+    install_oh_my_zsh if want_to_install?('ZSH oh-my-zsh suite')
+    install_symlinks if want_to_install?('Symlink the dotfiles?')
+    setup_ranger if want_to_install?('Set up ranger')
+
+    puts
+    success("installed")
 end
 
 task :update do
-	puts_cool("Updating dotfiles")
-	run %{git pull origin master}
-	puts 
-	puts_cool("Updating submodules")
-	Rake::Task[submodule_init].execute
-	puts
-	puts_cool("Updating Janus")
-	run %{cd ~/.vim && rake}
-	puts
-	puts_cool("Symlinking dotfiles again to be sure")
-	Rake:Task[symlink_dotfiles].execute
+    puts_cool("Updating dotfiles")
+    run %{git pull origin master}
+    puts
+    puts_cool("Updating submodules")
+    Rake::Task[submodule_init].execute
+    puts
+    puts_cool("Updating Janus")
+    run %{cd ~/.vim && rake}
+    puts
+    puts_cool("Symlinking dotfiles again to be sure")
+    Rake:Task[symlink_dotfiles].execute
 
-	success("updated")
+    success("updated")
 end
 
 task :uninstall do
-	puts "Not implemented"
+    puts "Not implemented"
 end
 
 
@@ -61,83 +61,75 @@ task :submodules do
 end
 
 task :symlink_dotfiles do
-	puts "Symlinking the files in symlinks/ to $HOME"
-	file_operation(Dir.glob('symlinks/*'))
-	puts
+    puts "Symlinking the files in symlinks/ to $HOME"
+    file_operation(Dir.glob('symlinks/*'))
+    puts
 end
 
 def install_binaries
-	puts_cool("Installing required binaries. Enjoy..")
-	run %{
-		sudo apt-get remove vim-tiny 
-		sudo apt-get install zsh ack ctags ruby vim tmux
-		}
-	# Add other installs aswell. Oracle java, etc..
-	install_pygmentizer
+    puts_cool("Installing required binaries. Enjoy..")
+    run %{
+        sudo apt-get remove vim-tiny 
+        sudo apt-get install zsh ack ctags ruby vim tmux
+        }
+    # Add other installs aswell. Oracle java, etc..
+    install_pygmentizer
 
-	puts
+    puts
 
-	if want_to_install_anyways?('Ranger - filebrowser')
-		run %{sudo apt-get install ranger highlight caca-utils w3m poppler-utils mediainfo atool}
-		setup_ranger
-	end
+    if want_to_install_anyways?('Ranger - filebrowser')
+        run %{sudo apt-get install ranger highlight caca-utils w3m poppler-utils mediainfo atool}
+        setup_ranger
+    end
 
-	if want_to_install_anyways?('Oracle Java from webupd8 PPA')
-		puts "implement it!"
-	end
-
-	if want_to_install_anyways?('xfce4.12 webupd8 PPA')
-		puts "implement it!"
-	end
-
-	
 end
 
 def install_pygmentizer
-	#Setup pygmentizer for lessfilter.sh
-	puts_cool("Installing pygmentizer")
-	run %{ sudo apt-get install python-setuptools }
-	run %{ sudo easy_install pygments }
-	puts
+    #Setup pygmentizer for lessfilter.sh
+    puts_cool("Installing pygmentizer")
+    run %{ sudo apt-get install python-setuptools }
+    run %{ sudo easy_install pygments }
+    puts
 end
 
-def install_vim_janus
-	puts 
-	puts_cool("Now entering Janus install procedure")
-	puts
 
-	run %{curl -Lo- https://bit.ly/janus-bootstrap | bash}
+def install_vim_spf13
+    puts
+    puts_cool("Now entering Janus install procedure")
+    puts
 
-	puts 
-	puts_cool("Janus install procedure complete")
-	puts
+    run %{curl http://j.mp/spf13-vim3 -L -o - | sh}
+
+    puts
+    puts_cool("Janus install procedure complete")
+    puts
 end
 
 def install_oh_my_zsh
-	puts 
-	puts_cool("Now entering oh-my-zsh install procedure")
-	puts
+    puts
+    puts_cool("Now entering oh-my-zsh install procedure")
+    puts
 
-	run %{curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sh}
+    run %{curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sh}
 
-	if not ENV["SHELL"].include? 'zsh' then
-		puts "Setting zsh as your default shell"
-		run %{ chsh -s /bin/zsh }
-	end
+    if not ENV["SHELL"].include? 'zsh' then
+        puts "Setting zsh as your default shell"
+        run %{ chsh -s /bin/zsh }
+    end
 
-	puts 
-	puts_cool("oh-my-zsh install procedure complete")
-	puts
-	puts "Linking oh-my-zsh with the dotfiles"
-	run %{echo 'source $HOME/.dotfiles/zsh/zshrc.zsh' >> ~/.zshrc}
-	puts
+    puts
+    puts_cool("oh-my-zsh install procedure complete")
+    puts
+    puts "Linking oh-my-zsh with the dotfiles"
+    run %{echo 'source $HOME/.dotfiles/zsh/zshrc.zsh' >> ~/.zshrc}
+    puts
 end
 
 def install_symlinks
-	puts 
-	puts_cool("Symlinking all the dotfiles to your home directory.")
-	Rake:Task[symlink_dotfiles].execute
-	puts
+    puts 
+    puts_cool("Symlinking all the dotfiles to your home directory.")
+    Rake:Task[symlink_dotfiles].execute
+    puts
 end
 
 def setup_ranger
@@ -166,8 +158,8 @@ def want_to_install? (section)
 end
 
 def want_to_install_anyways? (section)
-	puts "Would you like to install configuration files for: #{section}? [y]es, [n]o"
-	STDIN.gets.chomp == 'y'
+    puts "Would you like to install configuration files for: #{section}? [y]es, [n]o"
+    STDIN.gets.chomp == 'y'
 end
 
 def file_operation(files, method = :symlink)

@@ -1,0 +1,5 @@
+" ST2 multiple select awesomeness.
+Bundle 'terryma/vim-multiple-cursors'
+" Bundle https://github.com/sjl/splice.vim/ "Threeway merge
+" CSS inline color
+Bundle 'ap/vim-css-color' 
