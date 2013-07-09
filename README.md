@@ -56,7 +56,7 @@ When much has happened in your codebase, run:
 
 http://www.shanestillwell.com/index.php/2012/08/11/improving-my-vim-environment-with-ctags-and-tagbar/
 
-* Mapped to <F8>
+* Mapped to \<F8\>
 
 ## General system changes
 
