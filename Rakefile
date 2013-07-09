@@ -11,8 +11,8 @@ task :install  => [:submodule_init, :submodules] do
     puts
 
     install_binaries if want_to_install?('Install required and recommended binaries')
-    install_vim_spf13 if want_to_install?('VIM Janus suite')
-    install_oh_my_zsh if want_to_install?('ZSH oh-my-zsh suite')
+    install_vim_spf13 if want_to_inspreztoll?('spf13: VIM config')
+    install_prezto if want_to_install?('Prezto: ZSH config')
     install_symlinks if want_to_install?('Symlink the dotfiles?')
     setup_ranger if want_to_install?('Set up ranger')
 
@@ -109,12 +109,20 @@ def install_vim_spf13
     puts
 end
 
-def install_oh_my_zsh
+
+def install_prezto
     puts
-    puts_cool("Now entering oh-my-zsh install procedure")
+    puts_cool("Starting Prezto install procedure")
     puts
 
-    run %{curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sh}
+    run %{git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezth"}
+
+    run %{
+        setopt EXTENDED_GLOB
+        for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
+            ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
+        done
+    }
 
     if not ENV["SHELL"].include? 'zsh' then
         puts "Setting zsh as your default shell"
@@ -122,10 +130,11 @@ def install_oh_my_zsh
     end
 
     puts
-    puts_cool("oh-my-zsh install procedure complete")
+    puts_cool("Prezto is installed")
     puts
-    puts "Linking oh-my-zsh with the dotfiles"
-    run %{echo 'source $HOME/.dotfiles/zsh/zshrc.zsh' >> ~/.zshrc}
+    puts "You should clean up .zprestorc"
+    puts "Linking Prezto with the dotfiles"
+    run %{echo 'source $HOME/.dotfiles/zsh/zshrc.zsh' >> ~/.preztorc}
     puts
 end
 
@@ -137,13 +146,13 @@ def install_symlinks
 end
 
 def setup_ranger
-	puts
-	puts_cool("Setting up ranger config files")
-	puts "in  ~/.config/ranger"
-	run %{ranger --copy-config=all}
-	puts
-	puts "Be aware of a bug in Linux Mint. See the readme if you can't preview files."
-	puts
+    puts
+    puts_cool("Setting up ranger config files")
+    puts "in  ~/.config/ranger"
+    run %{ranger --copy-config=all}
+    puts
+    puts "Be aware of a bug in Linux Mint. See the readme if you can't preview files."
+    puts
 end
 
 private
@@ -207,12 +216,12 @@ def file_operation(files, method = :symlink)
 end
 
 def puts_cool(msg)
-	puts "======================================================"
+    puts "======================================================"
     puts msg
     puts "======================================================"
 end
 
 def success(msg)
-	puts "GZ"
-	puts "I iz #{msg}. Restart your terminal" 
+    puts "GZ"
+    puts "I iz #{msg}. Restart your terminal"
 end
