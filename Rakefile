@@ -27,8 +27,12 @@ task :update do
     puts_cool("Updating submodules")
     Rake::Task[submodule_init].execute
     puts
-    puts_cool("Updating Janus")
-    run %{cd ~/.vim && rake}
+    puts_cool("Updating spf13")
+    run %{
+        cd ~/.spf13-vim-3
+        git pull
+        vim +BundleInstall! +BundleClean +q
+    }
     puts
     puts_cool("Symlinking dotfiles again to be sure")
     Rake:Task[symlink_dotfiles].execute
