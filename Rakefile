@@ -4,17 +4,17 @@ require 'rake'
 
 task :default => ["install"]
 
-task :install  => [:submodule_init, :submodules] do
+task :install  => [:submodule_update, :submodules] do
     puts
+
     puts_cool("Welcome to the dotfiles install procedure")
     puts "This is intended for linux based OS. Please, only continue if you're a silly adventurer-" if not RUBY_PLATFORM.downcase.include?("linux")
     puts
 
-    install_binaries if want_to_install?('Install required and recommended binaries')
-    install_vim_spf13 if want_to_inspreztoll?('spf13: VIM config')
-    install_prezto if want_to_install?('Prezto: ZSH config')
-    install_symlinks if want_to_install?('Symlink the dotfiles?')
-    setup_ranger if want_to_install?('Set up ranger')
+    Rake::Task[install_binaries].execute if want_to_install?('Install required and recommended binaries')
+    Rake::Task[install_spf13] if want_to_inspreztoll?('spf13: VIM config')
+    Rake::Task[install_prezto].execute if want_to_install?('Prezto: ZSH config')
+    Rake::Task[symlink].execute if want_to_install?('Symlink the dotfiles?')
 
     puts
     success("installed")
@@ -25,18 +25,19 @@ task :update do
     run %{git pull origin master}
     puts
     puts_cool("Updating submodules")
-    Rake::Task[submodule_init].execute
+    Rake::Task[submodule_update].execute
     puts
     puts_cool("Updating spf13")
     run %{
-        cd ~/.spf13-vim-3
-        git pull
+        cd ~/.spf13-vim-3 && git pull
         vim +BundleInstall! +BundleClean +q
     }
     puts
+    puts_cool("Updating Prezto")
+    run %{cd ~/.prezto && git pull}
+    puts
     puts_cool("Symlinking dotfiles again to be sure")
-    Rake:Task[symlink_dotfiles].execute
-
+    Rake:Task[symlink].execute
     success("updated")
 end
 
@@ -44,8 +45,7 @@ task :uninstall do
     puts "Not implemented"
 end
 
-
-task :submodule_init do
+task :submodule_update do
   unless ENV["SKIP_SUBMODULES"]
     run %{ git submodule update --init --recursive }
   end
@@ -64,58 +64,51 @@ task :submodules do
   end
 end
 
-task :symlink_dotfiles do
+task :symlink do
     puts "Symlinking the files in symlinks/ to $HOME"
     file_operation(Dir.glob('symlinks/*'))
     puts
 end
 
-def install_binaries
+task :install_binaries do
     puts_cool("Installing required binaries. Enjoy..")
     run %{
-        sudo apt-get remove vim-tiny 
+        sudo apt-get remove vim-tiny
         sudo apt-get install zsh ack ctags ruby vim tmux
-        }
-    # Add other installs aswell. Oracle java, etc..
-    install_pygmentizer
+    }
+
+    if want_to_install_anyways?('Pygmentizer')
+        run %{ sudo apt-get install python-setuptools }
+        run %{ sudo easy_install pygments }
+    end
 
     puts
 
     if want_to_install_anyways?('Ranger - filebrowser')
         run %{sudo apt-get install ranger highlight caca-utils w3m poppler-utils mediainfo atool}
-        setup_ranger
+        puts "Ranger config files placed to ~/.config/ranger"
+        run %{ranger --copy-config=all}
+        puts "Be aware of a bug in Linux Mint. See the readme if you can't preview files."
+        puts
     end
-
 end
 
-def install_pygmentizer
-    #Setup pygmentizer for lessfilter.sh
-    puts_cool("Installing pygmentizer")
-    run %{ sudo apt-get install python-setuptools }
-    run %{ sudo easy_install pygments }
+task :install_spf13 do
     puts
-end
-
-
-def install_vim_spf13
+    puts_cool("Installing spf13.")
     puts
-    puts_cool("Now entering Janus install procedure")
-    puts
-
     run %{curl http://j.mp/spf13-vim3 -L -o - | sh}
-
     puts
-    puts_cool("Janus install procedure complete")
+    puts_cool("spf13 installed.")
     puts
 end
 
-
-def install_prezto
+task :install_prezto do
     puts
     puts_cool("Starting Prezto install procedure")
     puts
 
-    run %{git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezth"}
+    run %{git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"}
 
     run %{
         setopt EXTENDED_GLOB
@@ -135,23 +128,6 @@ def install_prezto
     puts "You should clean up .zprestorc"
     puts "Linking Prezto with the dotfiles"
     run %{echo 'source $HOME/.dotfiles/zsh/zshrc.zsh' >> ~/.preztorc}
-    puts
-end
-
-def install_symlinks
-    puts 
-    puts_cool("Symlinking all the dotfiles to your home directory.")
-    Rake:Task[symlink_dotfiles].execute
-    puts
-end
-
-def setup_ranger
-    puts
-    puts_cool("Setting up ranger config files")
-    puts "in  ~/.config/ranger"
-    run %{ranger --copy-config=all}
-    puts
-    puts "Be aware of a bug in Linux Mint. See the readme if you can't preview files."
     puts
 end
 

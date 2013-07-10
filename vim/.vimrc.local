@@ -5,6 +5,7 @@
     set colorcolumn=80 "  Vertical line at 80 chars
     let mapleader = "," " Change mapleader from \ to ,
     set timeoutlen=500 "  Ever notice a slight lag after typing the leader key + command? This lowers the timeout.
+    ""set nospell " Disable spellchecking?
 " }
 "  Tab stuff
 "j"set tabstop=2
