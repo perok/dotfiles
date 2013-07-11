@@ -7,36 +7,36 @@ task :default => ["install"]
 task :install  => [:submodule_update, :submodules] do
     puts
 
-    puts_cool("Welcome to the dotfiles install procedure")
+    puts_big("Welcome to the dotfiles install procedure")
     puts "This is intended for linux based OS. Please, only continue if you're a silly adventurer-" if not RUBY_PLATFORM.downcase.include?("linux")
     puts
 
-    Rake::Task[install_binaries].execute if want_to_install?('Install required and recommended binaries')
-    Rake::Task[install_spf13] if want_to_inspreztoll?('spf13: VIM config')
-    Rake::Task[install_prezto].execute if want_to_install?('Prezto: ZSH config')
-    Rake::Task[symlink].execute if want_to_install?('Symlink the dotfiles?')
+    Rake::Task[install_binaries].execute    if want_to_install?('Install required and recommended binaries')
+    Rake::Task[install_spf13].execute       if want_to_install?('spf13: VIM config')
+    Rake::Task[install_prezto].execute      if want_to_install?('Prezto: ZSH config')
+    Rake::Task[symlink].execute             if want_to_install?('Symlink the dotfiles?')
 
     puts
     success("installed")
 end
 
 task :update do
-    puts_cool("Updating dotfiles")
+    puts_big("Updating dotfiles")
     run %{git pull origin master}
     puts
-    puts_cool("Updating submodules")
+    puts_big("Updating submodules")
     Rake::Task[submodule_update].execute
     puts
-    puts_cool("Updating spf13")
+    puts_big("Updating spf13")
     run %{
         cd ~/.spf13-vim-3 && git pull
         vim +BundleInstall! +BundleClean +q
     }
     puts
-    puts_cool("Updating Prezto")
+    puts_big("Updating Prezto")
     run %{cd ~/.prezto && git pull}
     puts
-    puts_cool("Symlinking dotfiles again to be sure")
+    puts_big("Symlinking dotfiles again to be sure")
     Rake:Task[symlink].execute
     success("updated")
 end
@@ -46,22 +46,22 @@ task :uninstall do
 end
 
 task :submodule_update do
-  unless ENV["SKIP_SUBMODULES"]
-    run %{ git submodule update --init --recursive }
-  end
+    unless ENV["SKIP_SUBMODULES"]
+        run %{ git submodule update --init --recursive }
+    end
 end
 
 task :submodules do
-  unless ENV["SKIP_SUBMODULES"]
-    puts_cool("Downloading dotfiles submodules...please wait")
+    unless ENV["SKIP_SUBMODULES"]
+        puts_big("Downloading dotfiles submodules...please wait")
 
-    run %{
-      cd $HOME/.dotfiles
-      git submodule foreach 'git fetch origin; git checkout master; git reset --hard origin/master; git submodule update --recursive; git clean -df'
-      git clean -df
-    }
-    puts
-  end
+        run %{
+            cd $HOME/.dotfiles
+            git submodule foreach 'git fetch origin; git checkout master; git reset --hard origin/master; git submodule update --recursive; git clean -df'
+            git clean -df
+        }
+        puts
+    end
 end
 
 task :symlink do
@@ -71,7 +71,7 @@ task :symlink do
 end
 
 task :install_binaries do
-    puts_cool("Installing required binaries. Enjoy..")
+    puts_big("Installing required binaries. Enjoy..")
     run %{
         sudo apt-get remove vim-tiny
         sudo apt-get install zsh ack ctags ruby vim tmux
@@ -95,17 +95,17 @@ end
 
 task :install_spf13 do
     puts
-    puts_cool("Installing spf13.")
+    puts_big("Installing spf13.")
     puts
     run %{curl http://j.mp/spf13-vim3 -L -o - | sh}
     puts
-    puts_cool("spf13 installed.")
+    puts_big("spf13 installed.")
     puts
 end
 
 task :install_prezto do
     puts
-    puts_cool("Starting Prezto install procedure")
+    puts_big("Starting Prezto install procedure")
     puts
 
     run %{git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"}
@@ -123,7 +123,7 @@ task :install_prezto do
     end
 
     puts
-    puts_cool("Prezto is installed")
+    puts_big("Prezto is installed")
     puts
     puts "You should clean up .zprestorc"
     puts "Linking Prezto with the dotfiles"
@@ -133,17 +133,17 @@ end
 
 private
 def run(cmd)
-  puts "[Running] #{cmd}"
-  `#{cmd}` unless ENV['DEBUG']
+    puts "[Running] #{cmd}"
+    `#{cmd}` unless ENV['DEBUG']
 end
 
 def want_to_install? (section)
-  if ENV["ASK"]=="true"
-    puts "Would you like to install configuration files for: #{section}? [y]es, [n]o"
-    STDIN.gets.chomp == 'y'
-  else
-    true
-  end
+    if ENV["ASK"]=="true"
+        puts "Would you like to install configuration files for: #{section}? [y]es, [n]o"
+        STDIN.gets.chomp == 'y'
+    else
+        true
+    end
 end
 
 def want_to_install_anyways? (section)
@@ -152,46 +152,37 @@ def want_to_install_anyways? (section)
 end
 
 def file_operation(files, method = :symlink)
-  files.each do |f|
-    file = f.split('/').last
-    source = "#{ENV["PWD"]}/#{f}"
-    target = "#{ENV["HOME"]}/.#{file}"
+    files.each do |f|
+        file = f.split('/').last
+        source = "#{ENV["PWD"]}/#{f}"
+        target = "#{ENV["HOME"]}/.#{file}"
 
-    puts "======================#{file}=============================="
-    puts "Source: #{source}"
-    puts "Target: #{target}"
+        puts "======================#{file}=============================="
+        puts "Source: #{source}"
+        puts "Target: #{target}"
 
-    if File.exists?(target) && (!File.symlink?(target) || (File.symlink?(target) && File.readlink(target) != source))
-      puts "[Overwriting] #{target}...leaving original at #{target}.backup... [y] or [d]elete"
+        if File.exists?(target) && (!File.symlink?(target) || (File.symlink?(target) && File.readlink(target) != source))
+            puts "[Overwriting] #{target}...leaving original at #{target}.backup... [y] or [d]elete"
 
-      if STDIN.gets.chomp == 'y'
-        run %{ mv "$HOME/.#{file}" "$HOME/.#{file}.backup" }
-      else
-        run %{ rm "$HOME/.#{file}"}
-      end
+            if STDIN.gets.chomp == 'y'
+                run %{ mv "$HOME/.#{file}" "$HOME/.#{file}.backup" }
+            else
+                run %{ rm "$HOME/.#{file}"}
+            end
+        end
+
+        if method == :symlink
+            run %{ ln -nfs "#{source}" "#{target}" }
+        else
+            run %{ cp -f "#{source}" "#{target}" }
+        end
+
+        puts "=========================================================="
+        puts
     end
-
-    if method == :symlink
-      run %{ ln -nfs "#{source}" "#{target}" }
-    else
-      run %{ cp -f "#{source}" "#{target}" }
-    end
-
-    # Temporary solution until we find a way to allow customization
-    # This modifies zshrc to load all of yadr's zsh extensions.
-    # Eventually yadr's zsh extensions should be ported to prezto modules.
-    #if file == 'zshrc'
-    #  File.open(target, 'a') do |zshrc|
-    #    zshrc.puts('for config_file ($HOME/.yadr/zsh/*.zsh) source $config_file')
-    #  end
-    #end
-
-    puts "=========================================================="
-    puts
-  end
 end
 
-def puts_cool(msg)
+def puts_big(msg)
     puts "======================================================"
     puts msg
     puts "======================================================"
