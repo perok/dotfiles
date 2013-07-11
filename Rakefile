@@ -11,11 +11,12 @@ task :install  => [:submodule_update, :submodules] do
     puts "This is intended for linux based OS. Please, only continue if you're a silly adventurer-" if not RUBY_PLATFORM.downcase.include?("linux")
     puts
 
+    run %{export ASK=true}
     Rake::Task[install_binaries].execute    if want_to_install?('Install required and recommended binaries')
     Rake::Task[install_spf13].execute       if want_to_install?('spf13: VIM config')
     Rake::Task[install_prezto].execute      if want_to_install?('Prezto: ZSH config')
     Rake::Task[symlink].execute             if want_to_install?('Symlink the dotfiles?')
-
+    run %{unset ASK}
     puts
     success("installed")
 end
