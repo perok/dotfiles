@@ -1,4 +1,3 @@
-#
 # ZSH settings file
 #
 
@@ -67,8 +66,8 @@
   # }}}
   # Use dircolors {{{
     if [ -x /usr/bin/dircolors ]; then
-        test -r $DOTFILES/zsh/color/dircolors-solarized/dircolors.256dark && eval "$(dircolors -b $DOTFILES/zsh/color/dircolors-solarized/dircolors.256dark)" || eval "$(dircolors -b)"
-
+      export _DIRCOLORS="$DOTFILES/zsh/color/dircolors-solarized/dircolors.256dark"
+      test -r $_DIRCOLORS && eval "$(dircolors -b $_DIRCOLORS)" || eval "$(dircolors -b)"
     fi
   # }}}
 #  }}}

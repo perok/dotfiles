@@ -11,10 +11,10 @@ task :install  => [:submodule_update, :submodules] do
     puts "This is intended for linux based OS. Please, only continue if you're a silly adventurer-" if not RUBY_PLATFORM.downcase.include?("linux")
     puts
 
-    Rake::Task[install_binaries].execute    if want_to_install?('Install required and recommended binaries')
-    Rake::Task[install_spf13].execute       if want_to_install?('spf13: VIM config')
-    Rake::Task[install_prezto].execute      if want_to_install?('Prezto: ZSH config')
-    Rake::Task[symlink].execute             if want_to_install?('Symlink the dotfiles?')
+    Rake::Task["install_binaries"].execute    if want_to_install?('Install required and recommended binaries')
+    Rake::Task["install_spf13"].execute       if want_to_install?('spf13: VIM config')
+    Rake::Task["install_prezto"].execute      if want_to_install?('Prezto: ZSH config')
+    Rake::Task["symlink"].execute             if want_to_install?('Symlink the dotfiles?')
 
     puts
     success("installed")
@@ -25,7 +25,7 @@ task :update do
     run %{git pull origin master}
     puts
     puts_big("Updating submodules")
-    Rake::Task[submodule_update].execute
+    Rake::Task["submodule_update"].execute
     puts
     puts_big("Updating spf13")
     run %{
