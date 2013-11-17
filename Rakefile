@@ -9,14 +9,13 @@ task :install  => [:submodule_update, :submodules] do
 
     puts_big("Welcome to the dotfiles install procedure")
     puts "This is intended for linux based OS. Please, only continue if you're a silly adventurer-" if not RUBY_PLATFORM.downcase.include?("linux")
-    puts
-
-    run %{export ASK=true}
+    puts	
+    ENV["ASK"] = "true"
     Rake::Task["install_binaries"].execute    if want_to_install?('Install required and recommended binaries')
     Rake::Task["install_spf13"].execute       if want_to_install?('spf13: VIM config')
     Rake::Task["install_prezto"].execute      if want_to_install?('Prezto: ZSH config')
     Rake::Task["symlink"].execute             if want_to_install?('Symlink the dotfiles?')
-    run %{unset ASK}
+    ENV.delete("ASK")
     puts
     success("installed")
 end
@@ -111,6 +110,7 @@ task :install_prezto do
 
     run %{git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"}
 
+	# BUG.. Needs to be in ZSH to run these..
     run %{
         setopt EXTENDED_GLOB
         for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
@@ -128,18 +128,18 @@ task :install_prezto do
     puts
     puts "You should clean up .zprestorc"
     puts "Linking Prezto with the dotfiles"
-    run %{echo 'source $HOME/.dotfiles/zsh/zshrc.zsh' >> ~/.preztorc}
+    run %{echo 'source $HOME/.dotfiles/zsh/zshrc.zsh' >> ~/.zpreztorc}
     puts
 end
 
 private
 def run(cmd)
     puts "[Running] #{cmd}"
-    `#{cmd}` unless ENV['DEBUG']
+    sh "#{cmd}" unless ENV['DEBUG']
 end
 
 def want_to_install? (section)
-    if ENV["ASK"]=="true"
+    if ENV["ASK"] == 'true'
         puts "Would you like to install configuration files for: #{section}? [y]es, [n]o"
         STDIN.gets.chomp == 'y'
     else
