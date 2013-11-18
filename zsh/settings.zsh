@@ -54,7 +54,7 @@
     bindkey '^R' history-incremental-search-backward #bind history search to C-r 
     bindkey '^S' history-incremental-search-forward
     bindkey '^P' history-search-backward
-    bindkey '^N' history-search-forward  
+    bindkey '^N' history-search-forward
   # }}}
   # ctrl-f edit current buffer in editor {{{
     autoload -U edit-command-line
