@@ -66,10 +66,11 @@
   # Source modules {{{
     source $DOTFILES/zsh/z/z.sh
   # }}}
-  # Use dircolors {{{
-    if [ -x /usr/bin/dircolors ]; then
-      export _DIRCOLORS="$DOTFILES/zsh/color/dircolors-solarized/dircolors.256dark"
-      test -r $_DIRCOLORS && eval "$(dircolors -b $_DIRCOLORS)" || eval "$(dircolors -b)"
-    fi
+  # Use dircolors {{{ Deprecated: Symlink colorfile to ~/dir_colors
+  # . It's read by prezto.
+  #  if [ -x /usr/bin/dircolors ]; then
+  #    export _DIRCOLORS="$DOTFILES/zsh/color/dircolors-solarized/dircolors.256dark"
+  #    test -r $_DIRCOLORS && eval "$(dircolors -b $_DIRCOLORS)" || eval "$(dircolors -b)"
+  #  fi
   # }}}
 #  }}}

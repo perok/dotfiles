@@ -2,7 +2,6 @@
 " Written by perok
 " Default settings {
     set autowrite "  Write the old file out when switching between files.
-    set colorcolumn=80 "  Vertical line at 80 chars
     let mapleader = "," " Change mapleader from \ to ,
     set timeoutlen=500 "  Ever notice a slight lag after typing the leader key + command? This lowers the timeout.
     ""set nospell " Disable spellchecking?
@@ -102,10 +101,6 @@ nmap <C-l> <C-w>l
     " }
     " TagHighlight {
         ":call pathogen#helptags()
-    " }
-    " Tagbar {
-        nmap <F8> :TagbarToggle<CR>
-    " }
     " Nerdtree {
         nmap ,nt :NERDTreeToggle <enter>
 
@@ -137,7 +132,7 @@ let g:acp_behaviorSnipmateLength = 1
 "j"let g:solarized_termtrans = 1
 set background=dark
 ""let g:solarized_termcolors=256
-colorscheme solarized
+"colorscheme solarized
 
 " GVIM Setting {{{
 "set guioptions=aAce
@@ -161,3 +156,5 @@ if has("autocmd")
   autocmd bufwritepost .vimrc.local source $MYVIMRC
 endif
 
+" Syntastic PHP
+let g:syntastic_php_checkers=['php', 'phpcs', 'phpmd']

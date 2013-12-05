@@ -1,6 +1,6 @@
 #---------------------------------------------------------------
-# file:     ~/tmux/conf                         
-# author:   jason ryan - http://jasonwryan.com/    
+# file:     ~/tmux/conf
+# author:   jason ryan - http://jasonwryan.com/
 # vim:fenc=utf-8:nu:ai:si:et:ts=4:sw=4:fdm=indent:fdn=1:ft=conf:
 #---------------------------------------------------------------
 # Based on Thayer Williams' (http://cinderwick.ca)
@@ -30,11 +30,11 @@ set -g update-environment "DISPLAY SSH_ASKPASS SSH_AUTH_SOCK SSH_AGENT_PID SSH_C
 
 # -- set vi keys --
 # Need to rewrite from arrows to hjkl
-setw -g mode-keys vi
-#bind h select-pane -L #http://thedrearlight.com/blog/tmux-vim.html untested
-#bind j select-pane -D
-#bind k select-pane -U
-#bind l select-pane -R
+setw -g mode-keys vi # Adds vi style search, etc
+bind h select-pane -L #http://thedrearlight.com/blog/tmux-vim.html untested
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
 #bind-key -r C-h select-window -t :-
 #bind-key -r C-l select-window -t :+
 
@@ -71,7 +71,7 @@ bind C-p run "tmux set-buffer \"$(xsel -o)\"; tmux paste-buffer"
 #setw -g mouse-select-pane on #untested
 
 # -- pane/window control  -------------------------------------
-bind-key j command-prompt -p "join pane from:" "join-pane -s '%%'"
+bind-key C-j command-prompt -p "join pane from:" "join-pane -s '%%'"
 bind-key s command-prompt -p "send pane to:" "join-pane -t '%%'"
 bind-key w command-prompt -p "swap window with:" "swap-window -t ':%%'"
 bind-key m command-prompt -p "move window to:" "move-window -t ':%%'"
@@ -89,9 +89,9 @@ bind-key -n C-left prev
 
 # more intuitive keybindings for splitting
 unbind %
-bind h split-window -v
+bind C-h split-window -v
 unbind '"'
-bind v split-window -h
+bind C-v split-window -h
 
 # -- General key bindings ---------------------------------------------
 
@@ -115,19 +115,11 @@ bind-key a send-prefix
 bind-key C-b last-window
 
 # confirm before killing a window or the server
-bind-key k confirm kill-window
+bind-key C-k confirm kill-window
 bind-key K confirm kill-server
 
 # toggle statusbar
 bind-key b set-option status
-
-# border colours
-#set -g pane-border-fg magenta
-#set -g pane-active-border-fg magenta
-#set -g pane-active-border-bg default
-
-# wm window title string (uses statusbar variables)
-set -g set-titles-string "tmux:#I [ #W ]"
 
 # initialize sessions
 bind S source-file $DOTFILES/tmux/standard
@@ -158,9 +150,17 @@ set -g bell-action any
 # on-screen time for display-panes in ms
 set -g display-panes-time 2000
 
+# border colours
+#set -g pane-border-fg magenta
+#set -g pane-active-border-fg magenta
+#set -g pane-active-border-bg default
+
 #--------------------------------------------------------------
 # statusbar
 #--------------------------------------------------------------
+# wm window title string (uses statusbar variables)
+set -g set-titles-string "tmux:#I [ #W ]"
+
 set -g window-status-format "#I:#W"
 set -g window-status-current-format "#I:#W"
 
@@ -203,4 +203,4 @@ if '[ -z "$DISPLAY" ]' 'source-file $DOTFILES/tmux/xless'
 # color
 #--------------------------------------------------------------
 
-source-file $DOTFILES/tmux/color/tmux-colors-solarized/tmuxcolors-dark.conf
+#source-file $DOTFILES/tmux/color/tmux-colors-solarized/tmuxcolors-dark.conf

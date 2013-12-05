@@ -5,7 +5,7 @@
 #---------------------------------------------------------------
 
 # session initialization
-new -s IRC -n Tyrs tyrs
+,ew -s IRC -n Tyrs tyrs
 neww -n irssi /home/jason/Scripts/startirssi.sh
 neww -n RSS newsbeuter
 neww bash

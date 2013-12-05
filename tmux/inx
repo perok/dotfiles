@@ -6,4 +6,3 @@ set -g status-left-length 40
 
 set -g status-left '#[fg=blue]#H #[fg=black,bright]• #[fg=yellow]#(acpi -t | cut -d" " -f4)°C #[default]'
 set -g status-right '#[fg=cyan] #(uptime | cut -d " " -f4-5 | cut -d"," -f1) #[fg=black,bright]• #[fg=magenta]#(cut -d" " -f1-3 /proc/loadavg)'
-

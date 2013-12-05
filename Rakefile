@@ -6,10 +6,9 @@ task :default => ["install"]
 
 task :install  => [:submodule_update, :submodules] do
     puts
-
     puts_big("Welcome to the dotfiles install procedure")
-    puts "This is intended for linux based OS. Please, only continue if you're a silly adventurer-" if not RUBY_PLATFORM.downcase.include?("linux")
-    puts	
+    puts "This is intended for linux based OS's. Please, only continue if you're a silly adventurer." if not RUBY_PLATFORM.downcase.include?("linux")
+    puts
     ENV["ASK"] = "true"
     Rake::Task["install_binaries"].execute    if want_to_install?('Install required and recommended binaries')
     Rake::Task["install_spf13"].execute       if want_to_install?('spf13: VIM config')
@@ -110,7 +109,7 @@ task :install_prezto do
 
     run %{git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"}
 
-	# BUG.. Needs to be in ZSH to run these..
+    # TODO:Needs to be in ZSH to run these.. Add sh script with #/bin/env zsh shebang?
     run %{
         setopt EXTENDED_GLOB
         for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
@@ -140,7 +139,7 @@ end
 
 def want_to_install? (section)
     if ENV["ASK"] == 'true'
-        puts "Would you like to install configuration files for: #{section}? [y]es, [n]o"
+        puts "=> Install: #{section}? [y]es, [n]o"
         STDIN.gets.chomp == 'y'
     else
         true

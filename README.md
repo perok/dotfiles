@@ -23,6 +23,9 @@ Installation guide
 
 4. PROFIT
 
+# Todo
+
+Read line 70 of zpreztorc
 # Update
 
         cd ~/.dotfiles && rake update

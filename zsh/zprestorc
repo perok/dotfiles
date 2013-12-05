@@ -14,6 +14,8 @@ zstyle ':prezto:*:*' case-sensitive 'no'
 
 # Color output (auto set to 'no' on dumb terminals).
 zstyle ':prezto:*:*' color 'yes'
+#zstyle ':prezto:module:utility' color 'no' #Stops prezto from loading LS_COLOR
+#zstyle ':prezto:module:utility:ls' color 'no' #Stops prezto from running dircolors
 
 # Set the Zsh modules to load (man zshmodules).
 # zstyle ':prezto:load' zmodule 'attr' 'stat'
