@@ -44,7 +44,6 @@
   setopt correct # Command correction
   setopt short_loops # Allow short loops
 
-
 # }}}
 # Keybindings {{{
   #bindkey -v  # VI key bindings. Breaks C-a, C-e
@@ -66,11 +65,4 @@
   # Source modules {{{
     source $DOTFILES/zsh/z/z.sh
   # }}}
-  # Use dircolors {{{ Deprecated: Symlink colorfile to ~/dir_colors
-  # . It's read by prezto.
-  #  if [ -x /usr/bin/dircolors ]; then
-  #    export _DIRCOLORS="$DOTFILES/zsh/color/dircolors-solarized/dircolors.256dark"
-  #    test -r $_DIRCOLORS && eval "$(dircolors -b $_DIRCOLORS)" || eval "$(dircolors -b)"
-  #  fi
-  # }}}
 #  }}}

@@ -125,9 +125,8 @@ task :install_prezto do
     puts
     puts_big("Prezto is installed")
     puts
-    puts "You should clean up .zprestorc"
-    puts "Linking Prezto with the dotfiles"
-    run %{echo 'source $HOME/.dotfiles/zsh/zshrc.zsh' >> ~/.zpreztorc}
+    puts "~/.preztorc symlink is deleted. New linked to the dotfiles"
+    run %{rm -f ~/.zpreztorc;echo 'source $HOME/.dotfiles/zsh/zshrc.zsh' > ~/.zpreztorc}
     puts
 end
 
