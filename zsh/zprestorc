@@ -33,12 +33,13 @@ zstyle ':prezto:load' pmodule \
   'syntax-highlighting' \
   'history-substring-search' \
   'prompt'
+
 #
 # Editor
 #
 
 # Set the key mapping style to 'emacs' or 'vi'.
-zstyle ':prezto:module:editor' keymap 'vi'
+zstyle ':prezto:module:editor' key-bindings 'vi'
 
 # Auto convert .... to ../..
 zstyle ':prezto:module:editor' dot-expansion 'yes'

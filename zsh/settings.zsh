@@ -14,8 +14,8 @@
   esac
 
   export EDITOR="vim"
+  export VISUAL="vim"
   export PATH=$PATH:/usr/lib/jvm/java-7-oracle/bin:/usr/lib/jvm/java-7-oracle/db/bin:/usr/lib/jvm/java-7-oracle/jre/bin
-  export PATH=$PATH:/home/perok/Downloads/devkit/bin #  devkit
   export PATH=$PATH:$DOTFILES/bin #  System binaries
   export PATH=$PATH:/home/perok/Development/android-sdk-linux/tools #  System binaries
   # Pager {{{
@@ -46,6 +46,7 @@
 
 # }}}
 # Keybindings {{{
+# TODO: Gotta work the keybindings. prezto vi style fucking it up.
   #bindkey -v  # VI key bindings. Breaks C-a, C-e
   bindkey '^[[5~' up-line-or-history  # Page Up
   bindkey '^[[6~' down-line-or-history # Page Down

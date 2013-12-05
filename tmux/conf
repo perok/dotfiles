@@ -158,46 +158,50 @@ set -g display-panes-time 2000
 #--------------------------------------------------------------
 # statusbar
 #--------------------------------------------------------------
+
+# Using tmuxline.vim to automake a powerline for tmux.
+if-shell "test -f $DOTFILES/tmux/tmuxline.vim.snapshot" "source $DOTFILES/tmux/tmuxline.vim.snapshot"
+
 # wm window title string (uses statusbar variables)
-set -g set-titles-string "tmux:#I [ #W ]"
+#set -g set-titles-string "tmux:#I [ #W ]"
 
-set -g window-status-format "#I:#W"
-set -g window-status-current-format "#I:#W"
+#set -g window-status-format "#I:#W"
+#set -g window-status-current-format "#I:#W"
 
-set -g status-keys vi
-bind-key -t vi-edit Up history-up
-bind-key -t vi-edit Down history-down
+#set -g status-keys vi
+#bind-key -t vi-edit Up history-up
+#bind-key -t vi-edit Down history-down
 
-set -g status-interval 1
-set -g status-justify centre # center align window list
+#set -g status-interval 1
+#set -g status-justify centre # center align window list
 
-# default statusbar colors
-set -g status-fg white
-set -g status-bg default
+## default statusbar colors
+#set -g status-fg white
+#set -g status-bg default
 
-# default window title colors
-set-window-option -g window-status-fg black
-set-window-option -g window-status-bg default
-set-window-option -g window-status-attr bright
+## default window title colors
+#set-window-option -g window-status-fg black
+#set-window-option -g window-status-bg default
+#set-window-option -g window-status-attr bright
 
-# active window title colors
-set-window-option -g window-status-current-fg white
-set-window-option -g window-status-current-bg default
-set-window-option -g window-status-current-attr dim
+## active window title colors
+#set-window-option -g window-status-current-fg white
+#set-window-option -g window-status-current-bg default
+#set-window-option -g window-status-current-attr dim
 
-# bell colours
-set -g window-status-bell-bg default
-set -g window-status-bell-fg red
-set -g window-status-bell-attr bright
+## bell colours
+#set -g window-status-bell-bg default
+#set -g window-status-bell-fg red
+#set -g window-status-bell-attr bright
 
-# command/message line colors
-set -g message-fg white
-set -g message-bg black
-set -g message-attr bright
+## command/message line colors
+#set -g message-fg white
+#set -g message-bg black
+#set -g message-attr bright
 
 # Statusbar starting in X or not
-if '[ -n "$DISPLAY" ]' 'source-file $DOTFILES/tmux/inx'
-if '[ -z "$DISPLAY" ]' 'source-file $DOTFILES/tmux/xless'
+#if '[ -n "$DISPLAY" ]' 'source-file $DOTFILES/tmux/inx'
+#if '[ -z "$DISPLAY" ]' 'source-file $DOTFILES/tmux/xless'
 
 #--------------------------------------------------------------
 # color

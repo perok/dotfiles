@@ -3,3 +3,6 @@ Bundle 'terryma/vim-multiple-cursors'
 " Bundle https://github.com/sjl/splice.vim/ "Threeway merge
 " CSS inline color
 Bundle 'ap/vim-css-color'
+
+" For making a tmux powerline from vim_airline.
+Bundle 'edkolev/tmuxline.vim'
