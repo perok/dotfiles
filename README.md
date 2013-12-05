@@ -1,6 +1,6 @@
 # Perok's dotfiles
 
-My personal setup for tmux, zsh, ranger, and some other stuff.
+My personal setup for vim, tmux, zsh, ranger, and some other stuff.
 Based on spf13-vim and prezto with tweaks and additions.
 
 Installation guide
@@ -8,11 +8,11 @@ Installation guide
 
 1. Install in terminal with this command:
 
-        zsh -c "`curl -fsSL https://raw.github.com/perok/dotfiles/master/install.sh`"
+    zsh -c "`curl -fsSL https://raw.github.com/perok/dotfiles/master/install.sh`"
 
-  If you want questions, use this instead:
+If you want questions, use this instead:
 
-        zsh -c "`curl -fsSL https://raw.github.com/skwp/dotfiles/master/install.sh`" -s ask
+    zsh -c "`curl -fsSL https://raw.github.com/skwp/dotfiles/master/install.sh`" -s ask
 
 3. ???
 
@@ -20,9 +20,9 @@ Installation guide
 
 # Update
 
-        cd ~/.dotfiles && rake update
+    cd ~/.dotfiles && rake update
 
-## Ranger
+## Ranger - Read..
 
 There is a conflict problem in Linux Mint.
 Another package is also named highlight.
@@ -38,17 +38,16 @@ See: http://forums.linuxmint.com/viewtopic.php?f=47&t=122220
 
 On major changes in your codebase, run:
 
-* :UpdateTypesFile
+    :UpdateTypesFile
 
 ## General system changes
 
 Caps is useless. Swap caps with escape. Add this to startup:
 
-        xmodmap ~/dotfiles/scripts/speedswapper
+    xmodmap ~/dotfiles/scripts/speedswapper
 
 # TODO
 
 * Fix rakefile install
-* https://github.com/zsh-users/zsh-history-substring-search
 * https://github.com/dhruvasagar/vim-table-mode
 
