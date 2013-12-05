@@ -18,10 +18,6 @@ Installation guide
 
 4. PROFIT
 
-# Todo
-
-* Fix rakefile install
-
 # Update
 
         cd ~/.dotfiles && rake update
@@ -52,6 +48,7 @@ Caps is useless. Swap caps with escape. Add this to startup:
 
 # TODO
 
+* Fix rakefile install
 * https://github.com/zsh-users/zsh-history-substring-search
 * https://github.com/dhruvasagar/vim-table-mode
 
