@@ -33,10 +33,10 @@ task :update do
     }
     puts
     puts_big("Updating Prezto")
-    run %{cd ~/.prezto && git pull}
+    run %{cd ~/.zprezto && git pull && git submodule update --init --recursive}
     puts
     puts_big("Symlinking dotfiles again to be sure")
-    Rake:Task[symlink].execute
+    Rake::Task[symlink].execute
     success("updated")
 end
 
@@ -133,7 +133,7 @@ end
 
 private
 def run(cmd)
-    puts "[Running] #{cmd}"
+    puts "[Running command]"
     sh "#{cmd}" unless ENV['DEBUG']
 end
 
