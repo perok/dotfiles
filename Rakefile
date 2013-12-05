@@ -73,7 +73,7 @@ task :install_binaries do
     puts_big("Installing required binaries. Enjoy..")
     run %{
         sudo apt-get remove vim-tiny
-        sudo apt-get install zsh ack ctags ruby vim tmux
+        sudo apt-get install ack ctags ruby vim tmux
     }
 
     if want_to_install_anyways?('Pygmentizer')
@@ -110,6 +110,7 @@ task :install_prezto do
     run %{git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"}
 
     # TODO:Needs to be in ZSH to run these.. Add sh script with #/bin/env zsh shebang?
+    # Now started through zsh. Will it work??
     run %{
         setopt EXTENDED_GLOB
         for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
