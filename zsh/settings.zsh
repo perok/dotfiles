@@ -55,6 +55,7 @@
     bindkey '^S' history-incremental-search-forward
     bindkey '^P' history-search-backward
     bindkey '^N' history-search-forward
+    bindkey -M viins ‘jj’ vi-cmd-mode # Exit insert with jj TODO not working
   # }}}
   # ctrl-f edit current buffer in editor {{{
     autoload -U edit-command-line

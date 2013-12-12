@@ -47,7 +47,12 @@ Caps is useless. Swap caps with escape. Add this to startup:
     xmodmap ~/dotfiles/scripts/speedswapper
 
 # TODO
-
+* Migrate to stow? http://brandon.invergo.net/news/2012-05-26-using-gnu-stow-to-manage-your-dotfiles.html
+* Makefile instead of rakefile?
+* https://github.com/kana/vim-arpeggio change jk -> Escape ?
 * Fix rakefile install
 * https://github.com/dhruvasagar/vim-table-mode
-
+* https://github.com/Valloric/YouCompleteMe
+* https://github.com/Shougo/unite.vim replace C-p?
+* https://github.com/mhinz/vim-startify
+* https://github.com/dockyard/vim-easydir

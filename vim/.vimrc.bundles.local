@@ -6,3 +6,12 @@ Bundle 'ap/vim-css-color'
 
 " For making a tmux powerline from vim_airline.
 Bundle 'edkolev/tmuxline.vim'
+
+" Use ag instead of ack. Remember to install silversearcher-ag.
+Bundle 'rking/ag.vim'
+
+
+" Vim shell [experimental]
+" Need to run make in vimproc directory
+"Bundle 'Shougo/vimproc.vim'
+"Bundle 'Shougo/vimshell.vim'

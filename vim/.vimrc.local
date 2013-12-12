@@ -23,76 +23,71 @@ nnoremap <leader>q gqip "  Hard-wrap paragraphs of text
 nnoremap <leader>ft Vatzf "  Shortcut to fold tags with leader (usually \) + ft
 nnoremap <leader>v <C-w>v<C-w>l "  Opens a vertical split and switches over (\v)
 
-"j"set splitbelow "  Split windows below the current window.
+"set splitbelow "  Split windows below the current window.
 
 "Session settings
-"j"set sessionoptions=resize,winpos,winsize,buffers,tabpages,folds,curdir,help
+"set sessionoptions=resize,winpos,winsize,buffers,tabpages,folds,curdir,help
 
 "Set up an HTML5 template for all new .html files
 "autocmd BufNewFile * silent! 0r $VIMHOME/templates/%:e.tpl
 
 " Mapping {
+    " Faster shortcut for commenting. Requires T-Comment plugin
+    map ,c <c-_><c-_>
 
-"  Map a change directory to the desktop 
-nmap ,d :cd ~/Desktop<cr>:e.<cr>
+    "  Saves time; maps the spacebar to colon
+    nmap <space> :
 
-"  Shortcut for editing  vimrc file in a new tab  No good with janus
-""nmap ,ev :tabedit $MYVIMRC<cr>
+    "Map escape key to jj -- much faster
+    imap jj <esc>
 
-" Faster shortcut for commenting. Requires T-Comment plugin
-map ,c <c-_><c-_>
+    " Map a change directory to the desktop
+    nmap ,d :cd ~/Desktop<cr>:e.<cr>
 
-"  Saves time; maps the spacebar to colon
-nmap <space> :
+    "  Shortcut for editing  vimrc file in a new tab  No good with janus
+    "nmap ,ev :tabedit $MYVIMRC<cr>
 
-"Map escape key to jj -- much faster
-imap jj <esc>
+    "Automatically change current directory to that of the file in the buffer
+    " autocmd BufEnter * cd %:p:h
 
-"Automatically change current directory to that of the file in the buffer
-" autocmd BufEnter * cd %:p:h
+    " Map code completion to , + tab
+    imap ,<tab> <C-x><C-o>
 
-" Map code completion to , + tab
-imap ,<tab> <C-x><C-o>
+    " Yank text to the clipboard
+    "set clipboard=unnamed
+    noremap <leader>y "+y
+    noremap <leader>yy "+yy
 
-" Yank text to the clipboard
-"set clipboard=unnamed
-noremap <leader>y "+y
-noremap <leader>yy "+yy
+    " Preserve indentation while pasting text from the OS X clipboard
+    noremap <leader>p :set paste<CR>:put  *<CR>:set nopaste<CR>
 
-" Preserve indentation while pasting text from the OS X clipboard
-noremap <leader>p :set paste<CR>:put  *<CR>:set nopaste<CR>
+    "Auto-completion menu
+    " set wildmode=list:longest
 
-"Change zen coding plugin expansion key to shift + e
-"let g:user_zen_expandabbr_key = '<C-e>' Vetkje ka dette e
-"Auto-completion menu
-" set wildmode=list:longest
+    "set completeopt=longest,menuone
+    "inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+    "inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
+    "  \ '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
+    "inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
+    "  \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
 
-"set completeopt=longest,menuone
-"inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-"inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
-"  \ '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
-"inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
-"  \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
+    "Delete all buffers (via Derek Wyatt)
+    nmap <silent> ,da :exec "1," . bufnr('$') . "bd"<cr>
 
-"Delete all buffers (via Derek Wyatt)
-nmap <silent> ,da :exec "1," . bufnr('$') . "bd"<cr>
+    "Bubble single lines (kicks butt)
+    "http://vimcasts.org/episodes/bubbling-text/
+    nmap <C-Up> ddkP
+    nmap <C-Down> ddp
 
-"Bubble single lines (kicks butt)
-"http://vimcasts.org/episodes/bubbling-text/
-nmap <C-Up> ddkP
-nmap <C-Down> ddp
+    "Bubble multiple lines
+    vmap <C-Up> xkP`[V`]
+    vmap <C-Down> xp`[V`]
 
-"Bubble multiple lines
-vmap <C-Up> xkP`[V`]
-vmap <C-Down> xp`[V`]
-
-"
-" easier window navigation
-nmap <C-h> <C-w>h
-nmap <C-j> <C-w>j
-nmap <C-k> <C-w>k
-nmap <C-l> <C-w>l
-
+    " easier window navigation
+    nmap <C-h> <C-w>h
+    nmap <C-j> <C-w>j
+    nmap <C-k> <C-w>k
+    nmap <C-l> <C-w>l
 " }
 
 " Plugins {
@@ -106,6 +101,9 @@ nmap <C-l> <C-w>l
 
         "Show hidden files in NerdTree
         let NERDTreeShowHidden=1
+    " }
+    " Syntastic PHP {
+        let g:syntastic_php_checkers=['php', 'phpcs', 'phpmd']
     " }
 " }
 
@@ -128,33 +126,24 @@ let g:acp_behaviorSnipmateLength = 1
 :filetype plugin on
 
 " Colors and fonts
-"j"syntax enable
-"j"let g:solarized_termtrans = 1
-set background=dark
-""let g:solarized_termcolors=256
-"colorscheme solarized
+"syntax enable
+"let g:solarized_termtrans = 1
+"set background=dark
 
 " GVIM Setting {{{
 "set guioptions=aAce
 if has('gui_running')
-    "Using a cool patched font for powerline
     "set guifont=Menlo:h14
-    "set background transparency and solarized style
     "autopen NERDTree and focus cursor in new document
     autocmd VimEnter * NERDTree
     autocmd vimenter * wincmd p
 else
     "set mouse=a
 endif
-
-" A fancy status bar
-"let g:Powerline_symbols = 'fancy'
-
 " Source the vimrc file after saving it. This way, you don't have to reload
 " Vim to see the changes.
 if has("autocmd")
   autocmd bufwritepost .vimrc.local source $MYVIMRC
 endif
 
-" Syntastic PHP
-let g:syntastic_php_checkers=['php', 'phpcs', 'phpmd']
+
