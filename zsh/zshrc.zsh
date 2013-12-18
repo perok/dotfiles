@@ -1,6 +1,4 @@
-#
-# Entry point for ZSH settings. Only sourcing of other files.
-#
+# Entry point for ZSH settings. Source's all other settings files.
 
 # Set the default dotfiles location {{{
     export DOTFILES="$HOME/.dotfiles/"
