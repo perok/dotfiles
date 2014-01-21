@@ -1,27 +1,23 @@
 " .vimrc.local File
 " Written by perok
+
 " Default settings {
     set autowrite "  Write the old file out when switching between files.
     let mapleader = "," " Change mapleader from \ to ,
     set timeoutlen=500 "  Ever notice a slight lag after typing the leader key + command? This lowers the timeout.
     ""set nospell " Disable spellchecking?
 " }
-"  Tab stuff
-"j"set tabstop=2
-""set shiftwidth=2
-""set softtabstop=2
-""set expandtab
+" Tab stuff
+"set tabstop=2
+"set shiftwidth=2
+"set softtabstop=2
+"set expandtab
 
+" Indent stuff
+"set smartindent
 
-"  Indent stuff
-""set smartindent
-
-""set laststatus=2 "  Always show the status line
-""set linespace=3 "  Prefer a slightly higher line height
-
-nnoremap <leader>q gqip "  Hard-wrap paragraphs of text
-nnoremap <leader>ft Vatzf "  Shortcut to fold tags with leader (usually \) + ft
-nnoremap <leader>v <C-w>v<C-w>l "  Opens a vertical split and switches over (\v)
+"set laststatus=2 "  Always show the status line
+"set linespace=3 "  Prefer a slightly higher line height
 
 "set splitbelow "  Split windows below the current window.
 
@@ -35,16 +31,13 @@ nnoremap <leader>v <C-w>v<C-w>l "  Opens a vertical split and switches over (\v)
     " Faster shortcut for commenting. Requires T-Comment plugin
     map ,c <c-_><c-_>
 
-    "  Saves time; maps the spacebar to colon
+    " Saves time; maps the spacebar to colon
     nmap <space> :
 
-    "Map escape key to jj -- much faster
+    " Map escape key to jj -- much faster
     imap jj <esc>
 
-    " Map a change directory to the desktop
-    nmap ,d :cd ~/Desktop<cr>:e.<cr>
-
-    "  Shortcut for editing  vimrc file in a new tab  No good with janus
+    " Shortcut for editing  vimrc file in a new tab
     "nmap ,ev :tabedit $MYVIMRC<cr>
 
     "Automatically change current directory to that of the file in the buffer
@@ -53,8 +46,9 @@ nnoremap <leader>v <C-w>v<C-w>l "  Opens a vertical split and switches over (\v)
     " Map code completion to , + tab
     imap ,<tab> <C-x><C-o>
 
-    " Yank text to the clipboard
-    "set clipboard=unnamed
+    " Yank text to the clipboard TODO: not working. Solution is bad idea
+    " anyhow. "+ and "* are system clipboard and should be used.
+    "set clipboard=unnamedplus
     noremap <leader>y "+y
     noremap <leader>yy "+yy
 
@@ -88,8 +82,15 @@ nnoremap <leader>v <C-w>v<C-w>l "  Opens a vertical split and switches over (\v)
     nmap <C-j> <C-w>j
     nmap <C-k> <C-w>k
     nmap <C-l> <C-w>l
-" }
 
+    " Hard-wrap paragraphs of text
+    nnoremap <leader>q gqip
+    " Shortcut to fold tags with leader (usually \) + ft
+    nnoremap <leader>ft Vatzf
+    " Opens a vertical split and switches over (\v)
+    nnoremap <leader>v <C-w>v<C-w>l
+
+" }
 " Plugins {
     " Vim-airstrip {
         let g:airline_powerline_fonts=1
@@ -101,20 +102,24 @@ nnoremap <leader>v <C-w>v<C-w>l "  Opens a vertical split and switches over (\v)
 
         "Show hidden files in NerdTree
         let NERDTreeShowHidden=1
+
+        " let Nerdtree work like a split explorerer.
+        " http://vimcasts.org/blog/2013/01/oil-and-vinegar-split-windows-and-project-drawer/
+        let NERDTreeHijackNetrw=1
     " }
     " Syntastic PHP {
         let g:syntastic_php_checkers=['php', 'phpcs', 'phpmd']
     " }
 " }
+" Spelling {
+    "Helpeful abbreviations
+    iab lorem Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+    iab llorem Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
 
-"Helpeful abbreviations
-iab lorem Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-iab llorem Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-
-"Spelling corrects. Just for example. Add yours below.
-iab teh the
-iab Teh The
-
+    "Spelling corrects. Just for example. Add yours below.
+    iab teh the
+    iab Teh The
+" }
 "--------------------------"
 " PERSONAL SETTINGS
 " -------------------------"
@@ -131,8 +136,8 @@ let g:acp_behaviorSnipmateLength = 1
 "set background=dark
 
 " GVIM Setting {{{
-"set guioptions=aAce
 if has('gui_running')
+    set guioptions=aAce
     "set guifont=Menlo:h14
     "autopen NERDTree and focus cursor in new document
     autocmd VimEnter * NERDTree
@@ -140,10 +145,9 @@ if has('gui_running')
 else
     "set mouse=a
 endif
+
 " Source the vimrc file after saving it. This way, you don't have to reload
 " Vim to see the changes.
 if has("autocmd")
   autocmd bufwritepost .vimrc.local source $MYVIMRC
 endif
-
-

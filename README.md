@@ -8,11 +8,11 @@ Installation guide
 
 1. Install in terminal with this command:
 
-    zsh -c "`curl -fsSL https://raw.github.com/perok/dotfiles/master/install.sh`"
+		zsh -c "`curl -fsSL https://raw.github.com/perok/dotfiles/master/install.sh`"
 
-If you want questions, use this instead:
+	If you want questions, use this instead:
 
-    zsh -c "`curl -fsSL https://raw.github.com/skwp/dotfiles/master/install.sh`" -s ask
+		zsh -c "`curl -fsSL https://raw.github.com/skwp/dotfiles/master/install.sh`" -s ask
 
 3. ???
 
@@ -22,7 +22,7 @@ If you want questions, use this instead:
 
     cd ~/.dotfiles && rake update
 
-## Ranger - Read..
+## Ranger
 
 There is a conflict problem in Linux Mint.
 Another package is also named highlight.
