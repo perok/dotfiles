@@ -73,7 +73,7 @@ task :install_binaries do
     puts_big("Installing required binaries. Enjoy..")
     run %{
         sudo apt-get remove vim-tiny
-        sudo apt-get install ack ctags ruby vim tmux
+        sudo apt-get install ack ctags ruby vim tmux curl
     }
 
     if want_to_install_anyways?('Pygmentizer')
@@ -96,7 +96,7 @@ task :install_spf13 do
     puts
     puts_big("Installing spf13.")
     puts
-    run %{curl http://j.mp/spf13-vim3 -L -o - | sh}
+    run %{curl https://j.mp/spf13-vim3 -L > spf13-vim.sh && sh spf13-vim.sh}
     puts
     puts_big("spf13 installed.")
     puts

@@ -10,6 +10,11 @@ Bundle 'edkolev/tmuxline.vim'
 " Use ag instead of ack. Remember to install silversearcher-ag.
 Bundle 'rking/ag.vim'
 
+" Silence mode in vim
+Bundle 'junegunn/goyo.vim'
+" Fancy markdown reading
+Bundle 'amix/vim-zenroom2'
+
 
 " Vim shell [experimental]
 " Need to run make in vimproc directory
