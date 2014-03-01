@@ -56,10 +56,8 @@ bind P choose-buffer # choose which buffer to paste from
 bind-key -t vi-copy 'v' begin-selection
 bind-key -t vi-copy 'y' copy-selection
 
-# copy tmux buffer to clipboard
-bind C-y run "tmux show-buffer | xsel -b"
-# move x clipboard into tmux paste buffer
-bind C-p run "tmux set-buffer \"$(xsel -o)\"; tmux paste-buffer"
+# Linux clipboard:
+source $DOTFILES/tmux/tmux-linux.conf
 
 # -- Mouse interaction -------------------------------------
 

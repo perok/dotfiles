@@ -101,6 +101,7 @@ task :install_spf13 do
     puts_big("spf13 installed.")
     puts "Installing extra tools needed."
     run %{sudo apt-get install silversearcher-ag}
+    puts "Warning: Youcompleteme needs to be installed properly. Install script lies in it's module"
     puts
 end
 
@@ -114,7 +115,7 @@ task :install_prezto do
     # TODO:Needs to be in ZSH to run these.. Add sh script with #/bin/env zsh shebang?
     # Now started through zsh. Will it work??
     run %{
-        setopt EXTENDED_GLOB
+        setopt EXTENDED_GLOB;
         for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
             ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
         done
@@ -128,7 +129,10 @@ task :install_prezto do
     puts
     puts_big("Prezto is installed")
     puts
-    puts "~/.preztorc symlink is deleted. New linked to the dotfiles"
+    puts "Installing needed software"
+    run %{sudo apt-get install xclip} #For clipboard
+    puts
+    puts "~/.preztorc symlink is now deleted. New and customized one is now linked."
     run %{rm -f ~/.zpreztorc;echo 'source $HOME/.dotfiles/zsh/zshrc.zsh' > ~/.zpreztorc}
     puts
 end
