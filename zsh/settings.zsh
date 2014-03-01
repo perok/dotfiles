@@ -43,7 +43,6 @@
   setopt inc_append_history # Append commands to history immediately
   setopt correct # Command correction
   setopt short_loops # Allow short loops
-
 # }}}
 # Keybindings {{{
 # TODO: Gotta work the keybindings. prezto vi style fucking it up.

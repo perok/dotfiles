@@ -15,6 +15,8 @@ Bundle 'junegunn/goyo.vim'
 " Fancy markdown reading
 Bundle 'amix/vim-zenroom2'
 
+"Themes
+Bundle 'junegunn/seoul256.vim'
 
 " Vim shell [experimental]
 " Need to run make in vimproc directory

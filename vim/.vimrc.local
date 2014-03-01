@@ -131,9 +131,9 @@ let g:acp_behaviorSnipmateLength = 1
 :filetype plugin on
 
 " Colors and fonts
-"syntax enable
 "let g:solarized_termtrans = 1
 "set background=dark
+colo seoul256
 
 " GVIM Setting {{{
 if has('gui_running')

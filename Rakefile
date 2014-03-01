@@ -99,6 +99,8 @@ task :install_spf13 do
     run %{curl https://j.mp/spf13-vim3 -L > spf13-vim.sh && sh spf13-vim.sh}
     puts
     puts_big("spf13 installed.")
+    puts "Installing extra tools needed."
+    run %{sudo apt-get install silversearcher-ag}
     puts
 end
 
