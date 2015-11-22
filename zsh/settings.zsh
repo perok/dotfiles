@@ -64,6 +64,6 @@
 # }}}
 #  Other {{{
   # Source modules {{{
-    source $DOTFILES/zsh/z/z.sh
+    #source $DOTFILES/zsh/z/z.sh
   # }}}
 #  }}}
