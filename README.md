@@ -6,7 +6,16 @@ Personal setup for neovim, tmux, zsh, ranger, and some other stuff.
 Installation guide
 ------------------
 
-clone, copy symlinks to $HOME, source .zprezto.local in .zpreztorc
+Using https://github.com/anishathalye/dotbot/
+clone to .dotfiles, copy symlinks to $HOME, source .zprezto.local in .zpreztorc
+
+# TODO
+- Fix Readme
+- Sourcing for zprezto to local
+- How to install virtualenv
+- Install zprezto
+- Remove tmux?
+- Cleanup old git ~
 
 Noteable stuff
 --------------
@@ -14,6 +23,15 @@ Noteable stuff
 ## VIM
 
 * imap jk --> Esc
+
+Legg til
+
+
++
+http://vimrcfu.com/snippet/77
+and
+http://vimrcfu.com/snippet/182
+
 
 ## General system changes
 

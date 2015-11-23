@@ -1,0 +1,19 @@
+[user]
+    email = perokane@gmail.com
+    name = Per Øyvind Kanestrøm
+[core]
+    editor = nvim-client -f
+    pager = less -r
+[push]
+    default = simple
+[color]
+    ui = auto # covers diff = true, status = auto, branch = auto
+    interactive = auto
+    pager = true
+[alias]
+    l = log --graph --pretty=format:'%C(yellow)%h%C(cyan)%d%Creset %s %C(white)- %an, %ar%Creset'
+    ll = log --stat --abbrev-commit
+
+    d = diff --color-words
+
+    alias = !git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\\t => \\2/' | sort

@@ -1,0 +1,18 @@
+# Source this file in prezto's .zshrc
+
+# Add scripts folder
+export PATH=/home/perok/.scripts:$PATH
+
+# Virtualenv wrapper
+export WORKON_HOME=$HOME/.virtualenvs
+source /usr/local/bin/virtualenvwrapper_lazy.sh
+
+# Neovim aliases
+alias vim='nvim'
+alias :e='nvim'
+alias :E='nvim .'
+alias :q='exit'
+
+# Base16 Shell TODO not working on konsole
+#BASE16_SHELL="$HOME/.config/base16-shell/base16-default.dark.sh"
+#[[ -s $BASE16_SHELL ]] && source $BASE16_SHELL

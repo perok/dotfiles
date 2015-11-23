@@ -1,0 +1,23 @@
+- link:
+    ~/.dotfiles: ''
+    ~/.gitconfig: gitconfig
+    ~/.gitignore_global: gitignore_global
+    # NVIM
+    ~/.config/nvim/init.vim: config/nvim/init.vim
+    ~/.config/nvim/autoload/plug.vim: config/nvim/autoload/plug.vim
+    ~/.config/nvim/colors/badwolf.vim: config/nvim/colors/badwolf.vim
+    # Virtualenvs
+    #~/.virtualenvs/postactivate: virtualenvs/postactivate
+    #~/.virtualenvs/postdeactivate: virtualenvs/postdeactivate
+    # ZSH
+    #~/.zsh: zsh/
+    #~/.zshrc: zshrc
+
+    #~/.tmux.conf: tmux.conf
+
+- shell:
+    #- mkdir -p ~/.config/nvim/{autoload,colors}
+    #- mkdir -p ~/.virtualenvs
+    #- [git submodule update --init --recursive, Installing submodules]
+    #- [git submodule update --remote  --recursive, Updating submodules]
+    - [vim +PlugInstall +qall, Installing nvim plugins]
