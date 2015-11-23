@@ -7,17 +7,17 @@
     ~/.config/nvim/autoload/plug.vim: config/nvim/autoload/plug.vim
     ~/.config/nvim/colors/badwolf.vim: config/nvim/colors/badwolf.vim
     # Virtualenvs
-    #~/.virtualenvs/postactivate: virtualenvs/postactivate
-    #~/.virtualenvs/postdeactivate: virtualenvs/postdeactivate
+    ~/.virtualenvs/postactivate: virtualenvs/postactivate
+    ~/.virtualenvs/postdeactivate: virtualenvs/postdeactivate
     # ZSH
-    #~/.zsh: zsh/
-    #~/.zshrc: zshrc
+    ~/.zshrc: zshrc
+    ~/.dir_colors: dir_colors
 
     #~/.tmux.conf: tmux.conf
 
 - shell:
-    #- mkdir -p ~/.config/nvim/{autoload,colors}
-    #- mkdir -p ~/.virtualenvs
+    - mkdir -p ~/.config/nvim/{autoload,colors}
+    - mkdir -p ~/.virtualenvs
     #- [git submodule update --init --recursive, Installing submodules]
     #- [git submodule update --remote  --recursive, Updating submodules]
     - [vim +PlugInstall +qall, Installing nvim plugins]
