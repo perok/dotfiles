@@ -13,7 +13,12 @@
     ~/.virtualenvs/postactivate: virtualenvs/postactivate
     ~/.virtualenvs/postdeactivate: virtualenvs/postdeactivate
     # ZSH
-    ~/.zshrc: zshrc
+    ~/.zshrc: zsh/zshrc
+    ~/.zpreztorc: zsh/zpreztorc
+    ~/.zlogin: zsh/zlogin
+    ~/.zslogout: zsh/zlogout
+    ~/.zprofile: zsh/zprofile
+    ~/.zshenv: zsh/zshenv
     ~/.dir_colors: colors/dir_colors
     ~/.zprezto/modules/prompt/functions/prompt_lamda_setup: zsh/prompts/prompt_lamda_setup
     # KDE

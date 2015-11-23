@@ -24,8 +24,12 @@ if has('nvim')
 endif
 " }}}
 
-" vim-plug plugins {{{
+" Plugins {{{
 call plug#begin('$HOME/.config/nvim/plugged')
+
+" Syntax checking
+Plug 'benekastah/neomake'
+autocmd! BufWritePost * Neomake
 
 " The Silver searcher
 Plug 'rking/ag.vim'
@@ -36,8 +40,7 @@ Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
 Plug 'airblade/vim-gitgutter'   " Show line status in gutter
 Plug 'tpope/vim-fugitive'
 
-Plug 'scrooloose/nerdtree'
-", { 'on': 'NERDTreeToggle' }
+Plug 'scrooloose/nerdtree' ", { 'on': 'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
 Plug 'bling/vim-airline'
@@ -48,9 +51,9 @@ Plug 'morhetz/gruvbox'
 " Clojure/script/ plugins
 Plug 'tpope/vim-salve' " Leiningen
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
-Plug 'junegunn/rainbow_parentheses.vim'
 " Multiple file types
 Plug 'kovisoft/paredit', { 'for': ['clojure', 'scheme'] }
+Plug 'junegunn/rainbow_parentheses.vim'
 " Activation based on file type
 augroup rainbow_lisp
     autocmd!

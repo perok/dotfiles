@@ -1,16 +1,17 @@
 #
-# Lambda
-# A simple theme inspired by lambda from oh-my-zsh and minimal from prezto
+# Lambda+
+# A simple theme inspired by lambda from oh-my-zsh and minimal from prezto with
+# some additonal tweaks.
 #
 # Author:
+#   Per Øyvind Kanestrøm <perokane@gmail.com>
+#
+# Lambda author:
 #   Nicolas A. Tonne <nixo@gmx.com>
 #
 # Minimal Authors:
 #   Brian Tse <briankftse@gmail.com>
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
-#
-# Screenshots:
-#   http://i.imgur.com/V7fzEUg.png
 #
 
 function +vi-git_status {
@@ -46,8 +47,10 @@ function prompt_minimal_setup {
   zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b|%F{cyan}%r%f'
   zstyle ':vcs_info:git*+set-message:*' hooks git_status
 
+  #PROMPT='%F{green}%(?::%F{red})λ%f %~${vcs_info_msg_0_} '
   # Define prompts.
-  PROMPT='%F{green}%(?::%F{red})λ%f %~${vcs_info_msg_0_} '
+  NEWLINE=$'\n'
+  PROMPT='%(1j.jobs=%j.) %~${vcs_info_msg_0_}${NEWLINE} %F{green}%(?::%F{red})λ%f '
   RPROMPT=''
   SPROMPT='zsh: correct %F{red}%R%f to %F{green}%r%f [nyae]? '
 }

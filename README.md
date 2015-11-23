@@ -13,6 +13,7 @@ Clone and run install.
 * http://vimrcfu.com/snippet/77
 * http://vimrcfu.com/snippet/182
 * https://github.com/junegunn/fzf
+* Set $EDITOR
 
 Noteable stuff
 --------------
@@ -26,5 +27,5 @@ Noteable stuff
 
 Caps is useless. Swap caps with escape. Add this to startup:
 
-    xmodmap ~/dotfiles/scripts/speedswapper
+    ~./$HOME/.dotfiles/scripts/speedswapperAutostart
 

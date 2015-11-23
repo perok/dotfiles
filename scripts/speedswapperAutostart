@@ -1,0 +1,2 @@
+#!/bin/bash
+xmodmap ~/.dotfiles/scripts/speedswapper
