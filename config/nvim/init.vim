@@ -2,9 +2,10 @@
 " Other tips from https://github.com/euclio/vimrc/blob/master/vimrc
 
 " TODO {{{
-" install history tree plugin
 " https://github.com/mbbill/undotree
 " Base16 theme .XResources, ranger, vim, zsh?
+" nerdcomment
+" fzf
 " }}}
 
 " Core {{{
@@ -92,16 +93,16 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 "if !exists('g:airline_symbols')
 "    let g:airline_symbols = {}
+    " unicode symbols
+    "let g:airline_left_sep = '▶'
+    "let g:airline_right_sep = '◀'
+    "let g:airline_symbols.crypt = '🔒'
+    "let g:airline_symbols.linenr = '␤'
+    "let g:airline_symbols.branch = '⎇'
+    "let g:airline_symbols.paste = 'ρ'
+    "let g:airline_symbols.whitespace = 'Ξ'
 "endif
 
-" unicode symbols
-"let g:airline_left_sep = '▶'
-"let g:airline_right_sep = '◀'
-"let g:airline_symbols.crypt = '🔒'
-"let g:airline_symbols.linenr = '␤'
-"let g:airline_symbols.branch = '⎇'
-"let g:airline_symbols.paste = 'ρ'
-"let g:airline_symbols.whitespace = 'Ξ'
 "   }}}
 " }}}
 
@@ -120,7 +121,7 @@ set background=dark
 colorscheme gruvbox
 
 " Special filetypes {{{
-au BufRead,BufNewFile *.cl setfiletype c " OpenCL kernels
+autocmd BufRead,BufNewFile *.cl setfiletype c " OpenCL kernels
 " }}}
 " }}}
 
@@ -200,6 +201,7 @@ set formatoptions+=cr
 " r - autoinsert comment leader with <Enter>
 " q - allow formatting of comments with :gq
 " l - don't format already long lines
+
 " Show arrows when there are long lines, and show · for trailing space
 set list listchars=tab:»·,trail:·,precedes:←,extends:→
 
@@ -321,6 +323,26 @@ if has('nvim')
     tnoremap <A-j> <C-\><C-n><C-w>j
     tnoremap <A-k> <C-\><C-n><C-w>k
     tnoremap <A-l> <C-\><C-n><C-w>l
+
+    " gruvbox terminal color scheme
+    let g:terminal_color_0="#282828"
+    let g:terminal_color_1="#cc241d"
+    let g:terminal_color_2="#98971a"
+    let g:terminal_color_3="#d79921"
+    let g:terminal_color_4="#458588"
+    let g:terminal_color_5="#b16286"
+    let g:terminal_color_6="#689d6a"
+    let g:terminal_color_7="#a89984"
+    let g:terminal_color_8="#928374"
+    let g:terminal_color_9="#fb4934"
+    let g:terminal_color_10="#b8bb26"
+    let g:terminal_color_11="#fabd2f"
+    let g:terminal_color_12="#83a598"
+    let g:terminal_color_13="#d3869b"
+    let g:terminal_color_14="#8ec07c"
+    let g:terminal_color_15="#ebdbb2"
+    let g:terminal_color_background="#282828"
+    let g:terminal_color_foreground="#ebdbb2"
 endif
 " }}}
 

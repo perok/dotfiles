@@ -12,6 +12,7 @@ Clone and run install.
 # TODO
 * http://vimrcfu.com/snippet/77
 * http://vimrcfu.com/snippet/182
+* https://github.com/junegunn/fzf
 
 Noteable stuff
 --------------
