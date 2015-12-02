@@ -1,31 +1,35 @@
 # Perok's dotfiles
 
-My dots.
+My dots. Assumes Zsh, Prezto, Kde, and Neovim.
 
 Installation guide
 ------------------
 
-Using https://github.com/anishathalye/dotbot/
+Uses: https://github.com/anishathalye/dotbot/
 
-Clone and run install.
+Clone and ./install
 
-# TODO
+Todo
+----
+
 * http://vimrcfu.com/snippet/77
 * http://vimrcfu.com/snippet/182
-* https://github.com/junegunn/fzf
-* Set $EDITOR
+* Vimwiki?
+* vim-devicons
+* Nerdcommenter or tcomment
+* vim-easy-align
+* targets.vim
 
 Noteable stuff
 --------------
 
-## VIM
+### Nvim
 
-* imap jk --> Esc
+* imap jk <Esc>
 
+### General system changes
 
-## General system changes
+Caps is useless so swap it with escape. Add this to startup:
 
-Caps is useless. Swap caps with escape. Add this to startup:
-
-    ~./$HOME/.dotfiles/scripts/speedswapperAutostart
+    ./$HOME/.dotfiles/scripts/speedswapperAutostart
 

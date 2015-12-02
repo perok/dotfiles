@@ -26,4 +26,6 @@ alias :q='exit'
 #BASE16_SHELL="$HOME/.config/base16-shell/base16-default.dark.sh"
 #[[ -s $BASE16_SHELL ]] && source $BASE16_SHELL
 
+# Find text in pdf files
+# find . -name '*.pdf' -exec sh -c 'pdftotext "{}" - | grep --with-filename --label="{}" --color "speedup"' \;
 
