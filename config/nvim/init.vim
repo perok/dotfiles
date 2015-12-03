@@ -10,8 +10,8 @@
 " }}}
 
 " Core {{{
-" Use utf-8 everywhere
 if !has('nvim')
+    " Use utf-8 everywhere
     set encoding=utf8
 else
     " Allow the neovim Python plugin to work inside a virtualenv, by manually
@@ -22,28 +22,26 @@ endif
 
 " Leader shortcuts
 let g:mapleader=","       " leader is comma
-" }}}
 
-" Plugins {{{
-"auto-install vim-plug
+" auto-install vim-plug
 if empty(glob('~/.config/nvim/autoload/plug.vim'))
   silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs \
       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter * PlugInstall
 endif
+" }}}
 
+" Plugins {{{
 call plug#begin('$HOME/.config/nvim/plugged')
 
 " Syntax checking
 Plug 'benekastah/neomake'
-augroup plugin_neomake
-    autocmd!
-    autocmd bufwritepost * Neomake
-augroup END
 
 " The Silver searcher
 Plug 'rking/ag.vim'
 Plug 'kien/ctrlp.vim'
+
+" todo deoplete
 Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
 
 " Git plugins
@@ -61,14 +59,10 @@ Plug 'morhetz/gruvbox'
 " Clojure/script/ plugins
 Plug 'tpope/vim-salve' " Leiningen
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
+
 " Multiple file types
 Plug 'kovisoft/paredit', { 'for': ['clojure', 'scheme'] }
 Plug 'junegunn/rainbow_parentheses.vim'
-" Activation based on file type
-augroup plugin_rainbow_lisp
-    autocmd!
-    autocmd FileType lisp,clojure,scheme RainbowParentheses
-augroup END
 
 " Plug 'airodactyl/neovim-ranger'
 " nnoremap <f9> :tabe %:p:h<cr>
@@ -76,6 +70,16 @@ call plug#end()
 " }}}
 
 " Plugin settings {{{
+augroup plugin_neomake
+    autocmd!
+    autocmd bufwritepost * Neomake
+augroup END
+
+augroup plugin_rainbow_lisp
+    autocmd!
+    autocmd FileType lisp,clojure,scheme RainbowParentheses
+augroup END
+
 "   Ctrl-p settings {{{
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
@@ -89,15 +93,16 @@ let g:ctrlp_working_path_mode = 0
 let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
 let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""' " Use silver searcher
 
-" ,b is buffer
 nnoremap <leader>b :CtrlPBuffer<CR>
+nnoremap <leader>m :CtrlPMRUFiles<CR>
 "   }}}
 
 "   Nerdtree {{{
-" Start automatically if no files are specified
 "if exists("b:NERDTree")
 augroup nerdtree
     autocmd!
+
+    " Start automatically if no files are specified
     autocmd StdinReadPre * let s:std_in=1
     autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
@@ -129,14 +134,12 @@ syntax enable           " enable syntax processing
 
 set background=dark
 
-"colorscheme badwolf         " awesome colorscheme
 if has('vim_starting')
     colorscheme gruvbox
 endif
 " }}}
 
 " Autocmd {{{
-"if has("autocmd")
 augroup vimrc
     autocmd!
 
@@ -144,9 +147,9 @@ augroup vimrc
     autocmd BufRead,BufNewFile *.cl setfiletype c " OpenCL kernels
 
     " Set cursor to last place when reopening file
-    autocmd BufReadPost * 
-                \ if line("'\"") > 1 && line("'\"") <= line("$") | 
-                \   exe "normal! g'\"" | 
+    autocmd BufReadPost *
+                \ if line("'\"") > 1 && line("'\"") <= line("$") |
+                \   exe "normal! g'\"" |
                 \ endif
 
     " Do not use relativenumber in insert mode
@@ -158,10 +161,19 @@ augroup vimrc
     autocmd FocusLost   * set norelativenumber
     autocmd FocusGained * set relativenumber
 
+    " Resize splits when the window is resized.
+    autocmd VimResized * exe "normal! \<c-w>="
+
+    " Strip trailing whitespace.
+    autocmd BufWritePre,FileWritePre,FileAppendPre,FilterWritePre *
+        \ call <SID>StripTrailingWhitespaces()
 augroup END
 " }}}
 
 " Shortcuts/Movement {{{
+" jk is escape
+inoremap jk <esc>
+
 " move vertically by visual line
 nnoremap j gj
 nnoremap k gk
@@ -169,26 +181,9 @@ nnoremap k gk
 " move to beginning/end of line
 nnoremap B ^
 nnoremap E $
-" $/^ doesn't do anything
-"nnoremap $ <nop>
-"nnoremap ^ <nop>
 
 " highlight last inserted text
 nnoremap gV `[v`]
-
-" jk is escape
-inoremap jk <esc>
-
-" edit vimrc/zshrc and load vimrc bindings
-nnoremap <leader>ev :vsp $MYVIMRC<CR>
-nnoremap <leader>ez :vsp ~/.zshrc<CR>
-nnoremap <leader>sv :source $MYVIMRC<CR>
-
-" save session (,s). Open again with vim -S
-nnoremap <leader>s :mksession<CR>
-
-" w!! saves the file as sudo
-cmap w!! w !sudo tee % >/dev/null
 
 " Keep selection when indenting
 vnoremap < <gv
@@ -202,11 +197,39 @@ inoremap <c-k> <esc>:m-2<cr>==gi
 vnoremap <c-j> :m'>+<cr>gv=gv
 vnoremap <c-k> :m-2<cr>gv=gv
 
-" alt+{h,j,k,l}  window navigation
+" window navigation alt+{h,j,k,l}
 nnoremap <A-h> <C-w>h
 nnoremap <A-j> <C-w>j
 nnoremap <A-k> <C-w>k
 nnoremap <A-l> <C-w>l
+
+" w!! saves the file as sudo
+cmap w!! w !sudo tee % >/dev/null
+
+" edit vimrc/zshrc and load vimrc bindings
+nnoremap <leader>ev :vsp $MYVIMRC<CR>
+nnoremap <leader>ez :vsp ~/.zshrc<CR>
+nnoremap <leader>sv :source $MYVIMRC<CR>
+
+" save session (,s). Open again with vim -S
+nnoremap <leader>s :mksession<CR>
+" }}}
+
+" Tab Navigation --------------------------------------------------------- {{{
+" Easily create a new tab.
+map <Leader>tt :tabnew<CR>
+
+" Easily close a tab.
+map <Leader>tc :tabclose<CR>
+
+" Easily move a tab.
+noremap <Leader>tm :tabmove<CR>
+
+" Easily go to next tab.
+noremap <Leader>tn :tabnext<CR>
+
+" Easily go to previous tab.
+noremap <Leader>tp :tabprevious<CR>
 " }}}
 
 " Spaces and tabs {{{
@@ -226,7 +249,10 @@ set showcmd             " show command in bottom bar
 set cursorline          " highlight current line
 filetype indent on      " load filetype-specific indent files
 "Ignore these files when completing names and in Explorer
-set wildignore+=.svn,CVS,.git,*.o,*.a,*.class,*.mo,*.la,*.so,*.obj,*.swp,*.jpg,*.png,*.xpm,*.gif
+set wildignore+=.svn,.hg,.git
+set wildignore+=*.o,*.a,*.class,*.so,*.obj,*.pyc
+set wildignore+=*.jpg,*.png,*.xpm,*.gif,*.bmp,*.jpeg
+set wildignore+=*~,#*#,*.sw?,%*,*=
 set lazyredraw          " redraw only when we need to.
 set showmatch           " highlight matching [{()}]
 set breakindent         " Keep indent level when wrappping line
@@ -321,7 +347,7 @@ function! <SID>StripTrailingWhitespaces()
 endfunction
 
 " http://stackoverflow.com/questions/4292733/vim-creating-parent-directories-on-save
-" Make new directory where file is? 
+" Make new directory where file is?
 function! s:MkNonExDir(file, buf)
     if empty(getbufvar(a:buf, '&buftype')) && a:file!~#'\v^\w+\:\/'
         let dir=fnamemodify(a:file, ':h')
@@ -341,6 +367,8 @@ augroup END
 " Terminal {{{
 if has('nvim')
     set sh=zsh
+
+    " todo <Leader>t create term split
 
     augroup nvim_term
         autocmd!
