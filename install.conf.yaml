@@ -5,6 +5,7 @@
     ~/.dotfiles: ''
     ~/.gitconfig: gitconfig
     ~/.gitignore_global: gitignore_global
+    ~/.inputrc: inputrc
     # NVIM
     ~/.config/nvim/init.vim: config/nvim/init.vim
     ~/.config/nvim/autoload/plug.vim: config/nvim/autoload/plug.vim

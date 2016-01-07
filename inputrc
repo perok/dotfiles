@@ -1,0 +1,3 @@
+# Map vi to almost everything
+set editing-mode vi
+set keymap vi

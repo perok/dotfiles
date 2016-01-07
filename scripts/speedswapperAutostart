@@ -1,2 +1,11 @@
 #!/bin/bash
-xmodmap ~/.dotfiles/scripts/speedswapper
+# xmodmap -e ~/dotfiles/scripts/speedswapper
+xmodmap -e 'remove Lock = Caps_Lock'
+xmodmap -e 'keysym Escape = Caps_Lock'
+xmodmap -e 'keysym Caps_Lock = Escape'
+xmodmap -e 'add Lock = Caps_Lock'
+
+
+#!Turn Caps Lock into a second Escape key
+#remove Lock = Caps_Lock
+#keysym Caps_Lock = Escape

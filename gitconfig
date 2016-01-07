@@ -4,6 +4,7 @@
 [core]
     editor = nvim-client -f
     pager = less -r
+    excludesfile = $HOME/.gitignore_global
 [push]
     default = simple
 [color]
@@ -11,9 +12,12 @@
     interactive = auto
     pager = true
 [alias]
+    graph = log --all --graph --decorate --oneline
     l = log --graph --pretty=format:'%C(yellow)%h%C(cyan)%d%Creset %s %C(white)- %an, %ar%Creset'
     ll = log --stat --abbrev-commit
-
     d = diff --color-words
-
     alias = !git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\\t => \\2/' | sort
+    getroot = !pwd
+    difftex = difftool -y -t latex
+[difftool.latex]
+    cmd = latexdiff "$LOCAL" "$REMOTE"
