@@ -92,26 +92,6 @@ command! QHist call fzf#vim#search_history({'right': '40'})
 nnoremap q/ :QHist<CR>
 " }}}
 
-" The Silver searcher
-"Plug 'rking/ag.vim'
-"Plug 'kien/ctrlp.vim'
-" {{{
-"let g:ctrlp_map = '<c-p>'
-"let g:ctrlp_cmd = 'CtrlP'
-"let g:ctrlp_custom_ignore = {
-"  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
-"  \ 'file': '\v\.(exe|so|dll)$',
-"  \ }
-"let g:ctrlp_match_window = 'bottom,order:ttb'
-"let g:ctrlp_switch_buffer = 0
-"let g:ctrlp_working_path_mode = 0
-"let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
-"let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""' " Use silver searcher
-"
-"nnoremap <silent> <leader>b :CtrlPBuffer<CR>
-"nnoremap <silent> <leader>m :CtrlPMRUFiles<CR>
-" }}}
-
 " Omnicompletion
 " Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
 Plug 'Shougo/deoplete.nvim'
@@ -194,12 +174,6 @@ call plug#end()
 " }}}
 
 " Colors {{{
-" Enable true color
-if has('nvim')
-    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-    let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
-endif
-
 syntax enable           " enable syntax processing
 
 set background=dark
@@ -404,12 +378,6 @@ endif
 set ignorecase
 set smartcase
 
-" Use ag over grep
-"if executable('ag')
-"    set grepprg=ag\ --nogroup\ --nocolor\ --column
-"    set grepformat=%f:%l:%c%m
-"endif
-
 " turn off search highlight
 nnoremap <silent> <leader><space> :nohlsearch<CR>
 " }}}
@@ -525,11 +493,14 @@ if has('nvim')
     let g:terminal_color_background="#282828"
     let g:terminal_color_foreground="#ebdbb2"
 
+    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+    let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
     " Use a blinking upright bar cursor in Insert mode, a solid block in normal and a blinking underline in replace mode
     " TODO not working
     "let &t_SI = "\<Esc>[5 q"
     "let &t_SR = "\<Esc>[3 q"
     "let &t_EI = "\<Esc>[2 q"
+
 endif
 " }}}
 
