@@ -5,9 +5,9 @@
     " https://github.com/mbbill/undotree
     " Base16 theme .XResources, ranger, vim, zsh?
     " nerdcomment
-    " fzf
     " XDG variables not set
     "let g:python3_host_prog = '/path/to/python3'
+    " Remove nerdtree. fzf and ** in terminal does all that is needed
 " }}}
 
 " Core {{{
@@ -34,7 +34,7 @@ endif
 " }}}
 
 " Plugins {{{
-call plug#begin('$HOME/.config/nvim/plugged')
+call plug#begin()
 
 Plug 'tpope/vim-eunuch'
 Plug 'easymotion/vim-easymotion'
@@ -69,9 +69,17 @@ augroup plugin_neomake
 augroup END
 " }}}
 
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --no-update-rc --key-bindings --completion' }
 Plug 'junegunn/fzf.vim'
 " {{{
+
+function! s:find_git_root()
+  return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
+endfunction
+
+" If in git repo, go to root of repo and use fzf there
+command! ProjectFiles execute 'Files' s:find_git_root()
+
 nnoremap <C-p> :FZF<CR>
 nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <leader>m :History<CR>
@@ -102,6 +110,16 @@ let g:deoplete#enable_at_startup = 1
 " Git plugins
 Plug 'airblade/vim-gitgutter'   " Show line status in gutter
 Plug 'tpope/vim-fugitive'
+"Plug 'junegunn/gv.vim' " Required vim-fugitive. :GV[!] for commits
+
+Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
+" {{{
+nnoremap <F6> :UndotreeToggle<cr>
+if has("persistent_undo")
+    set undodir=~/.undodir/
+    set undofile
+endif
+" }}}
 
 Plug 'scrooloose/nerdtree' " , { 'on': 'NERDTreeToggle' }
 " {{{
@@ -162,11 +180,15 @@ augroup END
 " }}}
 
 " Javascript
-Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
+" http://davidosomething.com/blog/vim-for-javascript/
+Plug 'othree/yajs.vim', { 'for': 'javascript' } " JS syntax
+Plug 'itspriddle/vim-javascript-indent', { 'for': 'javascript' } " JS indent
 Plug 'mxw/vim-jsx', { 'for': 'javascript' }
 " {{{
 let g:jsx_ext_required = 0 " Allow JSX in normal JS files
 " }}}
+Plug 'elzr/vim-json', { 'for': 'json' }
+
 
 " Plug 'airodactyl/neovim-ranger'
 " nnoremap <f9> :tabe %:p:h<cr>
@@ -387,7 +409,6 @@ set foldenable          " enable folding
 set foldlevelstart=10   " open most folds by default
 set foldnestmax=10      " 10 nested fold max
 " space open/closes folds
-" TODO collision with space?
 nnoremap <space> za
 set foldmethod=indent   " fold based on indent level
 " }}}
@@ -446,17 +467,30 @@ augroup BWCCreateDir
     autocmd!
     autocmd BufWritePre * :call s:MkNonExDir(expand('<afile>'), +expand('<abuf>'))
 augroup END
+
+" ----------------------------------------------------------------------------
+" EX | chmod +x
+" ----------------------------------------------------------------------------
+command! EX if !empty(expand('%'))
+         \|   write
+         \|   call system('chmod +x '.expand('%'))
+         \| else
+         \|   echohl WarningMsg
+         \|   echo 'Save the file first'
+         \|   echohl None
+         \| endif
 " }}}
 
 " Terminal {{{
 if has('nvim')
     set sh=zsh
 
-    " TODO collision?
-    nnoremap <leader>t :STerm<CR>
     command! VsTerm  vsplit  | terminal
     command! STerm   split   | terminal
     command! TabTerm tabedit | terminal
+
+    " TODO collision?
+    nnoremap <silent> <leader>t :STerm<CR>
 
     augroup nvim_term
         autocmd!
@@ -497,10 +531,10 @@ if has('nvim')
     let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
     " Use a blinking upright bar cursor in Insert mode, a solid block in normal and a blinking underline in replace mode
     " TODO not working
+    " https://github.com/neovim/neovim/issues/2583
     "let &t_SI = "\<Esc>[5 q"
     "let &t_SR = "\<Esc>[3 q"
     "let &t_EI = "\<Esc>[2 q"
-
 endif
 " }}}
 

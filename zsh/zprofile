@@ -44,6 +44,8 @@ typeset -gU cdpath fpath mailpath path
 # Set the list of directories that Zsh searches for programs.
 path=(
   /usr/local/{bin,sbin}
+  $HOME/.local/bin # Python etc
+  $HOME/.dotfiles/bin # user local files
   $path
 )
 
@@ -76,7 +78,4 @@ TMPPREFIX="${TMPDIR%/}/zsh"
 #
 # Other variables
 #
-
-# Add bin folder
-export PATH=$PATH:$HOME/.dotfiles/bin
 

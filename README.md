@@ -1,6 +1,6 @@
 # Perok's dotfiles
 
-My dots. Assumes Zsh, Prezto, Kde, and Neovim.
+My dots. Assumes Zsh, Prezto, Kde, silversearcher-ag and Neovim.
 
 Installation guide
 ------------------

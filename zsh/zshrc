@@ -29,5 +29,7 @@ alias :q='exit'
 # Find text in pdf files
 # find . -name '*.pdf' -exec sh -c 'pdftotext "{}" - | grep --with-filename --label="{}" --color "speedup"' \;
 
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Set ag as the default source for fzf (respect .gitignore etc)
+export FZF_DEFAULT_COMMAND='ag -l -g ""'

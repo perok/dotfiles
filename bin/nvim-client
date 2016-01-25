@@ -17,10 +17,10 @@ filenames = [
         for arg in sys.argv[1:] if not arg[0] in ['-', '+']
 ]
 
-try:
-    nvim_socket = os.environ["NVIM_LISTEN_ADDRESS"]
-except KeyError:
-    # If we aren't running inside a `:terminal`, just exec nvim.
+nvim_socket = os.environ.get("NVIM_LISTEN_ADDRESS", None)
+
+# If we aren't running inside a `:terminal`, just exec nvim.
+if nvim_socket is None:
     os.execvp('nvim', sys.argv)
 
 nvim = neovim.attach('socket', path=nvim_socket)
