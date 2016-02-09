@@ -69,7 +69,7 @@ augroup plugin_neomake
 augroup END
 " }}}
 
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --no-update-rc --key-bindings --completion' }
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 " {{{
 
@@ -125,6 +125,7 @@ Plug 'scrooloose/nerdtree' " , { 'on': 'NERDTreeToggle' }
 " {{{
 let NERDTreeMinimalUI=1
 "let NERDTreeHijackNetrw=1
+let g:NERDTreeWinPos = "right"
 
 "if exists("b:NERDTree")
 augroup nerdtree
@@ -490,7 +491,7 @@ if has('nvim')
     command! TabTerm tabedit | terminal
 
     " TODO collision?
-    nnoremap <silent> <leader>t :STerm<CR>
+    nnoremap <silent> <leader>st :STerm<CR>
 
     augroup nvim_term
         autocmd!

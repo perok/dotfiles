@@ -9,6 +9,12 @@ Uses: https://github.com/anishathalye/dotbot/
 
 Clone and ./install
 
+Python files
+    sudo apt-get install python-virtualenv
+    sudo pip install virtualenvwrapper
+
+    apt-get install silversearcher-ag
+
 Todo
 ----
 

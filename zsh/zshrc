@@ -15,6 +15,10 @@ fi
 # Virtualenv wrapper
 export WORKON_HOME=$HOME/.virtualenvs
 source /usr/local/bin/virtualenvwrapper_lazy.sh
+#if [[ $(command -v virtualenvwrapper_lazy.sh) ]]; then
+#  source virtualenvwrapper_lazy.sh
+#fi
+
 
 # Neovim aliases
 alias vim='nvim'
@@ -32,4 +36,6 @@ alias :q='exit'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Set ag as the default source for fzf (respect .gitignore etc)
-export FZF_DEFAULT_COMMAND='ag -l -g ""'
+if [ -x "$(command -v ag)" ]; then
+  export FZF_DEFAULT_COMMAND='ag -l -g ""'
+fi

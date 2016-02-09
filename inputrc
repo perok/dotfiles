@@ -1,3 +1,4 @@
 # Map vi to almost everything
-set editing-mode vi
-set keymap vi
+# Note; This sux
+#set editing-mode vi
+#set keymap vi
