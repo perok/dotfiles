@@ -1,6 +1,10 @@
 " Based on http://dougblack.io/words/a-good-vimrc.html
 " Other tips from https://github.com/euclio/vimrc/blob/master/vimrc
 
+" Enable all py highlighting????
+"autocmd BufRead,BufNewFile *.py let python_highlight_all=1
+let python_highlight_all = 1
+
 " TODO {{{
     " https://github.com/mbbill/undotree
     " Base16 theme .XResources, ranger, vim, zsh?
