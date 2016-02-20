@@ -19,6 +19,9 @@ source /usr/local/bin/virtualenvwrapper_lazy.sh
 #  source virtualenvwrapper_lazy.sh
 #fi
 
+# Autojump
+source /usr/share/autojump/autojump.sh
+
 
 # Neovim aliases
 alias vim='nvim'

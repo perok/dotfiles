@@ -10,10 +10,13 @@ Uses: https://github.com/anishathalye/dotbot/
 Clone and ./install
 
 Python files
-    sudo apt-get install python-virtualenv
-    sudo pip install virtualenvwrapper
 
-    apt-get install silversearcher-ag
+    $ sudo apt-get install python-virtualenv silversearcher-ag
+    $ pip install virtualenvwrapper
+
+Other:
+
+    $ sudo apt-get install autojump
 
 Todo
 ----
@@ -37,5 +40,5 @@ Noteable stuff
 
 Caps is useless so swap it with escape. Add this to startup:
 
-    ./$HOME/.dotfiles/scripts/speedswapperAutostart
+    ./$HOME/.dotfiles/scripts/swap-caps-escape
 

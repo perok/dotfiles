@@ -55,7 +55,8 @@ map <Leader>h <Plug>(easymotion-linebackward)
 " }}}
 
 " Syntax checking
-Plug 'benekastah/neomake'
+" Plug 'benekastah/neomake' TODO until #291 merged, use:
+Plug 'hauleth/neomake'
 " {{{
 let g:neomake_javascript_enabled_makers = ['eslint']
 " Override eslint with local version where necessary.
