@@ -6,12 +6,15 @@
 let python_highlight_all = 1
 
 " TODO {{{
-    " https://github.com/mbbill/undotree
     " Base16 theme .XResources, ranger, vim, zsh?
-    " nerdcomment
     " XDG variables not set
     "let g:python3_host_prog = '/path/to/python3'
-    " Remove nerdtree. fzf and ** in terminal does all that is needed
+    " unimpaired - bunch of useful mappings on ] and [
+    " repeat - . them all!
+    " projectionist - jump all over the project with ease
+    " targets - more useful movements
+    " swapit - ^a/^x on steroids (mostly used for true/false switch)
+    " Lightline?
 " }}}
 
 " Core {{{
@@ -41,6 +44,12 @@ endif
 call plug#begin()
 
 Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-fugitive'
+Plug 'justinmk/vim-dirvish'
+" {{{
+let g:dirvish_hijack_netrw = 1
+" }}}
 Plug 'easymotion/vim-easymotion'
 " {{{
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
@@ -53,9 +62,14 @@ map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
 map <Leader>h <Plug>(easymotion-linebackward)
 " }}}
-Plug 'justinmk/vim-dirvish'
+
+Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 " {{{
-let g:dirvish_hijack_netrw = 1
+nnoremap <F6> :UndotreeToggle<cr>
+if has("persistent_undo")
+    set undodir=~/.undodir/
+    set undofile
+endif
 " }}}
 
 " Syntax checking
@@ -115,21 +129,10 @@ Plug 'Shougo/deoplete.nvim'
 let g:deoplete#enable_at_startup = 1
 " }}}
 
-" Git plugins
 Plug 'airblade/vim-gitgutter'   " Show line status in gutter
 " {{{
 " Always display gitgutter column
 let g:gitgutter_sign_column_always=1
-" }}}
-Plug 'tpope/vim-fugitive'
-
-Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
-" {{{
-nnoremap <F6> :UndotreeToggle<cr>
-if has("persistent_undo")
-    set undodir=~/.undodir/
-    set undofile
-endif
 " }}}
 
 Plug 'nathanaelkane/vim-indent-guides'
@@ -219,8 +222,7 @@ augroup vimrc
     autocmd VimResized * exe "normal! \<c-w>="
 
     " Normalize: Strip trailing whitespace.
-    autocmd BufWritePre,FileWritePre,FileAppendPre,FilterWritePre *
-        \ call <SID>StripTrailingWhitespaces()
+    autocmd BufWritePre * :%s/\s\+$//e
 
     " http://www.vimbits.com/bits/229
     autocmd BufRead COMMIT_EDITMSG setlocal spell!
@@ -416,18 +418,6 @@ function! ToggleNumber()
         set relativenumber
     endif
 endfunc
-
-" strips trailing whitespace at the end of files. this
-" is called on buffer write in the autogroup above.
-function! <SID>StripTrailingWhitespaces()
-    " save last search & cursor position
-    let _s=@/
-    let l = line(".")
-    let c = col(".")
-    %s/\s\+$//e
-    let @/=_s
-    call cursor(l, c)
-endfunction
 
 " http://stackoverflow.com/questions/4292733/vim-creating-parent-directories-on-save
 " Make new directory where file is?
