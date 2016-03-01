@@ -26,8 +26,7 @@ else
     "let g:python_host_prog3='/usr/bin/python3'
 endif
 
-" Leader shortcuts
-"let mapleader='\<Space>'       " leader is space
+" Leader is space
 nmap <space> <leader>
 
 " auto-install vim-plug
@@ -54,6 +53,10 @@ map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
 map <Leader>h <Plug>(easymotion-linebackward)
 " }}}
+Plug 'justinmk/vim-dirvish'
+" {{{
+let g:dirvish_hijack_netrw = 1
+" }}}
 
 " Syntax checking
 Plug 'benekastah/neomake'
@@ -62,10 +65,10 @@ let g:neomake_javascript_enabled_makers = ['eslint']
 " Override eslint with local version where necessary.
 let local_eslint = finddir('node_modules', '.;') . '/.bin/eslint'
 if matchstr(local_eslint, "^\/\\w") == ''
-  let local_eslint = getcwd() . "/" . local_eslint
+    let local_eslint = getcwd() . "/" . local_eslint
 endif
 if executable(local_eslint)
-  let g:syntastic_javascript_eslint_exec = local_eslint
+    let g:syntastic_javascript_eslint_exec = local_eslint
 endif
 
 augroup plugin_neomake
@@ -79,7 +82,7 @@ Plug 'junegunn/fzf.vim'
 " {{{
 
 function! s:find_git_root()
-  return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
+    return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
 endfunction
 
 " If in git repo, go to root of repo and use fzf there
@@ -119,7 +122,6 @@ Plug 'airblade/vim-gitgutter'   " Show line status in gutter
 let g:gitgutter_sign_column_always=1
 " }}}
 Plug 'tpope/vim-fugitive'
-"Plug 'junegunn/gv.vim' " Required vim-fugitive. :GV[!] for commits
 
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 " {{{
@@ -129,33 +131,6 @@ if has("persistent_undo")
     set undofile
 endif
 " }}}
-
-Plug 'scrooloose/nerdtree' " , { 'on': 'NERDTreeToggle' }
-" {{{
-let NERDTreeMinimalUI=1
-"let NERDTreeHijackNetrw=1
-let g:NERDTreeWinPos = "right"
-
-"if exists("b:NERDTree")
-augroup nerdtree
-    autocmd!
-
-    " Start automatically if no files are specified
-    autocmd StdinReadPre * let s:std_in=1
-    " TODO this does not work when opening a foler
-    autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-
-    " If only nerdtree is open, then close will exit vim
-    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
-
-    " Optionset to unset relativenumber, when arrives in nvim
-    " OptionSet relativenumber
-augroup END
-
-" Toggle with Ctrl-n
-map <C-n> :NERDTreeToggle<CR>
-" }}}
-Plug 'Xuyuanp/nerdtree-git-plugin'
 
 Plug 'nathanaelkane/vim-indent-guides'
 " {{{
@@ -240,13 +215,6 @@ augroup vimrc
     "autocmd FocusLost   * set norelativenumber
     "autocmd FocusGained * set relativenumber
 
-    " Do not use relativenumber when leaving window
-    " TODO this need more work..
-    "autocmd WinLeave   * set norelativenumber
-    "autocmd WinEnter   * if !exists("b:NERDTreeType") | set relativenumber | endif
-    "autocmd WinEnter *,!nerdtree  set relativenumber
-
-    "autocmd FileType nerdtree set norelativenumber
     " Resize splits when the window is resized.
     autocmd VimResized * exe "normal! \<c-w>="
 
@@ -254,21 +222,9 @@ augroup vimrc
     autocmd BufWritePre,FileWritePre,FileAppendPre,FilterWritePre *
         \ call <SID>StripTrailingWhitespaces()
 
-
     " http://www.vimbits.com/bits/229
     autocmd BufRead COMMIT_EDITMSG setlocal spell!
 augroup END
-" }}}
-
-" Statusline {{{
-"set noshowmode            " Do not show default mode in statusline
-
-set statusline=%{fugitive#statusline()} " Git status
-set statusline+=%m%r%w    " File flags
-set statusline+=\ %f      " Path to the file
-set statusline+=%=        " Switch to the right side
-set statusline+=%l/%L     " Current line / total lines
-set statusline+=\ %y      " Filetype
 " }}}
 
 " Shortcuts/Movement {{{
@@ -403,12 +359,22 @@ set splitright
 "set winminheight=5
 " }}}
 
+" Statusline {{{
+"set noshowmode            " Do not show default mode in statusline
+
+set statusline=%{fugitive#statusline()} " Git status
+set statusline+=%m%r%w    " File flags
+set statusline+=\ %f      " Path to the file
+set statusline+=%=        " Switch to the right side
+set statusline+=%l/%L     " Current line / total lines
+set statusline+=\ %y      " Filetype
+" }}}
+
 " Searching {{{
 if !has('nvim')
     set incsearch           " search as characters are entered
     set hlsearch            " highlight matches
 endif
-set ignorecase
 set smartcase
 
 " turn off search highlight
