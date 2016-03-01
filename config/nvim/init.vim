@@ -27,7 +27,8 @@ else
 endif
 
 " Leader shortcuts
-let g:mapleader=","       " leader is comma
+"let mapleader='\<Space>'       " leader is space
+nmap <space> <leader>
 
 " auto-install vim-plug
 if empty(glob('~/.config/nvim/autoload/plug.vim'))
@@ -55,8 +56,7 @@ map <Leader>h <Plug>(easymotion-linebackward)
 " }}}
 
 " Syntax checking
-" Plug 'benekastah/neomake' TODO until #291 merged, use:
-Plug 'hauleth/neomake'
+Plug 'benekastah/neomake'
 " {{{
 let g:neomake_javascript_enabled_makers = ['eslint']
 " Override eslint with local version where necessary.
@@ -114,6 +114,10 @@ let g:deoplete#enable_at_startup = 1
 
 " Git plugins
 Plug 'airblade/vim-gitgutter'   " Show line status in gutter
+" {{{
+" Always display gitgutter column
+let g:gitgutter_sign_column_always=1
+" }}}
 Plug 'tpope/vim-fugitive'
 "Plug 'junegunn/gv.vim' " Required vim-fugitive. :GV[!] for commits
 
@@ -152,16 +156,6 @@ augroup END
 map <C-n> :NERDTreeToggle<CR>
 " }}}
 Plug 'Xuyuanp/nerdtree-git-plugin'
-
-Plug 'bling/vim-airline'
-" {{{
-" Do not show default mode in statusline
-set noshowmode
-
-" Display buffers when one window open
-let g:airline#extensions#tabline#enabled = 1
-let g:airline_powerline_fonts = 1
-" }}}
 
 Plug 'nathanaelkane/vim-indent-guides'
 " {{{
@@ -266,6 +260,17 @@ augroup vimrc
 augroup END
 " }}}
 
+" Statusline {{{
+"set noshowmode            " Do not show default mode in statusline
+
+set statusline=%{fugitive#statusline()} " Git status
+set statusline+=%m%r%w    " File flags
+set statusline+=\ %f      " Path to the file
+set statusline+=%=        " Switch to the right side
+set statusline+=%l/%L     " Current line / total lines
+set statusline+=\ %y      " Filetype
+" }}}
+
 " Shortcuts/Movement {{{
 " jk is escape
 inoremap jk <esc>
@@ -306,7 +311,7 @@ nmap <up>    :3wincmd +<cr>
 nmap <down>  :3wincmd -<cr>
 
 " Shortcut to vim-eunuch's SudoWrite
-" todo remove vim eunoch?
+" TODO remove vim eunoch?
 "cmap w!! call SudoWrite()
 " Allow saving of files as sudo when I forgot to start vim using sudo.
 cmap w!! w !sudo tee > /dev/null %
@@ -407,7 +412,7 @@ set ignorecase
 set smartcase
 
 " turn off search highlight
-nnoremap <silent> <leader><space> :nohlsearch<CR>
+nnoremap <silent> <Esc> :nohlsearch<Bar>:echo<CR>
 " }}}
 
 " Folding {{{
@@ -415,7 +420,8 @@ set foldenable          " enable folding
 set foldlevelstart=10   " open most folds by default
 set foldnestmax=10      " 10 nested fold max
 " space open/closes folds
-nnoremap <space> za
+" TODO
+"nnoremap <space> za
 set foldmethod=indent   " fold based on indent level
 " }}}
 
@@ -495,7 +501,6 @@ if has('nvim')
     command! STerm   split   | terminal
     command! TabTerm tabedit | terminal
 
-    " TODO collision?
     nnoremap <silent> <leader>st :STerm<CR>
 
     augroup nvim_term
