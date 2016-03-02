@@ -15,6 +15,7 @@ let python_highlight_all = 1
     " targets - more useful movements
     " swapit - ^a/^x on steroids (mostly used for true/false switch)
     " Lightline?
+    " https://github.com/carlitux/deoplete-ternjs
 " }}}
 
 " Core {{{
@@ -365,7 +366,7 @@ set splitright
 "set noshowmode            " Do not show default mode in statusline
 
 set statusline=%{fugitive#statusline()} " Git status
-set statusline+=%m%r%w    " File flags
+set statusline+=%m%r%w%{HasPaste()}   " File flags
 set statusline+=\ %f      " Path to the file
 set statusline+=%=        " Switch to the right side
 set statusline+=%l/%L     " Current line / total lines
@@ -436,9 +437,7 @@ augroup BWCCreateDir
     autocmd BufWritePre * :call s:MkNonExDir(expand('<afile>'), +expand('<abuf>'))
 augroup END
 
-" ----------------------------------------------------------------------------
 " EX | chmod +x
-" ----------------------------------------------------------------------------
 command! EX if !empty(expand('%'))
          \|   write
          \|   call system('chmod +x '.expand('%'))
@@ -447,6 +446,34 @@ command! EX if !empty(expand('%'))
          \|   echo 'Save the file first'
          \|   echohl None
          \| endif
+
+function! HasPaste()
+    if &paste
+        return '[PASTE MODE]'
+    en
+    return ''
+endfunction
+
+" Don't close window, when deleting a buffer
+command! Bclose call <SID>BufcloseCloseIt()
+function! <SID>BufcloseCloseIt()
+   let l:currentBufNum = bufnr("%")
+   let l:alternateBufNum = bufnr("#")
+
+   if buflisted(l:alternateBufNum)
+     buffer #
+   else
+     bnext
+   endif
+
+   if bufnr("%") == l:currentBufNum
+     new
+   endif
+
+   if buflisted(l:currentBufNum)
+     execute("bdelete! ".l:currentBufNum)
+   endif
+endfunction
 " }}}
 
 " Terminal {{{
