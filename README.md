@@ -16,18 +16,15 @@ Python files
 
 Other:
 
-    $ sudo apt-get install autojump
+    $ sudo apt-get install autojump zathura
 
 Todo
 ----
 
+* http://zshwiki.org/home/zle/vi-mode
+* with https://github.com/zsh-users/zsh/blob/master/Functions/Zle/surround
 * http://vimrcfu.com/snippet/77
 * http://vimrcfu.com/snippet/182
-* Vimwiki?
-* vim-devicons
-* Nerdcommenter or tcomment
-* vim-easy-align
-* targets.vim
 
 Noteable stuff
 --------------

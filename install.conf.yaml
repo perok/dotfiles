@@ -6,14 +6,14 @@
     ~/.gitconfig: gitconfig
     ~/.gitignore_global: gitignore_global
     ~/.inputrc: inputrc
-    # NVIM
+    # Neovim
     ~/.config/nvim/init.vim: config/nvim/init.vim
     ~/.config/nvim/autoload/plug.vim: config/nvim/autoload/plug.vim
     ~/.config/nvim/colors/badwolf.vim: config/nvim/colors/badwolf.vim
     # Virtualenvs
     ~/.virtualenvs/postactivate: virtualenvs/postactivate
     ~/.virtualenvs/postdeactivate: virtualenvs/postdeactivate
-    # ZSH
+    # Zsh
     ~/.zshrc: zsh/zshrc
     ~/.zpreztorc: zsh/zpreztorc
     ~/.zlogin: zsh/zlogin
@@ -24,6 +24,8 @@
     ~/.zprezto/modules/prompt/functions/prompt_lambda_setup: zsh/prompts/prompt_lambda_setup
     # KDE
     ~/.local/share/konsole/Gruvbox_dark.colorscheme: colors/konsole/Gruvbox_dark.colorscheme
+    # Other
+    ~/.config/zathura/zathurarc: config/zathura/zathurarc
 
 
     #~/.tmux.conf: tmux.conf
