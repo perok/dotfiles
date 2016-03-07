@@ -19,7 +19,7 @@ let python_highlight_all = 1
 " }}}
 
 " Core {{{
-if !has('nvim')
+if !has('nvim') && has('vim_starting')
     " Use utf-8 everywhere
     set encoding=utf8
 else
@@ -50,6 +50,10 @@ Plug 'tpope/vim-fugitive'
 Plug 'justinmk/vim-dirvish'
 " {{{
 let g:dirvish_hijack_netrw = 1
+augroup plugin_dirvish
+    autocmd!
+    autocmd FileType dirvish call fugitive#detect(@%)
+augroup END
 " }}}
 Plug 'easymotion/vim-easymotion'
 " {{{
@@ -95,7 +99,7 @@ augroup END
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 " {{{
-
+let g:fzf_command_prefix = 'Fzf'
 function! s:find_git_root()
     return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
 endfunction
@@ -104,10 +108,10 @@ endfunction
 command! ProjectFiles execute 'Files' s:find_git_root()
 
 nnoremap <C-p> :FZF<CR>
-nnoremap <silent> <leader>b :Buffers<CR>
-nnoremap <silent> <leader>m :History<CR>
-nnoremap <silent> <leader>; :BLines<CR>
-nnoremap <silent> <leader>. :Lines<CR>
+nnoremap <silent> <leader>b :FzfBuffers<CR>
+nnoremap <silent> <leader>m :FzfHistory<CR>
+nnoremap <silent> <leader>; :FzfBLines<CR>
+nnoremap <silent> <leader>. :FzfLines<CR>
 "nnoremap <silent> <leader>gl :Commits<CR>
 "nnoremap <silent> <leader>ga :BCommits<CR>
 "nmap <leader><tab> <plug>(fzf-maps-n)
@@ -168,6 +172,9 @@ let g:jsx_ext_required = 0 " Allow JSX in normal JS files
 " }}}
 Plug 'elzr/vim-json', { 'for': 'json' }
 
+" Python
+let g:nvim_ipy_perform_mappings = 0
+Plug 'bfredl/nvim-ipy' , { 'on': 'IPython' }
 
 " Plug 'airodactyl/neovim-ranger'
 " nnoremap <f9> :tabe %:p:h<cr>
@@ -269,11 +276,8 @@ nmap <right> :3wincmd ><cr>
 nmap <up>    :3wincmd +<cr>
 nmap <down>  :3wincmd -<cr>
 
-" Shortcut to vim-eunuch's SudoWrite
-" TODO remove vim eunoch?
-"cmap w!! call SudoWrite()
-" Allow saving of files as sudo when I forgot to start vim using sudo.
-cmap w!! w !sudo tee > /dev/null %
+" Allow saving files with as root
+cmap w!! SudoWrite
 
 " edit vimrc/zshrc and load vimrc bindings
 nnoremap <leader>ev :vsp $MYVIMRC<CR>

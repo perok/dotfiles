@@ -1,3 +1,4 @@
+- clean: ['~']
 - shell:
     - mkdir -p "~/.config/nvim/{autoload,colors,swap,backup}"
     - mkdir -p ~/.virtualenvs
@@ -10,6 +11,7 @@
     ~/.config/nvim/init.vim: config/nvim/init.vim
     ~/.config/nvim/autoload/plug.vim: config/nvim/autoload/plug.vim
     ~/.config/nvim/colors/badwolf.vim: config/nvim/colors/badwolf.vim
+    ~/.config/nvim/ftplugin: config/nvim/ftplugin
     # Virtualenvs
     ~/.virtualenvs/postactivate: virtualenvs/postactivate
     ~/.virtualenvs/postdeactivate: virtualenvs/postdeactivate
@@ -32,6 +34,6 @@
 
 - shell:
     - [git submodule update --init --recursive, Installing submodules]
-    #- [git submodule update --remote  --recursive, Updating submodules]
-    - [(cd ~/.zprezto && git pull && git submodule update --init --recursive), Updating zprezto]
+      #- [git submodule update --remote  --recursive, Updating submodules]
+    - [cd ~/.zprezto && git pull && git submodule update --init --recursive, Updating zprezto]
     - [nvim +PlugInstall +qall, Installing nvim plugins]
