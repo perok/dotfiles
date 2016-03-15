@@ -13,6 +13,7 @@ Python files
 
     $ sudo apt-get install python-virtualenv silversearcher-ag
     $ pip install virtualenvwrapper
+    $ pip3 install neovim neovim-remote
 
 Other:
 
@@ -21,6 +22,7 @@ Other:
 Todo
 ----
 
+* Change to https://github.com/Eriner/zim
 * http://zshwiki.org/home/zle/vi-mode
 * with https://github.com/zsh-users/zsh/blob/master/Functions/Zle/surround
 * http://vimrcfu.com/snippet/77

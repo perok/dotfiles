@@ -22,4 +22,4 @@
 [difftool.latex]
     cmd = latexdiff "$LOCAL" "$REMOTE"
 [credential]
-	helper = cache --timeout=3600
+    helper = cache --timeout=3600

@@ -1,10 +1,6 @@
 " Based on http://dougblack.io/words/a-good-vimrc.html
 " Other tips from https://github.com/euclio/vimrc/blob/master/vimrc
 
-" Enable all py highlighting????
-"autocmd BufRead,BufNewFile *.py let python_highlight_all=1
-let python_highlight_all = 1
-
 " TODO {{{
     " Base16 theme .XResources, ranger, vim, zsh?
     " XDG variables not set
@@ -14,7 +10,6 @@ let python_highlight_all = 1
     " projectionist - jump all over the project with ease
     " targets - more useful movements
     " swapit - ^a/^x on steroids (mostly used for true/false switch)
-    " Lightline?
     " https://github.com/carlitux/deoplete-ternjs
 " }}}
 
@@ -43,6 +38,12 @@ endif
 
 " Plugins {{{
 call plug#begin()
+
+Plug 'mhinz/vim-startify'
+" {{{
+let g:startify_custom_header = []
+" }}}
+Plug 'itchyny/lightline.vim'
 
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-commentary'
@@ -168,9 +169,9 @@ Plug 'othree/yajs.vim', { 'for': 'javascript' } " JS syntax
 Plug 'itspriddle/vim-javascript-indent', { 'for': 'javascript' } " JS indent
 Plug 'mxw/vim-jsx', { 'for': 'javascript' }
 " {{{
-let g:jsx_ext_required = 0 " Allow JSX in normal JS files
+"let g:jsx_ext_required = 0 " Allow JSX in normal JS files
 " }}}
-Plug 'elzr/vim-json', { 'for': 'json' }
+" Plug 'elzr/vim-json', { 'for': 'json' }
 
 " Python
 let g:nvim_ipy_perform_mappings = 0
@@ -367,14 +368,73 @@ set splitright
 " }}}
 
 " Statusline {{{
-"set noshowmode            " Do not show default mode in statusline
+set noshowmode            " Do not show default mode in statusline
 
-set statusline=%{fugitive#statusline()} " Git status
-set statusline+=%m%r%w%{HasPaste()}   " File flags
-set statusline+=\ %f      " Path to the file
-set statusline+=%=        " Switch to the right side
-set statusline+=%l/%L     " Current line / total lines
-set statusline+=\ %y      " Filetype
+" set statusline=%{fugitive#statusline()} " Git status
+" set statusline+=%m%r%w%{HasPaste()}   " File flags
+" set statusline+=\ %f      " Path to the file
+" set statusline+=%=        " Switch to the right side
+" set statusline+=%l/%L     " Current line / total lines
+" set statusline+=\ %y      " Filetype
+
+let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ 'mode_map': { 'c': 'NORMAL' },
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ]
+      \ },
+      \ 'component_function': {
+      \   'modified': 'LightLineModified',
+      \   'readonly': 'LightLineReadonly',
+      \   'fugitive': 'LightLineFugitive',
+      \   'filename': 'LightLineFilename',
+      \   'fileformat': 'LightLineFileformat',
+      \   'filetype': 'LightLineFiletype',
+      \   'fileencoding': 'LightLineFileencoding',
+      \   'mode': 'LightLineMode',
+      \ },
+      \ 'separator': { 'left': '', 'right': '' },
+      \ 'subseparator': { 'left': '', 'right': '' }
+      \ }
+
+function! LightLineModified()
+  return &ft =~ 'help\|startify' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+endfunction
+
+function! LightLineReadonly()
+  return &ft !~? 'help\|startify' && &readonly ? '' : ''
+endfunction
+
+function! LightLineFilename()
+  return ('' != LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
+        \ (&ft =~ 'dirvish\|startify' ? '' :
+        \  '' != expand('%:t') ? expand('%:t') : '[No Name]') .
+        \ ('' != LightLineModified() ? ' ' . LightLineModified() : '')
+endfunction
+
+function! LightLineFugitive()
+  if &ft !~? 'help\|dirvish\|startify' && exists("*fugitive#head")
+    let _ = fugitive#head()
+    return strlen(_) ? ' '._ : ''
+  endif
+  return ''
+endfunction
+
+function! LightLineFileformat()
+  return winwidth(0) > 70 ? &fileformat : ''
+endfunction
+
+function! LightLineFiletype()
+  return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype : 'no ft') : ''
+endfunction
+
+function! LightLineFileencoding()
+  return winwidth(0) > 70 ? (strlen(&fenc) ? &fenc : &enc) : ''
+endfunction
+
+function! LightLineMode()
+  return winwidth(0) > 60 ? lightline#mode() : ''
+endfunction
 " }}}
 
 " Searching {{{
