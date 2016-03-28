@@ -50,7 +50,6 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'justinmk/vim-dirvish'
 " {{{
-let g:dirvish_hijack_netrw = 1
 augroup plugin_dirvish
     autocmd!
     autocmd FileType dirvish call fugitive#detect(@%)
@@ -73,8 +72,8 @@ Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 " {{{
 nnoremap <F6> :UndotreeToggle<cr>
 if has("persistent_undo")
-    set undodir=~/.undodir/
     set undofile
+    set undodir=~/.undodir/
 endif
 " }}}
 
@@ -143,7 +142,8 @@ let g:gitgutter_sign_column_always=1
 
 Plug 'nathanaelkane/vim-indent-guides'
 " {{{
-let g:indent_guides_start_level = 2
+" TODO not working?
+let g:indent_guides_start_level = 1
 " }}}
 
 " Colorschemes
