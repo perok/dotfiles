@@ -133,6 +133,10 @@ nnoremap q/ :QHist<CR>
 Plug 'Shougo/deoplete.nvim'
 " {{{
 let g:deoplete#enable_at_startup = 1
+augroup plugin_deoplete
+    " Close the preview window after completion is done.
+    autocmd CompleteDone * pclose!
+augroup END
 " }}}
 
 Plug 'airblade/vim-gitgutter'   " Show line status in gutter

@@ -1,16 +1,7 @@
-#
-# Defines environment variables.
-#
-# Authors:
-#   Sorin Ionescu <sorin.ionescu@gmail.com>
-#
-
-# Ensure that a non-login, non-interactive shell has a defined environment.
-if [[ "$SHLVL" -eq 1 && ! -o LOGIN && -s "${ZDOTDIR:-$HOME}/.zprofile" ]]; then
-  source "${ZDOTDIR:-$HOME}/.zprofile"
-fi
-
-# setup default dirs
-[ "$XDG_CACHE_HOME" ] || export XDG_CACHE_HOME="$HOME/.cache"
-[ "$XDG_CONFIG_HOME" ] || export XDG_CONFIG_HOME="$HOME/.config"
-[ "$XDG_DATA_HOME" ] || export XDG_DATA_HOME="$HOME/.local/share"
+# First invocation in /etc/zsh/zshenv
+path=(
+#  /usr/local/{bin,sbin}
+  $HOME/.local/bin # Python etc
+  $HOME/.dotfiles/bin # user local files
+  $path
+)

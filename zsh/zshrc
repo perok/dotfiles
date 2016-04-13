@@ -1,27 +1,21 @@
 #
-# Executes commands at the start of an interactive session.
-#
-# Authors:
-#   Sorin Ionescu <sorin.ionescu@gmail.com>
+# User configuration sourced by interactive shells
 #
 
-# Source Prezto.
-if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
-  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+# Source zim
+if [[ -s ${ZDOTDIR:-${HOME}}/.zim/init.zsh ]]; then
+  source ${ZDOTDIR:-${HOME}}/.zim/init.zsh
 fi
-
-# Customize to your needs...
 
 # Virtualenv wrapper
 export WORKON_HOME=$HOME/.virtualenvs
-source /usr/local/bin/virtualenvwrapper_lazy.sh
+source ~/.local/bin/virtualenvwrapper.sh
 #if [[ $(command -v virtualenvwrapper_lazy.sh) ]]; then
 #  source virtualenvwrapper_lazy.sh
 #fi
 
-# Autojump
-source /usr/share/autojump/autojump.sh
-
+# Autojump replaced by fasd
+# source /usr/share/autojump/autojump.sh
 
 # Neovim aliases
 alias vim='nvim'
@@ -29,12 +23,14 @@ alias :e='nvim'
 alias :E='nvim .'
 alias :q='exit'
 
+# fasd aliases
+alias v='f -e vim' # quick opening files with vim
+alias o='a -e xdg-open' # quick opening files with xdg-open
+
 # Base16 Shell TODO not working on konsole
 #BASE16_SHELL="$HOME/.config/base16-shell/base16-default.dark.sh"
 #[[ -s $BASE16_SHELL ]] && source $BASE16_SHELL
 
-# Find text in pdf files
-# find . -name '*.pdf' -exec sh -c 'pdftotext "{}" - | grep --with-filename --label="{}" --color "speedup"' \;
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -53,3 +49,21 @@ if [ -x "$(command -v ag)" ]; then
     ag -g "" "$1"
   }
 fi
+
+function diff {
+  if (( $+commands[colordiff] )); then
+    command diff --unified "$@" | colordiff --difftype diffu
+  elif (( $+commands[git] )); then
+    git --no-pager diff --color=auto --no-ext-diff --no-index "$@"
+  else
+    command diff --unified "$@"
+  fi
+}
+
+function make {
+  if (( $+commands[colormake] )); then
+    colormake "$@"
+  else
+    command make "$@"
+  fi
+}
