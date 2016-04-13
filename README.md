@@ -17,7 +17,7 @@ Python files
 
 Other:
 
-    $ sudo apt-get install autojump zathura
+    $ sudo apt-get install autojump zathura xsel
 
 Todo
 ----

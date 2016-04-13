@@ -10,6 +10,7 @@
     " projectionist - jump all over the project with ease
     " targets - more useful movements
     " swapit - ^a/^x on steroids (mostly used for true/false switch)
+    " https://github.com/critiqjo/vim-bufferline
     " https://github.com/carlitux/deoplete-ternjs
 " }}}
 
@@ -21,8 +22,8 @@ else
     " Allow the neovim Python plugin to work inside a virtualenv, by manually
     " specifying the path to python2. This variable must be set before any calls to
     " `has('python')`.
-    "let g:python_host_prog='/usr/bin/python2'
-    "let g:python_host_prog3='/usr/bin/python3'
+    " let g:python_host_prog='/usr/bin/python2'
+    " let g:python_host_prog3='/usr/bin/python3'
 endif
 
 " Leader is space
@@ -30,9 +31,9 @@ nmap <space> <leader>
 
 " auto-install vim-plug
 if empty(glob('~/.config/nvim/autoload/plug.vim'))
-  silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs \
-      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall
+    silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs \
+        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall
 endif
 " }}}
 
