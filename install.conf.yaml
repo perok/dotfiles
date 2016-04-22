@@ -38,7 +38,6 @@
     #~/.tmux.conf: tmux.conf
 
 - shell:
-    - [git submodule update --init --recursive, Installing submodules]
-      #- [git submodule update --remote  --recursive, Updating submodules]
-    - [cd ~/.zprezto && git pull && git submodule update --init --recursive, Updating zprezto]
+    - [git submodule foreach git pull origin master, Updating submodules to origin master]
+    - [git submodule update, Updating submodules]
     - [nvim +PlugInstall +qall, Installing nvim plugins]
