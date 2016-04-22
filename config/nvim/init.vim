@@ -43,6 +43,8 @@ call plug#begin()
 Plug 'mhinz/vim-startify'
 " {{{
 let g:startify_custom_header = []
+let g:startify_change_to_dir = 0
+let g:startify_change_to_vcs_root = 1
 " }}}
 Plug 'itchyny/lightline.vim'
 
@@ -147,8 +149,9 @@ let g:gitgutter_sign_column_always=1
 
 Plug 'nathanaelkane/vim-indent-guides'
 " {{{
-" TODO not working?
-let g:indent_guides_start_level = 1
+let g:indent_guides_enable_on_vim_startup = 1
+let g:indent_guides_start_level = 2
+let g:indent_guides_guide_size = 1
 " }}}
 
 " Colorschemes
