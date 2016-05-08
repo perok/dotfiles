@@ -9,15 +9,7 @@ Uses: https://github.com/anishathalye/dotbot/
 
 Clone and ./install
 
-Python files
-
-    $ sudo apt-get install python-virtualenv silversearcher-ag
-    $ pip install virtualenvwrapper
-    $ pip3 install neovim neovim-remote
-
-Other:
-
-    $ sudo apt-get install autojump zathura xsel
+    sudo ln -s ~/dotfiles/bin/sane-rm /usr/local/bin/rm
 
 Todo
 ----

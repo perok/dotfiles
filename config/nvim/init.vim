@@ -31,8 +31,7 @@ nmap <space> <leader>
 
 " auto-install vim-plug
 if empty(glob('~/.config/nvim/autoload/plug.vim'))
-    silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs \
-        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     autocmd VimEnter * PlugInstall
 endif
 " }}}
@@ -156,6 +155,7 @@ let g:indent_guides_guide_size = 1
 
 " Colorschemes
 Plug 'morhetz/gruvbox'
+Plug 'chriskempson/base16-vim'
 
 " Clojure/script/ plugins
 Plug 'tpope/vim-salve' " Leiningen
@@ -196,8 +196,9 @@ syntax enable           " enable syntax processing
 set background=dark
 
 if has('vim_starting')
-    "colorscheme ps_color
     colorscheme gruvbox
+    "let g:base16colorspace=256
+    "colorscheme base16-ocean
 endif
 " }}}
 
@@ -213,8 +214,8 @@ augroup vimrc
     autocmd BufRead,BufNewFile *.cl setfiletype c " OpenCL kernels
 
     " run python
-    autocmd BufRead *.py set makeprg=clear;python2.7\ %
-    autocmd BufRead *.py set autowrite
+    "autocmd BufRead *.py set makeprg=clear;python2.7\ %
+    "autocmd BufRead *.py set autowrite
 
     " run node.js
     autocmd BufRead *.js set makeprg=clear;node\ %
@@ -337,7 +338,8 @@ set wildignore+=*node_modules*
 set lazyredraw          " redraw only when we need to.
 set showmatch           " highlight matching [{()}]
 set breakindent         " Keep indent level when wrappping line
-set textwidth=80 colorcolumn=+1     " Color column at word 80
+set textwidth=80 " colorcolumn=+1     " Color column at word 80
+let &colorcolumn=join(range(81,999),",")
 
 " t - autowrap to textwidth
 " c - autowrap comments to textwidth
@@ -351,7 +353,7 @@ set formatoptions=cqjr
 set list listchars=tab:»·,trail:·,precedes:←,extends:→
 
 " Vertical and horizontal split lines for unicode
-set fillchars=vert:│,fold:-
+set fillchars=vert:│ " ,fold:-
 
 " Highlight colors are thin lines
 highlight VertSplit cterm=none ctermbg=none ctermfg=247
@@ -460,9 +462,8 @@ nnoremap <silent> <Esc> :nohlsearch<Bar>:echo<CR>
 set foldenable          " enable folding
 set foldlevelstart=10   " open most folds by default
 set foldnestmax=10      " 10 nested fold max
-" space open/closes folds
-" TODO
-"nnoremap <space> za
+" shift tab open/closes folds
+nnoremap <s-tab> za
 set foldmethod=indent   " fold based on indent level
 " }}}
 
