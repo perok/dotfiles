@@ -251,6 +251,11 @@ augroup END
 " jk is escape
 inoremap jk <esc>
 
+" Yank to end of line
+nnoremap Y y$
+" Move from position to $ one line down
+nnoremap K i<CR><Esc>d^==kg_lD
+
 " move vertically by visual line
 nnoremap j gj
 nnoremap k gk
@@ -594,7 +599,7 @@ if has('nvim')
     let g:terminal_color_background="#282828"
     let g:terminal_color_foreground="#ebdbb2"
 
-    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+    set termguicolors " enable true color support
     let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
     " Use a blinking upright bar cursor in Insert mode, a solid block in normal and a blinking underline in replace mode
     " TODO not working
