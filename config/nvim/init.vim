@@ -46,7 +46,6 @@ let g:startify_change_to_dir = 0
 " let g:startify_change_to_vcs_root = 1
 " }}}
 Plug 'itchyny/lightline.vim'
-
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
@@ -167,6 +166,7 @@ let g:indent_guides_guide_size = 1
 " Colorschemes
 Plug 'morhetz/gruvbox'
 Plug 'chriskempson/base16-vim'
+Plug 'jacoborus/tender'
 
 " Clojure/script/ plugins
 Plug 'tpope/vim-salve' " Leiningen
@@ -196,6 +196,9 @@ Plug 'mxw/vim-jsx', { 'for': 'javascript' }
 let g:nvim_ipy_perform_mappings = 0
 Plug 'bfredl/nvim-ipy' , { 'on': 'IPython' }
 
+" Latex
+Plug 'matze/vim-tex-fold', { 'for': 'tex' }
+
 " Plug 'airodactyl/neovim-ranger'
 " nnoremap <f9> :tabe %:p:h<cr>
 call plug#end()
@@ -205,9 +208,10 @@ call plug#end()
 syntax enable           " enable syntax processing
 
 set background=dark
+set termguicolors " enable true color support
 
 if has('vim_starting')
-    colorscheme gruvbox
+    colorscheme tender
     "let g:base16colorspace=256
     "colorscheme base16-ocean
 endif
@@ -403,8 +407,11 @@ set noshowmode            " Do not show default mode in statusline
 " set statusline+=%l/%L     " Current line / total lines
 " set statusline+=\ %y      " Filetype
 
+" enable tender lightline theme
+let g:tender_lightline = 1
+
 let g:lightline = {
-      \ 'colorscheme': 'wombat',
+      \ 'colorscheme': 'tender',
       \ 'mode_map': { 'c': 'NORMAL' },
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ]
@@ -610,7 +617,6 @@ if has('nvim')
     let g:terminal_color_background="#282828"
     let g:terminal_color_foreground="#ebdbb2"
 
-    set termguicolors " enable true color support
     let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
     " Use a blinking upright bar cursor in Insert mode, a solid block in normal and a blinking underline in replace mode
     " TODO not working
