@@ -129,15 +129,26 @@ command! QHist call fzf#vim#search_history({'right': '40'})
 nnoremap q/ :QHist<CR>
 " }}}
 
+"set completeopt=longest,menu,menuone
 " Omnicompletion
 " Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
 Plug 'Shougo/deoplete.nvim'
 " {{{
 let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_ignore_case = 'ignorecase'
 augroup plugin_deoplete
     " Close the preview window after completion is done.
     autocmd CompleteDone * pclose!
 augroup END
+" }}}
+
+Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips'
+" {{{
+inoremap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 " }}}
 
 Plug 'airblade/vim-gitgutter'   " Show line status in gutter
