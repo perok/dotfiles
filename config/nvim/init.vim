@@ -49,6 +49,7 @@ Plug 'itchyny/lightline.vim'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-surround'
 Plug 'justinmk/vim-dirvish'
 " {{{
 augroup plugin_dirvish
@@ -149,6 +150,9 @@ let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 " }}}
+
+" Use look to get more autocompletion on words with the look command
+Plug 'ujihisa/neco-look', { 'for': 'tex' }
 
 Plug 'airblade/vim-gitgutter'   " Show line status in gutter
 " {{{
@@ -315,7 +319,10 @@ nnoremap <leader>ez :vsp ~/.zshrc<CR>
 nnoremap <leader>sv :source $MYVIMRC<CR>
 
 " save session (,s). Open again with vim -S
-nnoremap <leader>s :mksession<CR>
+nnoremap <leader>ss :mksession!<CR>
+
+" Open spell dropdown window with <leader>s
+nnoremap <leader>sc a<C-X><C-S>
 
 " set paste mode
 set pastetoggle=<F2>
