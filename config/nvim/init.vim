@@ -46,10 +46,10 @@ let g:startify_change_to_dir = 0
 " let g:startify_change_to_vcs_root = 1
 " }}}
 Plug 'itchyny/lightline.vim'
-
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-surround'
 Plug 'justinmk/vim-dirvish'
 " {{{
 augroup plugin_dirvish
@@ -129,16 +129,30 @@ command! QHist call fzf#vim#search_history({'right': '40'})
 nnoremap q/ :QHist<CR>
 " }}}
 
+"set completeopt=longest,menu,menuone
 " Omnicompletion
 " Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
 Plug 'Shougo/deoplete.nvim'
 " {{{
 let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_ignore_case = 'ignorecase'
 augroup plugin_deoplete
     " Close the preview window after completion is done.
     autocmd CompleteDone * pclose!
 augroup END
 " }}}
+
+Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips'
+" {{{
+inoremap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+" }}}
+
+" Use look to get more autocompletion on words with the look command
+Plug 'ujihisa/neco-look', { 'for': 'tex' }
 
 Plug 'airblade/vim-gitgutter'   " Show line status in gutter
 " {{{
@@ -156,6 +170,7 @@ let g:indent_guides_guide_size = 1
 " Colorschemes
 Plug 'morhetz/gruvbox'
 Plug 'chriskempson/base16-vim'
+Plug 'jacoborus/tender'
 
 " Clojure/script/ plugins
 Plug 'tpope/vim-salve' " Leiningen
@@ -185,6 +200,9 @@ Plug 'mxw/vim-jsx', { 'for': 'javascript' }
 let g:nvim_ipy_perform_mappings = 0
 Plug 'bfredl/nvim-ipy' , { 'on': 'IPython' }
 
+" Latex
+Plug 'matze/vim-tex-fold', { 'for': 'tex' }
+
 " Plug 'airodactyl/neovim-ranger'
 " nnoremap <f9> :tabe %:p:h<cr>
 call plug#end()
@@ -194,11 +212,15 @@ call plug#end()
 syntax enable           " enable syntax processing
 
 set background=dark
+set termguicolors " enable true color support
 
 if has('vim_starting')
     "colorscheme gruvbox
-    let g:base16colorspace=256
-    colorscheme base16-ocean
+    "let g:base16colorspace=256
+    "colorscheme base16-ocean
+    colorscheme tender
+    "let g:base16colorspace=256
+    "colorscheme base16-ocean
 endif
 " }}}
 
@@ -302,7 +324,10 @@ nnoremap <leader>ez :vsp ~/.zshrc<CR>
 nnoremap <leader>sv :source $MYVIMRC<CR>
 
 " save session (,s). Open again with vim -S
-nnoremap <leader>s :mksession<CR>
+nnoremap <leader>ss :mksession!<CR>
+
+" Open spell dropdown window with <leader>s
+nnoremap <leader>sc a<C-X><C-S>
 
 " set paste mode
 set pastetoggle=<F2>
@@ -395,8 +420,11 @@ set noshowmode            " Do not show default mode in statusline
 " set statusline+=%l/%L     " Current line / total lines
 " set statusline+=\ %y      " Filetype
 
+" enable tender lightline theme
+let g:tender_lightline = 1
+
 let g:lightline = {
-      \ 'colorscheme': 'wombat',
+      \ 'colorscheme': 'tender',
       \ 'mode_map': { 'c': 'NORMAL' },
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ]
@@ -602,7 +630,6 @@ if has('nvim')
     let g:terminal_color_background="#282828"
     let g:terminal_color_foreground="#ebdbb2"
 
-    set termguicolors " enable true color support
     let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
     " Use a blinking upright bar cursor in Insert mode, a solid block in normal and a blinking underline in replace mode
     " TODO not working
