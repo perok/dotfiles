@@ -196,9 +196,9 @@ syntax enable           " enable syntax processing
 set background=dark
 
 if has('vim_starting')
-    colorscheme gruvbox
-    "let g:base16colorspace=256
-    "colorscheme base16-ocean
+    "colorscheme gruvbox
+    let g:base16colorspace=256
+    colorscheme base16-ocean
 endif
 " }}}
 
@@ -257,14 +257,16 @@ nnoremap Y y$
 nnoremap K i<CR><Esc>d^==kg_lD
 
 " move vertically by visual line
-nnoremap j gj
-nnoremap k gk
+" https://stackoverflow.com/questions/20975928/moving-the-cursor-through-long-soft-wrapped-lines-in-vim/21000307#21000307
+noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
+noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 
 " move to beginning/end of line
 nnoremap B ^
 nnoremap E $
 
-" highlight last inserted text
+" Quickly select the text that was just pasted. This allows you to, e.g.,
+" indent it after pasting.
 nnoremap gV `[v`]
 
 " Keep selection when indenting
@@ -342,6 +344,7 @@ set wildignore+=*node_modules*
 
 set lazyredraw          " redraw only when we need to.
 set showmatch           " highlight matching [{()}]
+set sidescroll=1        " Horizontally scroll 1 at a time
 set breakindent         " Keep indent level when wrappping line
 set textwidth=80 " colorcolumn=+1     " Color column at word 80
 let &colorcolumn=join(range(81,999),",")
