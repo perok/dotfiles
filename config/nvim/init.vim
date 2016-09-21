@@ -39,8 +39,7 @@ endif
 " Plugins {{{
 call plug#begin()
 
-Plug 'mhinz/vim-startify'
-" {{{
+Plug 'mhinz/vim-startify' " {{{
 let g:startify_custom_header = []
 let g:startify_change_to_dir = 0
 " let g:startify_change_to_vcs_root = 1
@@ -50,15 +49,13 @@ Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
-Plug 'justinmk/vim-dirvish'
-" {{{
+Plug 'justinmk/vim-dirvish' " {{{
 augroup plugin_dirvish
     autocmd!
     autocmd FileType dirvish call fugitive#detect(@%)
 augroup END
 " }}}
-Plug 'easymotion/vim-easymotion'
-" {{{
+Plug 'easymotion/vim-easymotion' " {{{
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
 let g:EasyMotion_smartcase = 1  " Turn on case insensitive feature
 let g:EasyMotion_startofline = 0    " keep cursor column when JK motion
@@ -70,8 +67,7 @@ map <Leader>k <Plug>(easymotion-k)
 map <Leader>h <Plug>(easymotion-linebackward)
 " }}}
 
-Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
-" {{{
+Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' } " {{{
 nnoremap <F6> :UndotreeToggle<cr>
 if has("persistent_undo")
     set undofile
@@ -80,8 +76,7 @@ endif
 " }}}
 
 " Syntax checking
-Plug 'benekastah/neomake'
-" {{{
+Plug 'benekastah/neomake' " {{{
 let g:neomake_javascript_enabled_makers = ['eslint']
 " Override eslint with local version where necessary.
 let local_eslint = finddir('node_modules', '.;') . '/.bin/eslint'
@@ -99,8 +94,7 @@ augroup END
 " }}}
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-" {{{
+Plug 'junegunn/fzf.vim' " {{{
 let g:fzf_command_prefix = 'Fzf'
 function! s:find_git_root()
     return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
@@ -131,9 +125,7 @@ nnoremap q/ :QHist<CR>
 
 "set completeopt=longest,menu,menuone
 " Omnicompletion
-" Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
-Plug 'Shougo/deoplete.nvim'
-" {{{
+Plug 'Shougo/deoplete.nvim' " {{{
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_ignore_case = 'ignorecase'
 augroup plugin_deoplete
@@ -143,8 +135,7 @@ augroup END
 " }}}
 
 Plug 'honza/vim-snippets'
-Plug 'SirVer/ultisnips'
-" {{{
+Plug 'SirVer/ultisnips' " {{{
 inoremap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
@@ -154,14 +145,13 @@ let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 " Use look to get more autocompletion on words with the look command
 Plug 'ujihisa/neco-look', { 'for': 'tex' }
 
-Plug 'airblade/vim-gitgutter'   " Show line status in gutter
-" {{{
+Plug 'airblade/vim-gitgutter' " {{{
 " Always display gitgutter column
+let g:gitgutter_map_keys = 0 " Activate stuff when I need it..
 let g:gitgutter_sign_column_always=1
 " }}}
 
-Plug 'nathanaelkane/vim-indent-guides'
-" {{{
+Plug 'nathanaelkane/vim-indent-guides' " {{{
 let g:indent_guides_enable_on_vim_startup = 1
 let g:indent_guides_start_level = 2
 let g:indent_guides_guide_size = 1
@@ -178,8 +168,7 @@ Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 
 " Multiple file types
 Plug 'kovisoft/paredit', { 'for': ['clojure', 'scheme'] }
-Plug 'junegunn/rainbow_parentheses.vim'
-" {{{
+Plug 'junegunn/rainbow_parentheses.vim' " {{{
 augroup plugin_rainbow_lisp
     autocmd!
     autocmd FileType lisp,clojure,scheme RainbowParentheses
@@ -190,8 +179,7 @@ augroup END
 " http://davidosomething.com/blog/vim-for-javascript/
 Plug 'othree/yajs.vim', { 'for': 'javascript' } " JS syntax
 Plug 'itspriddle/vim-javascript-indent', { 'for': 'javascript' } " JS indent
-Plug 'mxw/vim-jsx', { 'for': 'javascript' }
-" {{{
+Plug 'mxw/vim-jsx', { 'for': 'javascript' } " {{{
 "let g:jsx_ext_required = 0 " Allow JSX in normal JS files
 " }}}
 " Plug 'elzr/vim-json', { 'for': 'json' }
@@ -212,7 +200,9 @@ call plug#end()
 syntax enable           " enable syntax processing
 
 set background=dark
-set termguicolors " enable true color support
+if (has("termguicolors"))
+ set termguicolors " enable true color support
+endif
 
 if has('vim_starting')
     "colorscheme gruvbox
@@ -262,7 +252,12 @@ augroup vimrc
     autocmd VimResized * exe "normal! \<c-w>="
 
     " Normalize: Strip trailing whitespace.
-    autocmd BufWritePre * :%s/\s\+$//e
+    fun! TrimWhitespace() " {{{
+        let l:save = winsaveview()
+        %s/\s\+$//e
+        call winrestview(l:save)
+    endfun " }}}
+    autocmd BufWritePre * :call TrimWhitespace()
 
     " http://www.vimbits.com/bits/229
     autocmd BufRead COMMIT_EDITMSG setlocal spell!
@@ -318,8 +313,17 @@ nmap <down>  :3wincmd -<cr>
 " Allow saving files with as root
 cmap w!! SudoWrite
 
+fu! OpenInSplitIfBufferDirty(file)
+    if line('$') == 1 && getline(1) == ''
+        exec 'e' a:file
+    else
+        exec 'vsp' a:file
+    endif
+endfu
+" command -nargs=1 -complete=file -bar CleverOpen :call OpenInSplitIfBufferDirty(<q-args>)
+
 " edit vimrc/zshrc and load vimrc bindings
-nnoremap <leader>ev :vsp $MYVIMRC<CR>
+nnoremap <silent> <leader>ev :call OpenInSplitIfBufferDirty($MYVIMRC)<cr>
 nnoremap <leader>ez :vsp ~/.zshrc<CR>
 nnoremap <leader>sv :source $MYVIMRC<CR>
 
@@ -520,25 +524,26 @@ set noswapfile
 
 " Functions {{{
 " toggle between number and relativenumber
-function! ToggleNumber()
+function! ToggleNumber() " {{{
     if(&relativenumber == 1)
         set norelativenumber
         set number
     else
         set relativenumber
     endif
-endfunc
+endfunc " }}}
+
 
 " http://stackoverflow.com/questions/4292733/vim-creating-parent-directories-on-save
 " Make new directory where file is?
-function! s:MkNonExDir(file, buf)
+function! s:MkNonExDir(file, buf) " {{{
     if empty(getbufvar(a:buf, '&buftype')) && a:file!~#'\v^\w+\:\/'
         let dir=fnamemodify(a:file, ':h')
         if !isdirectory(dir)
             call mkdir(dir, 'p')
         endif
     endif
-endfunction
+endfunction " }}}
 
 " Autocreate directories that does not exist when saving?
 augroup BWCCreateDir
@@ -556,16 +561,16 @@ command! EX if !empty(expand('%'))
          \|   echohl None
          \| endif
 
-function! HasPaste()
+function! HasPaste() " {{{
     if &paste
         return '[PASTE MODE]'
     en
     return ''
-endfunction
+endfunction " }}}
 
 " Don't close window, when deleting a buffer
 command! Bclose call <SID>BufcloseCloseIt()
-function! <SID>BufcloseCloseIt()
+function! <SID>BufcloseCloseIt() " {{{
    let l:currentBufNum = bufnr("%")
    let l:alternateBufNum = bufnr("#")
 
@@ -582,7 +587,7 @@ function! <SID>BufcloseCloseIt()
    if buflisted(l:currentBufNum)
      execute("bdelete! ".l:currentBufNum)
    endif
-endfunction
+endfunction " }}}
 " }}}
 
 " Terminal {{{
@@ -611,24 +616,44 @@ if has('nvim')
     tnoremap <A-l> <C-\><C-n><C-w>l
 
     " gruvbox terminal color scheme
-    let g:terminal_color_0="#282828"
-    let g:terminal_color_1="#cc241d"
-    let g:terminal_color_2="#98971a"
-    let g:terminal_color_3="#d79921"
-    let g:terminal_color_4="#458588"
-    let g:terminal_color_5="#b16286"
-    let g:terminal_color_6="#689d6a"
-    let g:terminal_color_7="#a89984"
-    let g:terminal_color_8="#928374"
-    let g:terminal_color_9="#fb4934"
-    let g:terminal_color_10="#b8bb26"
-    let g:terminal_color_11="#fabd2f"
-    let g:terminal_color_12="#83a598"
-    let g:terminal_color_13="#d3869b"
-    let g:terminal_color_14="#8ec07c"
-    let g:terminal_color_15="#ebdbb2"
-    let g:terminal_color_background="#282828"
-    let g:terminal_color_foreground="#ebdbb2"
+    " let g:terminal_color_0="#282828"
+    " let g:terminal_color_1="#cc241d"
+    " let g:terminal_color_2="#98971a"
+    " let g:terminal_color_3="#d79921"
+    " let g:terminal_color_4="#458588"
+    " let g:terminal_color_5="#b16286"
+    " let g:terminal_color_6="#689d6a"
+    " let g:terminal_color_7="#a89984"
+    " let g:terminal_color_8="#928374"
+    " let g:terminal_color_9="#fb4934"
+    " let g:terminal_color_10="#b8bb26"
+    " let g:terminal_color_11="#fabd2f"
+    " let g:terminal_color_12="#83a598"
+    " let g:terminal_color_13="#d3869b"
+    " let g:terminal_color_14="#8ec07c"
+    " let g:terminal_color_15="#ebdbb2"
+    " let g:terminal_color_background="#282828"
+    " let g:terminal_color_foreground="#ebdbb2"
+
+    " Tender theme
+    let g:terminal_color_background =  "#1e1e1e"
+    let g:terminal_color_foreground =  "#adadad"
+    let g:terminal_color_0 =  "#1e1e1e"
+    let g:terminal_color_1 =  "#b60024"
+    let g:terminal_color_2 =  "#8e9d05"
+    let g:terminal_color_3 =  "#c8ac74"
+    let g:terminal_color_4 =  "#63c3f1"
+    let g:terminal_color_5 =  "#c76fbd"
+    let g:terminal_color_6 =  "#259286"
+    let g:terminal_color_7 =  "#eaeaea"
+    let g:terminal_color_8 =  "#262626"
+    let g:terminal_color_9 =  "#ee1c42"
+    let g:terminal_color_10 =  "#bec94a"
+    let g:terminal_color_11 =  "#fdb63b"
+    let g:terminal_color_12 =  "#a5d6eb"
+    let g:terminal_color_13 =  "#e24d8e"
+    let g:terminal_color_14 =  "#00b39e"
+    let g:terminal_color_15 =  "#eaeaea"
 
     let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
     " Use a blinking upright bar cursor in Insert mode, a solid block in normal and a blinking underline in replace mode
@@ -640,5 +665,5 @@ if has('nvim')
 endif
 " }}}
 
-set modelines=1         " Let vim look for settings on last line
+set modelines=1 " Let vim look for settings on last line
 " vim:foldmethod=marker:foldlevel=0
