@@ -14,17 +14,19 @@ source ~/.local/bin/virtualenvwrapper.sh
 #  source virtualenvwrapper_lazy.sh
 #fi
 
-# Autojump replaced by fasd
-# source /usr/share/autojump/autojump.sh
-
 # Neovim aliases
-alias vim='nvim'
-alias :e='nvim'
-alias :E='nvim .'
+if type nvim > /dev/null 2>&1; then
+  alias vim='nvim'
+  alias :e='nvim'
+  alias :E='nvim .'
+fi
+
+# set EDITOR='nvim-client -f' # for git?
+
 alias :q='exit'
 
 # fasd aliases
-alias v='f -e vim' # quick opening files with vim
+alias v='f -e nvim' # quick opening files with vim
 alias o='a -e xdg-open' # quick opening files with xdg-open
 
 # Base16 Shell TODO not working on konsole
@@ -66,4 +68,17 @@ function make {
   else
     command make "$@"
   fi
+}
+
+# Colorize man pages
+man() {
+  env \
+    LESS_TERMCAP_mb=$(printf "\e[1;31m")\
+    LESS_TERMCAP_md=$(printf "\e[1;31m")\
+    LESS_TERMCAP_me=$(printf "\e[0m")\
+    LESS_TERMCAP_se=$(printf "\e[0m")\
+    LESS_TERMCAP_so=$(printf "\e[1;44;33m")\
+    LESS_TERMCAP_ue=$(printf "\e[0m")\
+    LESS_TERMCAP_us=$(printf "\e[1;32m")\
+    man "$@"
 }
