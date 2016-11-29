@@ -10,7 +10,7 @@
 # The second line of modules may depend on options set by modules in the first line.
 # These dependencies are noted on the respective module's README.md.
 zmodules=(directory environment git history input utility custom spectrum fasd
-          syntax-highlighting prompt completion archive)
+          ssh syntax-highlighting prompt completion archive)
 # history-substring-search => use fzf instead
 
 
@@ -24,6 +24,16 @@ zmodules=(directory environment git history input utility custom spectrum fasd
 
 # Set your desired prompt here
 zprompt_theme='pure' #'steeef'
+
+
+#
+# Input
+#
+
+# Uncomment to enable double-dot expansion.
+# This appends '../' to your input for each '.' you type after an initial '..'
+zdouble_dot_expand='true'
+
 
 #
 # Utility
@@ -50,7 +60,7 @@ zhighlighters=(main brackets cursor)
 #
 
 # Load these ssh identities with the ssh module
-#zssh_ids=(id_rsa)
+zssh_ids=(id_rsa)
 
 
 #
