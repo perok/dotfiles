@@ -359,6 +359,10 @@ set shiftwidth=4    " Make sure >> indents 1 tab
 if !has('nvim')
     set wildmenu            " visual autocomplete for command menu
 endif
+if has('nvim')
+    set inccommand=split    " visual substitution
+endif
+
 set number              " show line numbers
 set relativenumber      " show relative numbers
 set showcmd             " show command in bottom bar
