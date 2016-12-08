@@ -121,7 +121,28 @@ nnoremap q: :CmdHist<CR>
 " Better search history
 command! QHist call fzf#vim#search_history({'right': '40'})
 nnoremap q/ :QHist<CR>
+
+" let g:fzf_files_options =
+"   \ '--preview "(highlight -O ansi {} || cat {}) 2> /dev/null | head -'.&lines.'"'
+
+" Customize fzf colors to match your color scheme
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
+
 " }}}
+" Search and replace across files
+Plug 'brooth/far.vim'
 
 "set completeopt=longest,menu,menuone
 " Omnicompletion
@@ -159,7 +180,8 @@ let g:indent_guides_guide_size = 1
 
 " Colorschemes
 Plug 'morhetz/gruvbox'
-Plug 'chriskempson/base16-vim'
+" Plug 'chriskempson/base16-vim'
+Plug 'Soares/base16.nvim'
 Plug 'jacoborus/tender'
 
 " Clojure/script/ plugins
@@ -200,7 +222,7 @@ call plug#end()
 syntax enable           " enable syntax processing
 
 set background=dark
-if (has("termguicolors"))
+if has("termguicolors")
  set termguicolors " enable true color support
 endif
 
@@ -211,7 +233,14 @@ if has('vim_starting')
     colorscheme tender
     "let g:base16colorspace=256
     "colorscheme base16-ocean
+    " colorscheme twilight
+    " colorscheme oceanicnext
 endif
+
+
+" From base16-nvim
+" let g:base16_transparent_background = 1
+"let g:base16_airline=1
 " }}}
 
 " General  {{{
@@ -379,8 +408,9 @@ set lazyredraw          " redraw only when we need to.
 set showmatch           " highlight matching [{()}]
 set sidescroll=1        " Horizontally scroll 1 at a time
 set breakindent         " Keep indent level when wrappping line
-set textwidth=80 " colorcolumn=+1     " Color column at word 80
-let &colorcolumn=join(range(81,999),",")
+set textwidth=80        " Width of text for wrapping
+let &colorcolumn=join(range(81,999),",") " Color column from 81 outwards
+" let colorcolumn=+1      " TODO not working?
 
 " t - autowrap to textwidth
 " c - autowrap comments to textwidth
@@ -427,9 +457,6 @@ set noshowmode            " Do not show default mode in statusline
 " set statusline+=%=        " Switch to the right side
 " set statusline+=%l/%L     " Current line / total lines
 " set statusline+=\ %y      " Filetype
-
-" enable tender lightline theme
-let g:tender_lightline = 1
 
 let g:lightline = {
       \ 'colorscheme': 'tender',
