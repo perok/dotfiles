@@ -96,3 +96,18 @@ bindkey '^x^e' edit-command-line
 # Vi style:
 # zle -N edit-command-line
 # bindkey -M vicmd v edit-command-line
+
+function docker_ip() {
+    local container_id=$(docker ps | grep $1 | awk '{print $ 1}' | tail -n 1)
+
+    if [ $container_id ]; then
+        docker inspect $container_id \
+            | grep -w "IPAddress" \
+            | awk '{ print $2 }' \
+            | tail -n 1
+    else
+        echo 'Unknown container' $1 1>&2
+        return 1
+    fi
+}
+

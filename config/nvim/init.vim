@@ -12,6 +12,7 @@
     " swapit - ^a/^x on steroids (mostly used for true/false switch)
     " https://github.com/critiqjo/vim-bufferline
     " https://github.com/carlitux/deoplete-ternjs
+    " Only https://github.com/mhinz/neovim-remote
 " }}}
 
 " Core {{{
@@ -223,7 +224,7 @@ syntax enable           " enable syntax processing
 
 set background=dark
 if has("termguicolors")
- set termguicolors " enable true color support
+    set termguicolors	" enable true color support
 endif
 
 if has('vim_starting')
@@ -254,6 +255,8 @@ augroup vimrc
     " File types highlighting
     autocmd BufRead,BufNewFile *.cl setfiletype c " OpenCL kernels
 
+    autocmd BufRead,BufNewFile *.tikz    set filetype=tex
+
     " run python
     "autocmd BufRead *.py set makeprg=clear;python2.7\ %
     "autocmd BufRead *.py set autowrite
@@ -280,7 +283,7 @@ augroup vimrc
     " Resize splits when the window is resized.
     autocmd VimResized * exe "normal! \<c-w>="
 
-    " Normalize: Strip trailing whitespace.
+    " Strip trailing whitespace.
     fun! TrimWhitespace() " {{{
         let l:save = winsaveview()
         %s/\s\+$//e
@@ -665,26 +668,6 @@ if has('nvim')
     " let g:terminal_color_15="#ebdbb2"
     " let g:terminal_color_background="#282828"
     " let g:terminal_color_foreground="#ebdbb2"
-
-    " Tender theme
-    let g:terminal_color_background =  "#1e1e1e"
-    let g:terminal_color_foreground =  "#adadad"
-    let g:terminal_color_0 =  "#1e1e1e"
-    let g:terminal_color_1 =  "#b60024"
-    let g:terminal_color_2 =  "#8e9d05"
-    let g:terminal_color_3 =  "#c8ac74"
-    let g:terminal_color_4 =  "#63c3f1"
-    let g:terminal_color_5 =  "#c76fbd"
-    let g:terminal_color_6 =  "#259286"
-    let g:terminal_color_7 =  "#eaeaea"
-    let g:terminal_color_8 =  "#262626"
-    let g:terminal_color_9 =  "#ee1c42"
-    let g:terminal_color_10 =  "#bec94a"
-    let g:terminal_color_11 =  "#fdb63b"
-    let g:terminal_color_12 =  "#a5d6eb"
-    let g:terminal_color_13 =  "#e24d8e"
-    let g:terminal_color_14 =  "#00b39e"
-    let g:terminal_color_15 =  "#eaeaea"
 
     let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
     " Use a blinking upright bar cursor in Insert mode, a solid block in normal and a blinking underline in replace mode
