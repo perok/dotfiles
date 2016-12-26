@@ -17,7 +17,8 @@
     ~/.config/nvim/ftplugin: config/nvim/ftplugin
     ~/.config/nvim/spell/en.utf-8.add: config/nvim/spell/en.utf-8.add
     # Tmux
-    ~/.tmux.conf: tmux/tmux.conf
+    ~/.tmux.conf: config/tmux/tmux.conf
+    ~/.config/tmux: config/tmux
     # Virtualenvs
     ~/.virtualenvs/postactivate: virtualenvs/postactivate
     ~/.virtualenvs/postdeactivate: virtualenvs/postdeactivate
@@ -37,6 +38,7 @@
     ~/.kde/share/apps/konsole/base16-ocean.colorscheme: colors/konsole/base16-ocean.colorscheme
     # Other
     ~/.config/zathura/zathurarc: config/zathura/zathurarc
+    ~/.config/cmus/rc: config/cmus/rc
     # TODO ranger
 
 
