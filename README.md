@@ -9,12 +9,11 @@ Uses: https://github.com/anishathalye/dotbot/
 
 Clone and ./install
 
-    sudo ln -s ~/dotfiles/bin/sane-rm /usr/local/bin/rm
+    $ sudo ln -s ~/dotfiles/bin/sane-rm /usr/local/bin/rm
 
 Todo
 ----
 
-* Change to https://github.com/Eriner/zim
 * http://zshwiki.org/home/zle/vi-mode
 * with https://github.com/zsh-users/zsh/blob/master/Functions/Zle/surround
 * http://vimrcfu.com/snippet/77
