@@ -2,7 +2,7 @@
     email = perokane@gmail.com
     name = Per Øyvind Kanestrøm
 [core]
-    editor = nvim-client -f
+    editor = vim
     pager = less -r
     excludesfile = $HOME/.gitignore_global
 [push]
