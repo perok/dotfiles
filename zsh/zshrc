@@ -8,8 +8,18 @@ if [[ -s ${ZDOTDIR:-${HOME}}/.zim/init.zsh ]]; then
 fi
 
 # Set default exports
-export EDITOR='vim'
-export VISUAL='vim'
+# If inside neovim terminal then use neovim-remote
+if [ -n "${NVIM_LISTEN_ADDRESS+x}" ]; then
+    export EDITOR='nvr'
+    alias hh='nvr -o'
+    alias vv='nvr -O'
+    alias tt='nvr --remote-tab'
+else
+    export EDITOR='nvim'
+fi
+export GIT_EDITOR="$EDITOR"
+export VISUAL="$EDITOR"
+
 
 # Virtualenv wrapper
 export WORKON_HOME=$HOME/.virtualenvs
@@ -18,19 +28,18 @@ source ~/.local/bin/virtualenvwrapper.sh
 #  source virtualenvwrapper_lazy.sh
 #fi
 
-# Neovim aliases
-if type nvim > /dev/null 2>&1; then
-  alias vim='nvim'
-  alias :e='nvim'
-  alias :E='nvim .'
-fi
+# Keybinding mode: e-> emacs, v-> vi
+bindkey -e
 
-# set EDITOR='nvim-client -f' # for git?
-
+# Set alias's
+alias vim="$EDITOR"
+alias :e="$EDITOR"
+alias :E="$EDITOR"
 alias :q='exit'
 
 # fasd aliases
-alias v='f -e nvim' # quick opening files with vim
+# TODO double check these
+alias v="f -e $EDITOR" # quick opening files with vim
 alias o='a -e xdg-open' # quick opening files with xdg-open
 
 # Base16 Shell TODO not working on konsole
@@ -87,7 +96,9 @@ man() {
     man "$@"
 }
 
+##
 # Enable Ctrl-x-e to edit command line
+##
 autoload -U edit-command-line
 # Emacs style
 zle -N edit-command-line
