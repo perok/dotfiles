@@ -12,7 +12,6 @@
     " swapit - ^a/^x on steroids (mostly used for true/false switch)
     " https://github.com/critiqjo/vim-bufferline
     " https://github.com/carlitux/deoplete-ternjs
-    " Only https://github.com/mhinz/neovim-remote
 " }}}
 
 " Core {{{
@@ -20,11 +19,10 @@ if !has('nvim') && has('vim_starting')
     " Use utf-8 everywhere
     set encoding=utf8
 else
-    " Allow the neovim Python plugin to work inside a virtualenv, by manually
-    " specifying the path to python2. This variable must be set before any calls to
-    " `has('python')`.
-    " let g:python_host_prog='/usr/bin/python2'
-    " let g:python_host_prog3='/usr/bin/python3'
+    " These variable must be set before any calls to `has('python')`.
+    " Avoids interpreter searching which gives better startup time.
+    let g:python_host_prog='/usr/bin/python2'
+    let g:python3_host_prog='/usr/bin/python3'
 endif
 
 " Leader is space
@@ -156,7 +154,7 @@ augroup plugin_deoplete
 augroup END
 " }}}
 
-Plug 'honza/vim-snippets'
+"Plug 'honza/vim-snippets'
 Plug 'SirVer/ultisnips' " {{{
 inoremap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -214,6 +212,9 @@ Plug 'bfredl/nvim-ipy' , { 'on': 'IPython' }
 " Latex
 Plug 'matze/vim-tex-fold', { 'for': 'tex' }
 
+Plug 'dpelle/vim-LanguageTool'
+let g:languagetool_jar = "/home/perok/Downloads/LanguageTool-3.5/languagetool-commandline.jar"
+let g:languagetool_lang = "en-GB"
 " Plug 'airodactyl/neovim-ranger'
 " nnoremap <f9> :tabe %:p:h<cr>
 call plug#end()
@@ -255,11 +256,7 @@ augroup vimrc
     " File types highlighting
     autocmd BufRead,BufNewFile *.cl setfiletype c " OpenCL kernels
 
-    autocmd BufRead,BufNewFile *.tikz    set filetype=tex
-
-    " run python
-    "autocmd BufRead *.py set makeprg=clear;python2.7\ %
-    "autocmd BufRead *.py set autowrite
+    autocmd BufRead,BufNewFile *.tikz set filetype=tex
 
     " run node.js
     autocmd BufRead *.js set makeprg=clear;node\ %
@@ -321,6 +318,15 @@ nnoremap gV `[v`]
 " Keep selection when indenting
 vnoremap < <gv
 vnoremap > >gv
+
+" Search mappings: These will make it so that going to the next one in a
+" search will center on the line it's found in.
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+" Use | and _ to split windows (while preserving original behaviour of [count]bar and [count]_).
+nnoremap <expr><silent> <Bar> v:count == 0 ? "<C-W>v<C-W><Right>" : ":<C-U>normal! 0".v:count."<Bar><CR>"
+nnoremap <expr><silent> _     v:count == 0 ? "<C-W>s<C-W><Down>"  : ":<C-U>normal! ".v:count."_<CR>"
 
 " Moving lines and selections with Ctrl-J and K
 nnoremap <c-k> :m-2<cr>==

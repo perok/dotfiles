@@ -28,6 +28,10 @@ source ~/.local/bin/virtualenvwrapper.sh
 #  source virtualenvwrapper_lazy.sh
 #fi
 
+# Use XDG spec
+#alias tmux=tmux -f "$XDG_CONFIG_HOME"/tmux/tmux.conf
+export TMUX_TMPDIR="$XDG_RUNTIME_DIR"/tmux
+
 # Keybinding mode: e-> emacs, v-> vi
 bindkey -e
 

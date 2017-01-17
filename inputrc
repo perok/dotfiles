@@ -1,4 +1,4 @@
-# Map vi to almost everything
-# Note; This sux
+# Make readline use vi bindngs
 #set editing-mode vi
 #set keymap vi
+#set keymap vi-insert "jk": "\e"
