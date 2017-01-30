@@ -337,10 +337,11 @@ vnoremap <c-j> :m'>+<cr>gv=gv
 vnoremap <c-k> :m-2<cr>gv=gv
 
 " window navigation alt+{h,j,k,l}
-nnoremap <A-h> <C-w>h
-nnoremap <A-j> <C-w>j
-nnoremap <A-k> <C-w>k
-nnoremap <A-l> <C-w>l
+" '<M-...>' Alt-key or meta-key
+nnoremap <M-h> <C-w>h
+nnoremap <M-j> <C-w>j
+nnoremap <M-k> <C-w>k
+nnoremap <M-l> <C-w>l
 
 " Window resizing
 nmap <left>  :3wincmd <<cr>

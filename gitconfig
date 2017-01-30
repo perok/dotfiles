@@ -1,6 +1,6 @@
 [user]
-    email = perokane@gmail.com
-    name = Per Øyvind Kanestrøm
+	email = per.oyvind.kanestrom@sgfinans.no
+	name = Per Øyvind Kanestrøm
 [core]
     editor = vim
     pager = less -r
@@ -25,7 +25,9 @@
     helper = cache --timeout=3600
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path =
+	path = 
 [mergetool "sourcetree"]
 	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
+[commit]
+	template = /Users/perkanestrom/.stCommitMsg
