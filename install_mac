@@ -6,7 +6,7 @@ brew install reattach-to-user-namespace
 brew cask install amethyst
 brew install ag ranger
 brew install openconnect
-brew install zsh zplug
+brew install zsh
 
 defaults write com.apple.Finder AppleShowAllFiles true
 

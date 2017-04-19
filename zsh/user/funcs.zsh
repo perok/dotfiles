@@ -18,16 +18,21 @@ ftpane() {
   fi
 }
 
-#
-# Other tweaks
-#
 
-function diff {
-  if (( $+commands[colordiff] )); then
-    command diff --unified "$@" | colordiff --difftype diffu
-  elif (( $+commands[git] )); then
-    git --no-pager diff --color=auto --no-ext-diff --no-index "$@"
-  else
-    command diff --unified "$@"
-  fi
+function docker_ip() {
+    local container_id=$(docker ps | grep $1 | awk '{print $ 1}' | tail -n 1)
+
+    if [ $container_id ]; then
+        docker inspect $container_id \
+            | grep -w "IPAddress" \
+            | awk '{ print $2 }' \
+            | tail -n 1
+    else
+        echo 'Unknown container' $1 1>&2
+        return 1
+    fi
+}
+
+function murderAllPort() {
+    lsof -i:$1 | tail -n +2 | awk '{ print $2 }' | xargs -L1 kill -9
 }

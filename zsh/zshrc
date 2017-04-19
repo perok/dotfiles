@@ -8,11 +8,21 @@ function source_file() {
     fi
 }
 
-source_file $ZDOTFILES/user/funcs.zsh
+# Base setup
+source ${ZDOTDIR:-${HOME}}/.zim/init.zsh
 
+# Utility tools
+export NVM_DIR="$HOME/.nvm"
+export WORKON_HOME=$HOME/.virtualenvs
+export SDKMAN_DIR="$HOME/.sdkman"
+source_file "$NVM_DIR/nvm.sh"
+source_file '~/.local/bin/virtualenvwrapper.sh' # Use _lazy
+source_file '~/.sdkman/bin/sdkman-init.sh'
+source ~/.fzf.zsh
+source ~/.zplug/init.zsh
+
+# Plugins
 # TODO https://github.com/mssun/dotfiles/blob/master/.zshrc.zplug
-export ZPLUG_HOME=/usr/local/opt/zplug
-source $ZPLUG_HOME/init.zsh
 # zplug manage itself like other packages: zplug update
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
@@ -20,16 +30,20 @@ zplug "zsh-users/zsh-completions"
 zplug "gradle/gradle-completion"
 zplug load #--verbose
 
-
-source_file ${ZDOTDIR:-${HOME}}/.zim/init.zsh
-# Source zim
+# Custom settings
+source $ZDOTFILES/user/funcs.zsh
+source $ZDOTFILES/user/defaults.zsh
+source $ZDOTFILES/user/tweaks.zsh
+source $ZDOTFILES/user/keybindings.zsh
+if [ -z ${LINUX+x} ]; then
+    source $ZDOTFILES/user/linux.zsh
+fi
 
 export GRADLE_OPTS=-Dorg.gradle.daemon=true
 
 # Mac java change default version
 export JAVA_8_HOME=$(/usr/libexec/java_home -v1.8)
 export JAVA_7_HOME=$(/usr/libexec/java_home -v1.7)
-export JAVA_HOME=$JAVA_7_HOME
 
 alias java7='export JAVA_HOME=$JAVA_7_HOME'
 alias java8='export JAVA_HOME=$JAVA_8_HOME'
@@ -37,126 +51,3 @@ alias java8='export JAVA_HOME=$JAVA_8_HOME'
 #default java8
 export JAVA_HOME=$JAVA_8_HOME
 
-
-# Set default exports
-# If inside neovim terminal then use neovim-remote
-if [ -n "${NVIM_LISTEN_ADDRESS+x}" ]; then
-    export EDITOR='nvr'
-    alias hh='nvr -o'
-    alias vv='nvr -O'
-    alias tt='nvr --remote-tab'
-else
-    export EDITOR='nvim'
-fi
-export GIT_EDITOR="$EDITOR"
-export VISUAL="$EDITOR"
-
-# Use XDG spec
-# alias tmux=tmux -f "$XDG_CONFIG_HOME"/tmux/tmux.conf
-# TODO mac ?
-
-if [ -z ${LINUX+x} ]; then
-    export TMUX_TMPDIR="$XDG_RUNTIME_DIR"/tmux
-fi
-
-# Keybinding mode: e-> emacs, v-> vi
-bindkey -e
-
-# Set alias's
-alias vim="$EDITOR"
-alias :e="$EDITOR"
-alias :E="$EDITOR"
-alias :q='exit'
-
-# fasd aliases
-# TODO double check these. xdg-open must be changed on mac
-alias v="f -e $EDITOR" # quick opening files with vim
-alias o='a -e xdg-open' # quick opening files with xdg-open
-
-# Base16 Shell TODO not working on konsole
-#BASE16_SHELL="$HOME/.config/base16-shell/base16-default.dark.sh"
-#[[ -s $BASE16_SHELL ]] && source $BASE16_SHELL
-
-#
-# FZF
-#
-source_file ~/.fzf.zsh
-if [ -x "$(command -v ag)" ]; then
-  # Set ag as the default source for fzf (respect .gitignore etc)
-  export FZF_DEFAULT_COMMAND='ag -l -g ""'
-  # To apply the command to CTRL-T as well
-  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-
-  # For zsh {cmd} **<tab> completion
-  # Use ag instead of the default find command for listing candidates.
-  # - The first argument to the function is the base path to start traversal
-  # - Note that ag only lists files not directories
-  # - See the source code (completion.{bash,zsh}) for the details.
-  _fzf_compgen_path() {
-    ag -g "" "$1"
-  }
-fi
-
-
-
-function make {
-  if (( $+commands[colormake] )); then
-    colormake "$@"
-  else
-    command make "$@"
-  fi
-}
-
-# Colorize man pages
-man() {
-  env \
-    LESS_TERMCAP_mb=$(printf "\e[1;31m")\
-    LESS_TERMCAP_md=$(printf "\e[1;31m")\
-    LESS_TERMCAP_me=$(printf "\e[0m")\
-    LESS_TERMCAP_se=$(printf "\e[0m")\
-    LESS_TERMCAP_so=$(printf "\e[1;44;33m")\
-    LESS_TERMCAP_ue=$(printf "\e[0m")\
-    LESS_TERMCAP_us=$(printf "\e[1;32m")\
-    man "$@"
-}
-
-##
-# Enable Ctrl-x-e to edit command line
-##
-autoload -U edit-command-line
-# Emacs style
-zle -N edit-command-line
-bindkey '^xe' edit-command-line
-bindkey '^x^e' edit-command-line
-# Vi style:
-# zle -N edit-command-line
-# bindkey -M vicmd v edit-command-line
-
-function docker_ip() {
-    local container_id=$(docker ps | grep $1 | awk '{print $ 1}' | tail -n 1)
-
-    if [ $container_id ]; then
-        docker inspect $container_id \
-            | grep -w "IPAddress" \
-            | awk '{ print $2 }' \
-            | tail -n 1
-    else
-        echo 'Unknown container' $1 1>&2
-        return 1
-    fi
-}
-
-function murderAllPort() {
-    lsof -i:$1 | tail -n +2 | awk '{ print $2 }' | xargs -L1 kill -9
-}
-
-export NVM_DIR="$HOME/.nvm"
-source_file "$NVM_DIR/nvm.sh"
-
-# Virtualenv wrapper
-export WORKON_HOME=$HOME/.virtualenvs
-source_file '~/.local/bin/virtualenvwrapper.sh' # Use _lazy
-
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/Users/perkanestrom/.sdkman"
-source_file '~/.sdkman/bin/sdkman-init.sh'

@@ -37,6 +37,7 @@
 
 - shell:
     - ["[ ! -d ~/.zim ] && git clone --recursive https://github.com/Eriner/zim.git ${ZDOTDIR:-${HOME}}/.zim || exit 0", Installing zim]
+    - ["[ ! -d ~/.zplug ] && git clone https://github.com/zplug/zplug.git ${HOME}/.zplug || exit 0", Installing zplug]
     #- [git submodule foreach git pull origin master, Updating submodules to origin master]
     #- [git submodule update --init --recursive, Update..]
     #- [git submodule update, Updating submodules] # Update submodule to index
