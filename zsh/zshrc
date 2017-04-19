@@ -2,12 +2,32 @@
 # User configuration sourced by interactive shells
 #
 
+# TODO https://github.com/mssun/dotfiles/blob/master/.zshrc.zplug
+export ZPLUG_HOME=/usr/local/opt/zplug
+source $ZPLUG_HOME/init.zsh
+# zplug manage itself like other packages: zplug update
+zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+
+zplug "zsh-users/zsh-completions"
+zplug "gradle/gradle-completion"
+zplug load #--verbose
+
+function source_file() {
+    if [[ -r $1 ]]; then
+        source $1
+    fi
+}
+
+source_file ${ZDOTDIR:-${HOME}}/.zim/init.zsh
+# Source zim
+
 export GRADLE_OPTS=-Dorg.gradle.daemon=true
 
 # Mac java change default version
 export JAVA_8_HOME=$(/usr/libexec/java_home -v1.8)
 export JAVA_7_HOME=$(/usr/libexec/java_home -v1.7)
-export JAVA_6_HOME=$(/usr/libexec/java_home -v1.6)
+#export JAVA_6_HOME=$(/usr/libexec/java_home -v1.6)
+export JAVA_HOME=$JAVA_7_HOME
 
 alias java6='export JAVA_HOME=$JAVA_6_HOME'
 alias java7='export JAVA_HOME=$JAVA_7_HOME'
@@ -16,11 +36,6 @@ alias java8='export JAVA_HOME=$JAVA_8_HOME'
 #default java8
 export JAVA_HOME=$JAVA_8_HOME
 
-
-# Source zim
-if [[ -s ${ZDOTDIR:-${HOME}}/.zim/init.zsh ]]; then
-  source ${ZDOTDIR:-${HOME}}/.zim/init.zsh
-fi
 
 # Set default exports
 # If inside neovim terminal then use neovim-remote
@@ -35,16 +50,9 @@ fi
 export GIT_EDITOR="$EDITOR"
 export VISUAL="$EDITOR"
 
-
-# Virtualenv wrapper
-export WORKON_HOME=$HOME/.virtualenvs
-source ~/.local/bin/virtualenvwrapper.sh
-#if [[ $(command -v virtualenvwrapper_lazy.sh) ]]; then
-#  source virtualenvwrapper_lazy.sh
-#fi
-
 # Use XDG spec
-#alias tmux=tmux -f "$XDG_CONFIG_HOME"/tmux/tmux.conf
+# alias tmux=tmux -f "$XDG_CONFIG_HOME"/tmux/tmux.conf
+# TODO mac ?
 export TMUX_TMPDIR="$XDG_RUNTIME_DIR"/tmux
 
 # Keybinding mode: e-> emacs, v-> vi
@@ -57,7 +65,7 @@ alias :E="$EDITOR"
 alias :q='exit'
 
 # fasd aliases
-# TODO double check these
+# TODO double check these. xdg-open must be changed on mac
 alias v="f -e $EDITOR" # quick opening files with vim
 alias o='a -e xdg-open' # quick opening files with xdg-open
 
@@ -65,9 +73,10 @@ alias o='a -e xdg-open' # quick opening files with xdg-open
 #BASE16_SHELL="$HOME/.config/base16-shell/base16-default.dark.sh"
 #[[ -s $BASE16_SHELL ]] && source $BASE16_SHELL
 
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
+#
+# FZF
+#
+source_file ~/.fzf.zsh
 if [ -x "$(command -v ag)" ]; then
   # Set ag as the default source for fzf (respect .gitignore etc)
   export FZF_DEFAULT_COMMAND='ag -l -g ""'
@@ -83,6 +92,30 @@ if [ -x "$(command -v ag)" ]; then
     ag -g "" "$1"
   }
 fi
+
+# ftpane - switch pane (@george-b)
+ftpane() {
+  local panes current_window current_pane target target_window target_pane
+  panes=$(tmux list-panes -s -F '#I:#P - #{pane_current_path} #{pane_current_command}')
+  current_pane=$(tmux display-message -p '#I:#P')
+  current_window=$(tmux display-message -p '#I')
+
+  target=$(echo "$panes" | grep -v "$current_pane" | fzf +m --reverse) || return
+
+  target_window=$(echo $target | awk 'BEGIN{FS=":|-"} {print$1}')
+  target_pane=$(echo $target | awk 'BEGIN{FS=":|-"} {print$2}' | cut -c 1)
+
+  if [[ $current_window -eq $target_window ]]; then
+    tmux select-pane -t ${target_window}.${target_pane}
+  else
+    tmux select-pane -t ${target_window}.${target_pane} &&
+    tmux select-window -t $target_window
+  fi
+}
+
+#
+# Other tweaks
+#
 
 function diff {
   if (( $+commands[colordiff] )); then
@@ -141,6 +174,17 @@ function docker_ip() {
     fi
 }
 
+function murderAllPort() {
+    lsof -i:$1 | tail -n +2 | awk '{ print $2 }' | xargs -L1 kill -9
+}
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+source_file "$NVM_DIR/nvm.sh"
+
+# Virtualenv wrapper
+export WORKON_HOME=$HOME/.virtualenvs
+source_file '~/.local/bin/virtualenvwrapper.sh' # Use _lazy
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/Users/perkanestrom/.sdkman"
+source_file '~/.sdkman/bin/sdkman-init.sh'

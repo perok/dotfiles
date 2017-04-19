@@ -1,7 +1,28 @@
+#
 # First invocation in /etc/zsh/zshenv
+#
+
+if [ "$ZSHENV_SOURCE" = true ] ; then
+  return
+fi
+# TODO better solution than removing path_helper in /etc/zprofile?
+# Disable loading global config files
+setopt no_global_rcs
+
+# TODO set alternative $ZDOTDIR in .zshenv
 path=(
-#  /usr/local/{bin,sbin}
-  $HOME/.local/bin # Python etc
-  $HOME/.dotfiles/bin # user local files
+  '.'
+  /usr/local/{bin,sbin}
+  $HOME/.local/bin
+  $HOME/.dotfiles/bin
+  $HOME/.rbenv/bin
   $path
 )
+
+#export PATH
+if (( $+commands[rbenv] )); then
+  eval "$(rbenv init -)"
+fi
+
+export ZSHENV_SOURCE=true
+

@@ -32,6 +32,7 @@ zprompt_theme='pure' #'steeef'
 
 # Uncomment to enable double-dot expansion.
 # This appends '../' to your input for each '.' you type after an initial '..'
+# TODO not working
 zdouble_dot_expand='true'
 
 

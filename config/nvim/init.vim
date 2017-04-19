@@ -212,9 +212,14 @@ Plug 'bfredl/nvim-ipy' , { 'on': 'IPython' }
 " Latex
 Plug 'matze/vim-tex-fold', { 'for': 'tex' }
 
-Plug 'dpelle/vim-LanguageTool'
+Plug 'dpelle/vim-LanguageTool', { 'for': 'tex' }
 let g:languagetool_jar = "/home/perok/Downloads/LanguageTool-3.5/languagetool-commandline.jar"
 let g:languagetool_lang = "en-GB"
+
+" Scala
+Plug 'ensime/ensime-vim', { 'for': 'scala' }
+Plug 'derekwyatt/vim-scala', { 'for': 'scala' }
+
 " Plug 'airodactyl/neovim-ranger'
 " nnoremap <f9> :tabe %:p:h<cr>
 call plug#end()
@@ -247,6 +252,9 @@ endif
 
 " General  {{{
 let g:tex_flavor = "latex"
+
+" TODO if mac
+set clipboard=unnamed
 " }}}
 
 " Autocmd {{{
