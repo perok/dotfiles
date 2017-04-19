@@ -15,6 +15,9 @@
 " }}}
 
 " Core {{{
+let s:is_darwin = system('uname') =~ "darwin"
+let s:is_linux = system('uname') =~ "Linux"
+
 if !has('nvim') && has('vim_starting')
     " Use utf-8 everywhere
     set encoding=utf8
@@ -253,8 +256,9 @@ endif
 " General  {{{
 let g:tex_flavor = "latex"
 
-" TODO if mac
-set clipboard=unnamed
+if s:is_darwin
+    set clipboard=unnamed
+endif
 " }}}
 
 " Autocmd {{{
@@ -346,10 +350,17 @@ vnoremap <c-k> :m-2<cr>gv=gv
 
 " window navigation alt+{h,j,k,l}
 " '<M-...>' Alt-key or meta-key
-nnoremap <M-h> <C-w>h
-nnoremap <M-j> <C-w>j
-nnoremap <M-k> <C-w>k
-nnoremap <M-l> <C-w>l
+if s:is_darwin
+    nnoremap <M-h> <C-w>h
+    nnoremap <M-j> <C-w>j
+    nnoremap <M-k> <C-w>k
+    nnoremap <M-l> <C-w>l
+else
+    nnoremap <A-h> <C-w>h
+    nnoremap <A-j> <C-w>j
+    nnoremap <A-k> <C-w>k
+    nnoremap <A-l> <C-w>l
+endif
 
 " Window resizing
 nmap <left>  :3wincmd <<cr>
