@@ -9,17 +9,24 @@ sudo apt install \
    redshift \
    mosh zathura mupdf htop \
    vlc ffmpeg synaptic \
-   python-virtualenv \
-   mtpfs \ # FS for Android usb mounting
-   wajig \ # wajig large -> list all installed and size
-   look \ # Autocompletion of words. Used with vim.
-   smbclient # Samba printer client
+   python-virtualenv
+
+# FS for Android usb mounting
+sudo apt install  mtpfs
+# wajig large -> list all installed and size
+sudo apt install wajig
+# Autocompletion of words. Used with vim.
+sudo apt install look
+# Samba printer client
+sudo apt install smbclient
 
 pip install --user \
   virtualenvwrapper
 pip3 install --user \
-  neovim neovim-remote \
-  unidecode # For vim ultisnips
+  neovim neovim-remote
+# For vim ultisnips
+pip3 install --user \
+  unidecode
 
 kwriteconfig5 --file ~/.config/kwinrc --group Windows --key BorderlessMaximizedWindows true
 

@@ -9,4 +9,7 @@
     # Other
 
 - shell:
-    - [./install_linux, Installing linux tools]
+    -
+        command: ./install_linux
+        stdin: true
+        stdout: true

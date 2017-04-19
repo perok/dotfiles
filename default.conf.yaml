@@ -1,3 +1,7 @@
+- defaults:
+    clean:
+        relink: true
+        force: true
 - clean: ['~']
 - shell:
     - mkdir -p ~/.config/nvim/autoload

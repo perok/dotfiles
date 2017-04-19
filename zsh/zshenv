@@ -16,7 +16,7 @@ else
         export OSX=
 fi
 
-export ZDOTFILES=$HOME/dotfiles/zsh
+export ZDOTFILES=$HOME/.dotfiles/zsh
 
 if [ "$ZSHENV_SOURCE" = true ] ; then
   return
