@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+set -e
+
+sudo apt install \
+   xsel unrar p7zip \
+   zsh silversearcher-ag colordiff colormake \
+   ranger atool caca-utils highlight libsixel-bin \
+   redshift \
+   mosh zathura mupdf htop \
+   vlc ffmpeg synaptic \
+   python-virtualenv \
+   mtpfs \ # FS for Android usb mounting
+   wajig \ # wajig large -> list all installed and size
+   look \ # Autocompletion of words. Used with vim.
+   smbclient # Samba printer client
+
+pip install --user \
+  virtualenvwrapper
+pip3 install --user \
+  neovim neovim-remote \
+  unidecode # For vim ultisnips
+
+kwriteconfig5 --file ~/.config/kwinrc --group Windows --key BorderlessMaximizedWindows true
+
+kwin_x11 --replace & disown

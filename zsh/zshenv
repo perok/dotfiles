@@ -2,6 +2,22 @@
 # First invocation in /etc/zsh/zshenv
 #
 
+if [[ `uname` == 'Linux' ]]
+then
+        export LINUX=1
+else
+        export LINUX=
+fi
+
+if [[ `uname` == 'Darwin' ]]
+then
+        export OSX=1
+else
+        export OSX=
+fi
+
+export ZDOTFILES=$HOME/dotfiles/zsh
+
 if [ "$ZSHENV_SOURCE" = true ] ; then
   return
 fi

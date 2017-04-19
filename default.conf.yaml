@@ -30,19 +30,10 @@
     ~/.zshenv: zsh/zshenv
     #~/.zim/modules/prompt/functions/prompt_lambda_setup: zsh/prompts/prompt_lambda_setup
     ~/.dir_colors: colors/dir_colors
-    # KDE
-    ~/.local/share/konsole/Gruvbox_dark.colorscheme: colors/konsole/Gruvbox_dark.colorscheme
-    ~/.local/share/konsole/base16-ocean.colorscheme: colors/konsole/base16-ocean.colorscheme
-    # Yakuake is not updated..
-    ~/.kde/share/apps/konsole/Gruvbox_dark.colorscheme: colors/konsole/Gruvbox_dark.colorscheme
-    ~/.kde/share/apps/konsole/base16-ocean.colorscheme: colors/konsole/base16-ocean.colorscheme
     # Other
     ~/.config/zathura/zathurarc: config/zathura/zathurarc
     ~/.config/cmus/rc: config/cmus/rc
     # TODO ranger
-
-
-    #~/.tmux.conf: tmux.conf
 
 - shell:
     - ["[ ! -d ~/.zim ] && git clone --recursive https://github.com/Eriner/zim.git ${ZDOTDIR:-${HOME}}/.zim || exit 0", Installing zim]

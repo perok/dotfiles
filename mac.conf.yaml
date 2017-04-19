@@ -1,0 +1,4 @@
+- clean: ['~']
+- link:
+- shell:
+    - [./install_mac, Installing mac tools]
