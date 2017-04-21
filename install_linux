@@ -28,6 +28,11 @@ pip3 install --user \
 pip3 install --user \
   unidecode
 
+# sudo apt-get install arc-kde
+# sudo add-apt-repository ppa:papirus/papirus
+# sudo apt install arc-kde papirus-icon-theme
+# Run kvantummanager
+
 kwriteconfig5 --file ~/.config/kwinrc --group Windows --key BorderlessMaximizedWindows true
 
 kwin_x11 --replace & disown

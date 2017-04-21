@@ -1,4 +1,5 @@
 # Keybinding mode: e-> emacs, v-> vi
+# TODO use vi
 bindkey -e
 
 ##

@@ -18,7 +18,6 @@ export SDKMAN_DIR="$HOME/.sdkman"
 source_file "$NVM_DIR/nvm.sh"
 source_file '~/.local/bin/virtualenvwrapper.sh' # Use _lazy
 source_file '~/.sdkman/bin/sdkman-init.sh'
-source ~/.fzf.zsh
 source ~/.zplug/init.zsh
 
 # Plugins
@@ -31,15 +30,18 @@ zplug "gradle/gradle-completion"
 zplug load #--verbose
 
 # Custom settings
-source $ZDOTFILES/user/funcs.zsh
-source $ZDOTFILES/user/defaults.zsh
-source $ZDOTFILES/user/tweaks.zsh
 source $ZDOTFILES/user/keybindings.zsh
+source $ZDOTFILES/user/defaults.zsh
+source $ZDOTFILES/user/funcs.zsh
+source $ZDOTFILES/user/tweaks.zsh
 if [ -n ${LINUX+x} ]; then
     source $ZDOTFILES/user/linux.zsh
 else
     source $ZDOTFILES/user/darwin.zsh
 fi
 
+# Fzf must be loaded last
+source ~/.fzf.zsh
 export GRADLE_OPTS=-Dorg.gradle.daemon=true
 
+#start_tmux

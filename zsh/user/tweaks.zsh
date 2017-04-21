@@ -22,7 +22,7 @@ function diff {
   elif (( $+commands[git] )); then
     git --no-pager diff --color=auto --no-ext-diff --no-index "$@"
   else
-    command diff --unified "$@"
+    command diff --unified --color=auto "$@"
   fi
 }
 
