@@ -16,7 +16,7 @@ export NVM_DIR="$HOME/.nvm"
 export WORKON_HOME=$HOME/.virtualenvs
 export SDKMAN_DIR="$HOME/.sdkman"
 source_file "$NVM_DIR/nvm.sh"
-source_file '~/.local/bin/virtualenvwrapper.sh' # Use _lazy
+source_file '~/.local/bin/virtualenvwrapper_lazy.sh'
 source_file '~/.sdkman/bin/sdkman-init.sh'
 source ~/.zplug/init.zsh
 

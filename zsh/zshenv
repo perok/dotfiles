@@ -4,28 +4,32 @@
 
 if [[ `uname` == 'Linux' ]]
 then
-        export LINUX=1
+    export LINUX=1
 else
-        export LINUX=
+    export LINUX=
 fi
 
 if [[ `uname` == 'Darwin' ]]
 then
-        export OSX=1
+    export OSX=1
 else
-        export OSX=
+    export OSX=
 fi
 
 export ZDOTFILES=$HOME/.dotfiles/zsh
+export DOTUTILS=$HOME/.dotutils
+export XDG_MUSIC_DIR=$HOME/Music
 
 if [ "$ZSHENV_SOURCE" = true ] ; then
-  return
+    return
 fi
+
 # TODO better solution than removing path_helper in /etc/zprofile?
 # Disable loading global config files
 setopt no_global_rcs
 
 # TODO set alternative $ZDOTDIR in .zshenv
+
 path=(
   '.'
   /usr/local/{bin,sbin}
@@ -35,7 +39,6 @@ path=(
   $path
 )
 
-#export PATH
 if (( $+commands[rbenv] )); then
   eval "$(rbenv init -)"
 fi

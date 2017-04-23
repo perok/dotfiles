@@ -8,6 +8,7 @@ if [ -n "${NVIM_LISTEN_ADDRESS+x}" ]; then
 else
     export EDITOR='nvim'
 fi
+
 export GIT_EDITOR="$EDITOR"
 export VISUAL="$EDITOR"
 
