@@ -2,7 +2,7 @@
 	email = per.oyvind.kanestrom@sgfinans.no
 	name = Per Øyvind Kanestrøm
 [core]
-    editor = vim
+	editor = nvr --remote-wait-silent
     pager = less -r
 	excludesfile = /Users/perkanestrom/.gitignore_global
 [push]
@@ -25,7 +25,7 @@
     helper = cache --timeout=3600
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
+	path =
 [mergetool "sourcetree"]
 	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
