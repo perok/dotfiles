@@ -1,11 +1,10 @@
-
 function start_tmux() {
-    if type tmux &> /dev/null; then
-        #if not inside a tmux session, and if no session is started, start a new session
-        if [[ $HOST == "Great-Pooto" && -z "$TMUX" && -z $TERMINAL_CONTEXT ]]; then
-            (tmux -2 attach || tmux -2 new-session)
-        fi
+  if type tmux &> /dev/null; then
+    #if not inside a tmux session, and if no session is started, start a new session
+    if [[ $HOST == "Great-Pooto" && -z "$TMUX" && -z $TERMINAL_CONTEXT ]]; then
+      (tmux -2 attach || tmux -2 new-session)
     fi
+  fi
 }
 
 # ftpane - switch pane (@george-b)
@@ -24,25 +23,25 @@ ftpane() {
     tmux select-pane -t ${target_window}.${target_pane}
   else
     tmux select-pane -t ${target_window}.${target_pane} &&
-    tmux select-window -t $target_window
+      tmux select-window -t $target_window
   fi
 }
 
 
 function docker_ip() {
-    local container_id=$(docker ps | grep $1 | awk '{print $ 1}' | tail -n 1)
+  local container_id=$(docker ps | grep $1 | awk '{print $ 1}' | tail -n 1)
 
-    if [ $container_id ]; then
-        docker inspect $container_id \
-            | grep -w "IPAddress" \
-            | awk '{ print $2 }' \
-            | tail -n 1
-    else
-        echo 'Unknown container' $1 1>&2
-        return 1
-    fi
+  if [ $container_id ]; then
+    docker inspect $container_id \
+      | grep -w "IPAddress" \
+      | awk '{ print $2 }' \
+      | tail -n 1
+  else
+    echo 'Unknown container' $1 1>&2
+    return 1
+  fi
 }
 
 function murderAllPort() {
-    lsof -i:$1 | tail -n +2 | awk '{ print $2 }' | xargs -L1 kill -9
+  lsof -i:$1 | tail -n +2 | awk '{ print $2 }' | xargs -L1 kill -9
 }

@@ -1,12 +1,12 @@
 # Set default exports
 # If inside neovim terminal then use neovim-remote
 if [ -n "${NVIM_LISTEN_ADDRESS+x}" ]; then
-    export EDITOR='nvr'
-    alias hh='nvr -o'
-    alias vv='nvr -O'
-    alias tt='nvr --remote-tab'
+  export EDITOR='nvr'
+  alias hh='nvr -o'
+  alias vv='nvr -O'
+  alias tt='nvr --remote-tab'
 else
-    export EDITOR='nvim'
+  export EDITOR='nvim'
 fi
 
 export GIT_EDITOR="$EDITOR"
