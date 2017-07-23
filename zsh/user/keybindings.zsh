@@ -6,6 +6,9 @@
 bindkey -v
 
 export KEYTIMEOUT=1 # ESC timeout time 10ms
+# don't display RPROMPT for previously accepted lines; only display it next to
+# current line
+setopt transient_rprompt
 
 # Enable Ctrl-x-e to edit command line
 autoload -U edit-command-line
