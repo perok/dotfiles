@@ -5,6 +5,7 @@
 	editor = nvr --remote-wait-silent
     pager = less -r
 	excludesfile = /Users/perkanestrom/.gitignore_global
+	autocrlf = input
 [push]
     default = simple
 [color]
@@ -19,6 +20,7 @@
     alias = !git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\\t => \\2/' | sort
     getroot = !pwd
     difftex = difftool -y -t latex
+    git = !exec git
 [difftool.latex]
     cmd = latexdiff "$LOCAL" "$REMOTE"
 [credential]
