@@ -1,0 +1,93 @@
+#!/usr/bin/env bash
+
+# todo rewrite to bash
+# exec as zsh -c ?
+# Rewrite to py3..
+
+set -e
+
+declare -a _program_desc
+declare -a _programs
+_programs_no_desc=()
+
+# echo $a[2,-1]
+
+# apt-cache policy gnuift . see if installed == (none)
+
+function _install() {
+    local platform=$1; shift
+    IFS='?' read -r -a split <<< "$@"
+    #local split=(${(s:-:)@}) # Split on -
+    local prg=${split[0]} # $#split gives length
+    local desc=${split[2]}
+    echo lol "${split[0]}"
+    echo "$prg" "$desc"
+
+    _programs[${platform}]+=" $prg"
+
+    if [[ $desc ]]; then
+        _program_desc[${prg}]=$desc
+    else
+        _programs_no_desc+=($prg)
+    fi
+}
+
+function install() {
+    _install shared "$@"
+}
+
+function install_linux() {
+    if [[ -z $LINUX ]]; then
+        return 1
+    fi
+
+    _install linux "$@"
+}
+
+function install_ppa() {
+    # TODO check if package is available before installing
+    if [[ -z $LINUX ]]; then
+        return 1
+    fi
+
+    _install linux "$@"
+}
+
+
+function install_darwin() {
+    if [[ -z $OSX ]]; then
+        return 0
+    fi
+
+    _install darwin "$@"
+}
+
+install tmux - Terminal multiplexer
+install shellcheck
+install more programs
+install_ppa mopidy mopidy-mpris
+#install_pip_root Mopidy-YouTube Mopidy-Scrobbler
+install_linux SPECIFIC ? Terminal multiplexer
+install_darwin stuff more stuff - OSC stuff
+
+#echo $_shared_programs
+
+# Want to install:
+printf "\nWant to install"
+printf "\n###############\n"
+printf "$_program_desc"
+for k in "${!_program_desc[@]}"; do
+  echo "$k -> ${_program_desc[$k]}"
+done
+
+#echo "\nTEST ${(@kv)_programs}"
+
+
+
+#typeset -A a
+#a[a]='those are values'
+#print -l ${(s: :)a[a]}
+#those
+#are
+#values
+

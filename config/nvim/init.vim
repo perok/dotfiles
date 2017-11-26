@@ -1,5 +1,13 @@
 " Based on http://dougblack.io/words/a-good-vimrc.html
 " Other tips from https://github.com/euclio/vimrc/blob/master/vimrc
+" set guicursor=a:block-blinkon0
+"set guicursor=n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20
+" TODO Cause of random q's popping up
+set guicursor=
+au VimLeave * set guicursor=a:block-blinkon0
+
+set mouse=a
+
 
 " TODO {{{
     " Base16 theme .XResources, ranger, vim, zsh?
@@ -40,6 +48,8 @@ endif
 
 " Plugins {{{
 call plug#begin()
+
+Plug 'editorconfig/editorconfig-vim'
 
 Plug 'mhinz/vim-startify' " {{{
 let g:startify_custom_header = []
@@ -215,10 +225,6 @@ Plug 'bfredl/nvim-ipy' , { 'on': 'IPython' }
 " Latex
 Plug 'matze/vim-tex-fold', { 'for': 'tex' }
 
-Plug 'dpelle/vim-LanguageTool', { 'for': 'tex' }
-let g:languagetool_jar = "/home/perok/Downloads/LanguageTool-3.5/languagetool-commandline.jar"
-let g:languagetool_lang = "en-GB"
-
 " Scala
 Plug 'ensime/ensime-vim', { 'for': 'scala' }
 Plug 'derekwyatt/vim-scala', { 'for': 'scala' }
@@ -233,7 +239,7 @@ syntax enable           " enable syntax processing
 
 set background=dark
 if has("termguicolors")
-    set termguicolors	" enable true color support
+    set termguicolors   " enable true color support
 endif
 
 if has('vim_starting')
@@ -695,7 +701,6 @@ if has('nvim')
     " let g:terminal_color_background="#282828"
     " let g:terminal_color_foreground="#ebdbb2"
 
-    let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
     " Use a blinking upright bar cursor in Insert mode, a solid block in normal and a blinking underline in replace mode
     " TODO not working
     " https://github.com/neovim/neovim/issues/2583

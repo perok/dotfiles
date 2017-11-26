@@ -9,6 +9,8 @@
     # Other
 
 - shell:
+    - [git clone https://github.com/faho/kwin-tiling.git $DOTUTILS/kwin-tiling]
+    - [cd $DOTUTILS/kwin-tiling/; plasmapkg2 --type kwinscript -i .]
     -
         command: ./install_linux
         stdin: true

@@ -14,6 +14,7 @@ ftpane() {
   current_pane=$(tmux display-message -p '#I:#P')
   current_window=$(tmux display-message -p '#I')
 
+  # TODO fzf-tmux
   target=$(echo "$panes" | grep -v "$current_pane" | fzf +m --reverse) || return
 
   target_window=$(echo $target | awk 'BEGIN{FS=":|-"} {print$1}')

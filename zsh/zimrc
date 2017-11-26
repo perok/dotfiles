@@ -10,7 +10,7 @@
 # The second line of modules may depend on options set by modules in the first line.
 # These dependencies are noted on the respective module's README.md.
 zmodules=(directory environment git git-info history input utility meta custom
-          spectrum fasd ssh syntax-highlighting prompt completion archive)
+          syntax-highlighting prompt completion archive spectrum fasd ssh)
 # history-substring-search => use fzf instead
 
 
@@ -62,15 +62,4 @@ zhighlighters=(main brackets cursor)
 
 # Load these ssh identities with the ssh module
 zssh_ids=(id_rsa)
-
-
-#
-# Pacman
-#
-
-# Set (optional) pacman front-end.
-#zpacman_frontend='powerpill'
-
-# Load any helper scripts as defined here
-#zpacman_helper=(aur)
 

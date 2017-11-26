@@ -3,13 +3,15 @@
 set -e
 
 sudo apt install \
-   xsel unrar p7zip \
-   zsh silversearcher-ag colordiff colormake \
-   ranger atool caca-utils highlight libsixel-bin \
-   redshift \
-   mosh zathura mupdf htop \
-   vlc ffmpeg synaptic \
-   python-virtualenv
+    zsh xsel htop synaptic \
+    unrar p7zip \
+    gawk silversearcher-ag colordiff colormake \
+    ranger atool caca-utils highlight libsixel-bin \
+    redshift \
+    mosh zathura mupdf \
+    mpv ffmpeg youtube-dl \
+    python-virtualenv \
+    lnav tig
 
 # FS for Android usb mounting
 sudo apt install  mtpfs
