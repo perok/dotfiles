@@ -2,46 +2,63 @@
 # User configuration sourced by interactive shells
 #
 
+# Fix locale warning from terminal in Intellij
+LC_CTYPE=en_US.UTF-8
+LC_ALL=en_US.UTF-8
+
 function source_file() {
     if [[ -r $1 ]]; then
         source $1
     fi
 }
 
+#
 # Base setup
-source ${ZDOTDIR:-${HOME}}/.zim/init.zsh
+#
 
-# Utility tools
-export NVM_DIR="$HOME/.nvm"
-export WORKON_HOME=$HOME/.virtualenvs
-export SDKMAN_DIR="$HOME/.sdkman"
-source_file "$NVM_DIR/nvm.sh"
-source_file '~/.local/bin/virtualenvwrapper_lazy.sh'
-source_file '~/.sdkman/bin/sdkman-init.sh'
+# Change default zim location
+export ZIM_HOME=${ZDOTDIR:-${HOME}}/.zim
+# Start zim
+[[ -s ${ZIM_HOME}/init.zsh ]] && source ${ZIM_HOME}/init.zsh
+
+# Init Zplug
 source ~/.zplug/init.zsh
 
+#
 # Plugins
+#
+
 # TODO https://github.com/mssun/dotfiles/blob/master/.zshrc.zplug
 # zplug manage itself like other packages: zplug update
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
 zplug "zsh-users/zsh-completions"
 zplug "gradle/gradle-completion"
+zplug "b4b4r07/enhancd", use:init.sh
+
 zplug load #--verbose
 
 # Custom settings
-source $ZDOTFILES/user/keybindings.zsh
 source $ZDOTFILES/user/defaults.zsh
+source $ZDOTFILES/user/keybindings.zsh
 source $ZDOTFILES/user/funcs.zsh
 source $ZDOTFILES/user/tweaks.zsh
-if [ -n ${LINUX+x} ]; then
+source "$ZDOTFILES/user/alias.zsh"
+if [[ -n ${LINUX} ]]; then
     source $ZDOTFILES/user/linux.zsh
 else
     source $ZDOTFILES/user/darwin.zsh
 fi
 
-# Fzf must be loaded last
-source ~/.fzf.zsh
+# Utility tools
+source ~/.fzf.zsh # Load after personal settings
+export NVM_DIR="$HOME/.nvm"
+export WORKON_HOME=$HOME/.virtualenvs
+export SDKMAN_DIR="$HOME/.sdkman"
+source_file "$NVM_DIR/nvm.sh"
+source_file '~/.local/bin/virtualenvwrapper_lazy.sh'
+source_file '~/.sdkman/bin/sdkman-init.sh'
+
 export GRADLE_OPTS=-Dorg.gradle.daemon=true
 
 #start_tmux
