@@ -29,11 +29,6 @@ let s:is_linux = system('uname') =~ "Linux"
 if !has('nvim') && has('vim_starting')
     " Use utf-8 everywhere
     set encoding=utf8
-else
-    " These variable must be set before any calls to `has('python')`.
-    " Avoids interpreter searching which gives better startup time.
-    let g:python_host_prog='/usr/bin/python2'
-    let g:python3_host_prog='/usr/bin/python3'
 endif
 
 " Leader is space
@@ -78,6 +73,7 @@ map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
 map <Leader>h <Plug>(easymotion-linebackward)
 " }}}
+Plug 'godlygeek/tabular'
 
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' } " {{{
 nnoremap <F6> :UndotreeToggle<cr>
@@ -181,7 +177,7 @@ Plug 'ujihisa/neco-look', { 'for': 'tex' }
 Plug 'airblade/vim-gitgutter' " {{{
 " Always display gitgutter column
 let g:gitgutter_map_keys = 0 " Activate stuff when I need it..
-let g:gitgutter_sign_column_always=1
+set signcolumn=yes
 " }}}
 
 Plug 'nathanaelkane/vim-indent-guides' " {{{
@@ -195,6 +191,7 @@ Plug 'morhetz/gruvbox'
 " Plug 'chriskempson/base16-vim'
 Plug 'Soares/base16.nvim'
 Plug 'jacoborus/tender'
+Plug 'cocopon/iceberg.vim'
 
 " Clojure/script/ plugins
 Plug 'tpope/vim-salve' " Leiningen
@@ -226,7 +223,9 @@ Plug 'bfredl/nvim-ipy' , { 'on': 'IPython' }
 Plug 'matze/vim-tex-fold', { 'for': 'tex' }
 
 " Scala
-Plug 'ensime/ensime-vim', { 'for': 'scala' }
+Plug 'ensime/ensime-vim' ", { 'for': 'scala' }
+let ensime_server_v2=1
+
 Plug 'derekwyatt/vim-scala', { 'for': 'scala' }
 
 " Plug 'airodactyl/neovim-ranger'
@@ -246,7 +245,7 @@ if has('vim_starting')
     "colorscheme gruvbox
     "let g:base16colorspace=256
     "colorscheme base16-ocean
-    colorscheme tender
+    colorscheme iceberg
     "let g:base16colorspace=256
     "colorscheme base16-ocean
     " colorscheme twilight
@@ -494,7 +493,7 @@ set noshowmode            " Do not show default mode in statusline
 " set statusline+=\ %y      " Filetype
 
 let g:lightline = {
-      \ 'colorscheme': 'tender',
+      \ 'colorscheme': 'iceberg',
       \ 'mode_map': { 'c': 'NORMAL' },
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ]
