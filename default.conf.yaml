@@ -8,6 +8,7 @@
     - mkdir -p ~/.config/nvim/colors
     - mkdir -p ~/.config/nvim/swap
     - mkdir -p ~/.config/nvim/backup
+    - mkdir -p ~/.config/nvim/spell
     - mkdir -p ~/.config/zathura
     - mkdir -p ~/.virtualenvs
 - link:
@@ -24,6 +25,8 @@
     # Tmux
     ~/.tmux.conf: config/tmux/tmux.conf
     ~/.config/tmux: config/tmux
+    ~/.config/kitty: config/kitty
+    ~/.config/alacritty: config/alacritty
     # Virtualenvs
     ~/.virtualenvs/postactivate: virtualenvs/postactivate
     ~/.virtualenvs/postdeactivate: virtualenvs/postdeactivate
