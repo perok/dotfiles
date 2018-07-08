@@ -22,19 +22,12 @@ sudo apt install look
 # Samba printer client
 sudo apt install smbclient
 
-pip install --user \
-  virtualenvwrapper
-pip3 install --user \
-  neovim neovim-remote
-# For vim ultisnips
-pip3 install --user \
-  unidecode
-
 # sudo apt-get install arc-kde
 # sudo add-apt-repository ppa:papirus/papirus
 # sudo apt install arc-kde papirus-icon-theme
 # Run kvantummanager
 
+# KDE specific setup
 kwriteconfig5 --file ~/.config/kwinrc --group Windows --key BorderlessMaximizedWindows true
 
 kwin_x11 --replace & disown

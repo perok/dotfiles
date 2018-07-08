@@ -43,9 +43,11 @@
     # TODO ranger
 
 - shell:
+    - ["./install_generic", Installing packages]
     - ["[ ! -d ~/.zim ] && git clone --recursive https://github.com/Eriner/zim.git ${ZDOTDIR:-${HOME}}/.zim || exit 0", Installing zim]
     - ["[ ! -d ~/.zplug ] && git clone https://github.com/zplug/zplug.git ${HOME}/.zplug || exit 0", Installing zplug]
     - ["[ ! -d ~/.tmux/plugins/tpm ] &&  git clone https://github.com/tmux-plugins/tpm ${HOME}/.tmux/plugins/tpm || exit 0", Installing tpm]
+    - ["./colors/gruvbox-idea/install.bash", Installing Gruvbox Idea colorscheme]
     #- [git submodule foreach git pull origin master, Updating submodules to origin master]
     #- [git submodule update --init --recursive, Update..]
     #- [git submodule update, Updating submodules] # Update submodule to index
