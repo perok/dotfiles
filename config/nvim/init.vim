@@ -14,7 +14,6 @@ set mouse=a
     " XDG variables not set
     "let g:python3_host_prog = '/path/to/python3'
     " unimpaired - bunch of useful mappings on ] and [
-    " repeat - . them all!
     " projectionist - jump all over the project with ease
     " targets - more useful movements
     " swapit - ^a/^x on steroids (mostly used for true/false switch)
@@ -56,6 +55,7 @@ Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
+Plug 'tpope/repeat'  " '.' supports non-native commands
 Plug 'justinmk/vim-dirvish' " {{{
 augroup plugin_dirvish
     autocmd!
@@ -84,6 +84,7 @@ endif
 " }}}
 
 " Syntax checking
+" TODO change to ALE?
 Plug 'benekastah/neomake' " {{{
 let g:neomake_javascript_enabled_makers = ['eslint']
 " Override eslint with local version where necessary.
@@ -189,13 +190,13 @@ let g:indent_guides_guide_size = 1
 " Colorschemes
 Plug 'morhetz/gruvbox'
 " Plug 'chriskempson/base16-vim'
-Plug 'Soares/base16.nvim'
-Plug 'jacoborus/tender'
-Plug 'cocopon/iceberg.vim'
+" Plug 'Soares/base16.nvim'
+" Plug 'jacoborus/tender'
+" Plug 'cocopon/iceberg.vim'
 
 " Clojure/script/ plugins
-Plug 'tpope/vim-salve' " Leiningen
-Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
+" Plug 'tpope/vim-salve' " Leiningen
+" Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 
 " Multiple file types
 Plug 'kovisoft/paredit', { 'for': ['clojure', 'scheme'] }
@@ -215,16 +216,12 @@ Plug 'mxw/vim-jsx', { 'for': 'javascript' } " {{{
 " }}}
 " Plug 'elzr/vim-json', { 'for': 'json' }
 
-" Python
-let g:nvim_ipy_perform_mappings = 0
-Plug 'bfredl/nvim-ipy' , { 'on': 'IPython' }
-
 " Latex
 Plug 'matze/vim-tex-fold', { 'for': 'tex' }
 
 " Scala
-Plug 'ensime/ensime-vim' ", { 'for': 'scala' }
-let ensime_server_v2=1
+" Plug 'ensime/ensime-vim' ", { 'for': 'scala' }
+" let ensime_server_v2=1
 
 Plug 'derekwyatt/vim-scala', { 'for': 'scala' }
 
@@ -242,10 +239,10 @@ if has("termguicolors")
 endif
 
 if has('vim_starting')
-    "colorscheme gruvbox
+    colorscheme gruvbox
     "let g:base16colorspace=256
     "colorscheme base16-ocean
-    colorscheme iceberg
+    "colorscheme iceberg
     "let g:base16colorspace=256
     "colorscheme base16-ocean
     " colorscheme twilight
@@ -288,6 +285,7 @@ augroup vimrc
     " Do not use relativenumber in insert mode
     autocmd InsertEnter * set norelativenumber
     autocmd InsertLeave * set relativenumber
+    " TODO when entering Term. Disable all number showing
 
     " Do not use relative number when focus is lost
     " TODO not working in neovim
@@ -493,7 +491,7 @@ set noshowmode            " Do not show default mode in statusline
 " set statusline+=\ %y      " Filetype
 
 let g:lightline = {
-      \ 'colorscheme': 'iceberg',
+      \ 'colorscheme': 'gruvbox',
       \ 'mode_map': { 'c': 'NORMAL' },
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ]
@@ -679,26 +677,6 @@ if has('nvim')
     tnoremap <A-j> <C-\><C-n><C-w>j
     tnoremap <A-k> <C-\><C-n><C-w>k
     tnoremap <A-l> <C-\><C-n><C-w>l
-
-    " gruvbox terminal color scheme
-    " let g:terminal_color_0="#282828"
-    " let g:terminal_color_1="#cc241d"
-    " let g:terminal_color_2="#98971a"
-    " let g:terminal_color_3="#d79921"
-    " let g:terminal_color_4="#458588"
-    " let g:terminal_color_5="#b16286"
-    " let g:terminal_color_6="#689d6a"
-    " let g:terminal_color_7="#a89984"
-    " let g:terminal_color_8="#928374"
-    " let g:terminal_color_9="#fb4934"
-    " let g:terminal_color_10="#b8bb26"
-    " let g:terminal_color_11="#fabd2f"
-    " let g:terminal_color_12="#83a598"
-    " let g:terminal_color_13="#d3869b"
-    " let g:terminal_color_14="#8ec07c"
-    " let g:terminal_color_15="#ebdbb2"
-    " let g:terminal_color_background="#282828"
-    " let g:terminal_color_foreground="#ebdbb2"
 
     " Use a blinking upright bar cursor in Insert mode, a solid block in normal and a blinking underline in replace mode
     " TODO not working
