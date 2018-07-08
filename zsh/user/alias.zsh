@@ -1,3 +1,4 @@
+eval "$(thefuck --alias)"
 
 # `exa` utility {{{
 alias l='exa -bghl --group-directories-first --sort name --git'

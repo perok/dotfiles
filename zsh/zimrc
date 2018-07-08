@@ -28,7 +28,7 @@ zinput_mode='vi'
 
 # Set your desired prompt here
 zprompt_theme='pure' #'steeef'
-
+PURE_PROMPT_SYMBOL='λ'
 
 #
 # Input

@@ -28,7 +28,11 @@ fi
 # Disable loading global config files
 setopt no_global_rcs
 
+# TODO
+#export XDG_CONFIG_HOME="$HOME/.config"
+#export DOTUTILS="$XDG_CONFIG_HOME/dotutils" # For zplug, etc..
 # TODO set alternative $ZDOTDIR in .zshenv
+# TODO osx   export PATH="$(brew --prefix coreutils)/libexec/gnubin:$PATH" ?
 
 path=(
   '.'

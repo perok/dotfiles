@@ -3,8 +3,8 @@
 #
 
 # Fix locale warning from terminal in Intellij
-LC_CTYPE=en_US.UTF-8
-LC_ALL=en_US.UTF-8
+export LC_CTYPE=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 
 function source_file() {
     if [[ -r $1 ]]; then
@@ -39,10 +39,10 @@ zplug "b4b4r07/enhancd", use:init.sh
 zplug load #--verbose
 
 # Custom settings
-source $ZDOTFILES/user/defaults.zsh
-source $ZDOTFILES/user/keybindings.zsh
-source $ZDOTFILES/user/funcs.zsh
-source $ZDOTFILES/user/tweaks.zsh
+source "$ZDOTFILES/user/defaults.zsh"
+source "$ZDOTFILES/user/keybindings.zsh"
+source "$ZDOTFILES/user/funcs.zsh"
+source "$ZDOTFILES/user/tweaks.zsh"
 source "$ZDOTFILES/user/alias.zsh"
 if [[ -n ${LINUX} ]]; then
     source $ZDOTFILES/user/linux.zsh
