@@ -6,6 +6,7 @@
     pager = less -r
 	excludesfile = /Users/perkanestrom/.gitignore_global
 	autocrlf = input
+	commitGraph = true
 [push]
 	default = current
 [color]
