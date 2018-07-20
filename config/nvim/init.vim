@@ -82,6 +82,7 @@ if has("persistent_undo")
     set undodir=~/.undodir/
 endif
 " }}}
+Plug 'whiteinge/diffconflicts'
 
 " Syntax checking
 " TODO change to ALE?
