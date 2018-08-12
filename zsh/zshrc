@@ -2,130 +2,63 @@
 # User configuration sourced by interactive shells
 #
 
-# Source zim
-if [[ -s ${ZDOTDIR:-${HOME}}/.zim/init.zsh ]]; then
-  source ${ZDOTDIR:-${HOME}}/.zim/init.zsh
-fi
+# Fix locale warning from terminal in Intellij
+export LC_CTYPE=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 
-# Set default exports
-# If inside neovim terminal then use neovim-remote
-if [ -n "${NVIM_LISTEN_ADDRESS+x}" ]; then
-    export EDITOR='nvr'
-    alias hh='nvr -o'
-    alias vv='nvr -O'
-    alias tt='nvr --remote-tab'
-else
-    export EDITOR='nvim'
-fi
-export GIT_EDITOR="$EDITOR"
-export VISUAL="$EDITOR"
-
-
-# Virtualenv wrapper
-export WORKON_HOME=$HOME/.virtualenvs
-source ~/.local/bin/virtualenvwrapper.sh
-#if [[ $(command -v virtualenvwrapper_lazy.sh) ]]; then
-#  source virtualenvwrapper_lazy.sh
-#fi
-
-# Use XDG spec
-#alias tmux=tmux -f "$XDG_CONFIG_HOME"/tmux/tmux.conf
-export TMUX_TMPDIR="$XDG_RUNTIME_DIR"/tmux
-
-# Keybinding mode: e-> emacs, v-> vi
-bindkey -e
-
-# Set alias's
-alias vim="$EDITOR"
-alias :e="$EDITOR"
-alias :E="$EDITOR"
-alias :q='exit'
-
-# fasd aliases
-# TODO double check these
-alias v="f -e $EDITOR" # quick opening files with vim
-alias o='a -e xdg-open' # quick opening files with xdg-open
-
-# Base16 Shell TODO not working on konsole
-#BASE16_SHELL="$HOME/.config/base16-shell/base16-default.dark.sh"
-#[[ -s $BASE16_SHELL ]] && source $BASE16_SHELL
-
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-if [ -x "$(command -v ag)" ]; then
-  # Set ag as the default source for fzf (respect .gitignore etc)
-  export FZF_DEFAULT_COMMAND='ag -l -g ""'
-  # To apply the command to CTRL-T as well
-  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-
-  # For zsh {cmd} **<tab> completion
-  # Use ag instead of the default find command for listing candidates.
-  # - The first argument to the function is the base path to start traversal
-  # - Note that ag only lists files not directories
-  # - See the source code (completion.{bash,zsh}) for the details.
-  _fzf_compgen_path() {
-    ag -g "" "$1"
-  }
-fi
-
-function diff {
-  if (( $+commands[colordiff] )); then
-    command diff --unified "$@" | colordiff --difftype diffu
-  elif (( $+commands[git] )); then
-    git --no-pager diff --color=auto --no-ext-diff --no-index "$@"
-  else
-    command diff --unified "$@"
-  fi
-}
-
-function make {
-  if (( $+commands[colormake] )); then
-    colormake "$@"
-  else
-    command make "$@"
-  fi
-}
-
-# Colorize man pages
-man() {
-  env \
-    LESS_TERMCAP_mb=$(printf "\e[1;31m")\
-    LESS_TERMCAP_md=$(printf "\e[1;31m")\
-    LESS_TERMCAP_me=$(printf "\e[0m")\
-    LESS_TERMCAP_se=$(printf "\e[0m")\
-    LESS_TERMCAP_so=$(printf "\e[1;44;33m")\
-    LESS_TERMCAP_ue=$(printf "\e[0m")\
-    LESS_TERMCAP_us=$(printf "\e[1;32m")\
-    man "$@"
-}
-
-##
-# Enable Ctrl-x-e to edit command line
-##
-autoload -U edit-command-line
-# Emacs style
-zle -N edit-command-line
-bindkey '^xe' edit-command-line
-bindkey '^x^e' edit-command-line
-# Vi style:
-# zle -N edit-command-line
-# bindkey -M vicmd v edit-command-line
-
-function docker_ip() {
-    local container_id=$(docker ps | grep $1 | awk '{print $ 1}' | tail -n 1)
-
-    if [ $container_id ]; then
-        docker inspect $container_id \
-            | grep -w "IPAddress" \
-            | awk '{ print $2 }' \
-            | tail -n 1
-    else
-        echo 'Unknown container' $1 1>&2
-        return 1
+function source_file() {
+    if [[ -r $1 ]]; then
+        source $1
     fi
 }
 
+#
+# Base setup
+#
 
+# Change default zim location
+export ZIM_HOME=${ZDOTDIR:-${HOME}}/.zim
+# Start zim
+[[ -s ${ZIM_HOME}/init.zsh ]] && source ${ZIM_HOME}/init.zsh
+
+# Init Zplug
+source ~/.zplug/init.zsh
+
+#
+# Plugins
+#
+
+# TODO https://github.com/mssun/dotfiles/blob/master/.zshrc.zplug
+# zplug manage itself like other packages: zplug update
+zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+
+zplug "zsh-users/zsh-completions"
+zplug "gradle/gradle-completion"
+zplug "b4b4r07/enhancd", use:init.sh
+
+zplug load #--verbose
+
+# Custom settings
+source "$ZDOTFILES/user/defaults.zsh"
+source "$ZDOTFILES/user/keybindings.zsh"
+source "$ZDOTFILES/user/funcs.zsh"
+source "$ZDOTFILES/user/tweaks.zsh"
+source "$ZDOTFILES/user/alias.zsh"
+if [[ -n ${LINUX} ]]; then
+    source $ZDOTFILES/user/linux.zsh
+else
+    source $ZDOTFILES/user/darwin.zsh
+fi
+
+# Utility tools
+source ~/.fzf.zsh # Load after personal settings
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+export WORKON_HOME=$HOME/.virtualenvs
+export SDKMAN_DIR="$HOME/.sdkman"
+source_file "$NVM_DIR/nvm.sh"
+source_file '~/.local/bin/virtualenvwrapper_lazy.sh'
+source_file '~/.sdkman/bin/sdkman-init.sh'
+
+export GRADLE_OPTS=-Dorg.gradle.daemon=true
+
+#start_tmux

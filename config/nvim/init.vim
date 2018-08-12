@@ -1,12 +1,19 @@
 " Based on http://dougblack.io/words/a-good-vimrc.html
 " Other tips from https://github.com/euclio/vimrc/blob/master/vimrc
+" set guicursor=a:block-blinkon0
+"set guicursor=n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20
+" TODO Cause of random q's popping up
+set guicursor=
+au VimLeave * set guicursor=a:block-blinkon0
+
+set mouse=a
+
 
 " TODO {{{
     " Base16 theme .XResources, ranger, vim, zsh?
     " XDG variables not set
     "let g:python3_host_prog = '/path/to/python3'
     " unimpaired - bunch of useful mappings on ] and [
-    " repeat - . them all!
     " projectionist - jump all over the project with ease
     " targets - more useful movements
     " swapit - ^a/^x on steroids (mostly used for true/false switch)
@@ -15,14 +22,12 @@
 " }}}
 
 " Core {{{
+let s:is_darwin = system('uname') =~ "darwin"
+let s:is_linux = system('uname') =~ "Linux"
+
 if !has('nvim') && has('vim_starting')
     " Use utf-8 everywhere
     set encoding=utf8
-else
-    " These variable must be set before any calls to `has('python')`.
-    " Avoids interpreter searching which gives better startup time.
-    let g:python_host_prog='/usr/bin/python2'
-    let g:python3_host_prog='/usr/bin/python3'
 endif
 
 " Leader is space
@@ -38,6 +43,8 @@ endif
 " Plugins {{{
 call plug#begin()
 
+Plug 'editorconfig/editorconfig-vim'
+
 Plug 'mhinz/vim-startify' " {{{
 let g:startify_custom_header = []
 let g:startify_change_to_dir = 0
@@ -48,6 +55,7 @@ Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
+Plug 'tpope/repeat'  " '.' supports non-native commands
 Plug 'justinmk/vim-dirvish' " {{{
 augroup plugin_dirvish
     autocmd!
@@ -65,6 +73,7 @@ map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
 map <Leader>h <Plug>(easymotion-linebackward)
 " }}}
+Plug 'godlygeek/tabular'
 
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' } " {{{
 nnoremap <F6> :UndotreeToggle<cr>
@@ -73,8 +82,10 @@ if has("persistent_undo")
     set undodir=~/.undodir/
 endif
 " }}}
+Plug 'whiteinge/diffconflicts'
 
 " Syntax checking
+" TODO change to ALE?
 Plug 'benekastah/neomake' " {{{
 let g:neomake_javascript_enabled_makers = ['eslint']
 " Override eslint with local version where necessary.
@@ -168,7 +179,7 @@ Plug 'ujihisa/neco-look', { 'for': 'tex' }
 Plug 'airblade/vim-gitgutter' " {{{
 " Always display gitgutter column
 let g:gitgutter_map_keys = 0 " Activate stuff when I need it..
-let g:gitgutter_sign_column_always=1
+set signcolumn=yes
 " }}}
 
 Plug 'nathanaelkane/vim-indent-guides' " {{{
@@ -180,12 +191,13 @@ let g:indent_guides_guide_size = 1
 " Colorschemes
 Plug 'morhetz/gruvbox'
 " Plug 'chriskempson/base16-vim'
-Plug 'Soares/base16.nvim'
-Plug 'jacoborus/tender'
+" Plug 'Soares/base16.nvim'
+" Plug 'jacoborus/tender'
+" Plug 'cocopon/iceberg.vim'
 
 " Clojure/script/ plugins
-Plug 'tpope/vim-salve' " Leiningen
-Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
+" Plug 'tpope/vim-salve' " Leiningen
+" Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 
 " Multiple file types
 Plug 'kovisoft/paredit', { 'for': ['clojure', 'scheme'] }
@@ -205,16 +217,15 @@ Plug 'mxw/vim-jsx', { 'for': 'javascript' } " {{{
 " }}}
 " Plug 'elzr/vim-json', { 'for': 'json' }
 
-" Python
-let g:nvim_ipy_perform_mappings = 0
-Plug 'bfredl/nvim-ipy' , { 'on': 'IPython' }
-
 " Latex
 Plug 'matze/vim-tex-fold', { 'for': 'tex' }
 
-Plug 'dpelle/vim-LanguageTool'
-let g:languagetool_jar = "/home/perok/Downloads/LanguageTool-3.5/languagetool-commandline.jar"
-let g:languagetool_lang = "en-GB"
+" Scala
+" Plug 'ensime/ensime-vim' ", { 'for': 'scala' }
+" let ensime_server_v2=1
+
+Plug 'derekwyatt/vim-scala', { 'for': 'scala' }
+
 " Plug 'airodactyl/neovim-ranger'
 " nnoremap <f9> :tabe %:p:h<cr>
 call plug#end()
@@ -225,14 +236,14 @@ syntax enable           " enable syntax processing
 
 set background=dark
 if has("termguicolors")
-    set termguicolors	" enable true color support
+    set termguicolors   " enable true color support
 endif
 
 if has('vim_starting')
-    "colorscheme gruvbox
+    colorscheme gruvbox
     "let g:base16colorspace=256
     "colorscheme base16-ocean
-    colorscheme tender
+    "colorscheme iceberg
     "let g:base16colorspace=256
     "colorscheme base16-ocean
     " colorscheme twilight
@@ -247,6 +258,10 @@ endif
 
 " General  {{{
 let g:tex_flavor = "latex"
+
+if s:is_darwin
+    set clipboard=unnamed
+endif
 " }}}
 
 " Autocmd {{{
@@ -271,6 +286,7 @@ augroup vimrc
     " Do not use relativenumber in insert mode
     autocmd InsertEnter * set norelativenumber
     autocmd InsertLeave * set relativenumber
+    " TODO when entering Term. Disable all number showing
 
     " Do not use relative number when focus is lost
     " TODO not working in neovim
@@ -337,10 +353,18 @@ vnoremap <c-j> :m'>+<cr>gv=gv
 vnoremap <c-k> :m-2<cr>gv=gv
 
 " window navigation alt+{h,j,k,l}
-nnoremap <A-h> <C-w>h
-nnoremap <A-j> <C-w>j
-nnoremap <A-k> <C-w>k
-nnoremap <A-l> <C-w>l
+" '<M-...>' Alt-key or meta-key
+if s:is_darwin
+    nnoremap <M-h> <C-w>h
+    nnoremap <M-j> <C-w>j
+    nnoremap <M-k> <C-w>k
+    nnoremap <M-l> <C-w>l
+else
+    nnoremap <A-h> <C-w>h
+    nnoremap <A-j> <C-w>j
+    nnoremap <A-k> <C-w>k
+    nnoremap <A-l> <C-w>l
+endif
 
 " Window resizing
 nmap <left>  :3wincmd <<cr>
@@ -468,7 +492,7 @@ set noshowmode            " Do not show default mode in statusline
 " set statusline+=\ %y      " Filetype
 
 let g:lightline = {
-      \ 'colorscheme': 'tender',
+      \ 'colorscheme': 'gruvbox',
       \ 'mode_map': { 'c': 'NORMAL' },
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ]
@@ -655,27 +679,6 @@ if has('nvim')
     tnoremap <A-k> <C-\><C-n><C-w>k
     tnoremap <A-l> <C-\><C-n><C-w>l
 
-    " gruvbox terminal color scheme
-    " let g:terminal_color_0="#282828"
-    " let g:terminal_color_1="#cc241d"
-    " let g:terminal_color_2="#98971a"
-    " let g:terminal_color_3="#d79921"
-    " let g:terminal_color_4="#458588"
-    " let g:terminal_color_5="#b16286"
-    " let g:terminal_color_6="#689d6a"
-    " let g:terminal_color_7="#a89984"
-    " let g:terminal_color_8="#928374"
-    " let g:terminal_color_9="#fb4934"
-    " let g:terminal_color_10="#b8bb26"
-    " let g:terminal_color_11="#fabd2f"
-    " let g:terminal_color_12="#83a598"
-    " let g:terminal_color_13="#d3869b"
-    " let g:terminal_color_14="#8ec07c"
-    " let g:terminal_color_15="#ebdbb2"
-    " let g:terminal_color_background="#282828"
-    " let g:terminal_color_foreground="#ebdbb2"
-
-    let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
     " Use a blinking upright bar cursor in Insert mode, a solid block in normal and a blinking underline in replace mode
     " TODO not working
     " https://github.com/neovim/neovim/issues/2583

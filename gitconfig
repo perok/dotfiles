@@ -1,25 +1,69 @@
 [user]
-    email = perokane@gmail.com
-    name = Per Øyvind Kanestrøm
+	email = perokane@gmail.com
+	name = Per Øyvind Kanestrøm
 [core]
-    editor = vim
+	editor = nvr --remote-wait-silent
     pager = less -r
-    excludesfile = $HOME/.gitignore_global
+	excludesfile = /Users/perkanestrom/.gitignore_global
+	autocrlf = input
+	commitGraph = true
 [push]
-    default = simple
+	default = current
 [color]
     ui = auto # covers diff = true, status = auto, branch = auto
     interactive = auto
     pager = true
+[pretty]
+    longline = %C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)
+    longlinemsg = %C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n             %C(white)%s%C(reset) %C(dim white)- %an%C(reset)
+    longlinemsgcomitter = %C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset) %C(bold cyan)(committed: %cD)%C(reset) %C(auto)%d%C(reset)%n             %C(white)%s%C(reset)%n             %C(dim white)- %an <%ae> %C(reset) %C(dim white)(committer: %cn <%ce>)%C(reset)
+    longlinemsgcomitterv4 = %C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset) %C(bold cyan)(committed: %cD)%C(reset) %C(auto)%d%C(reset)%n%C(white)%w(100,10,10)%B%C(reset)%w(,18,)%C(dim white)- %an <%ae> %C(reset)%n%n
 [alias]
+    # Graphs
     graph = log --all --graph --decorate --oneline
     l = log --graph --pretty=format:'%C(yellow)%h%C(cyan)%d%Creset %s %C(white)- %an, %ar%Creset'
     ll = log --stat --abbrev-commit
+    # https://stackoverflow.com/questions/1838873/visualizing-branch-topology-in-git/34467298#34467298
+    lg = !"git lg1"
+    lg1 = !"git lg-specific --pretty=longline --all"
+    lg2 = !"git lg-specific --pretty=longlinemsg --all"
+    lg3 = !"git lg-specific --pretty=longlinemsgcomitter --all"
+    lg4 = !"git lg-specific --pretty=longlinemsgcomitterv4 --all"
+    lg-specific = log --graph --abbrev-commit --decorate
+
+    # Other
     d = diff --color-words
     alias = !git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\\t => \\2/' | sort
     getroot = !pwd
     difftex = difftool -y -t latex
+    git = !exec git
+
+    # https://stackoverflow.com/questions/1360712/git-stash-cannot-apply-to-a-dirty-working-tree-please-stage-your-changes#3733698
+    # 1) creates a patch
+    # 2) pipes that to the apply command
+    # 3) if there are any conflicts they will need to be resolved via 3-way merge
+    # 4) if apply (or merge) succeeded it drops the just applied stash item...
+    unstash = !git stash show -p | git apply -3 && git stash drop
 [difftool.latex]
     cmd = latexdiff "$LOCAL" "$REMOTE"
 [credential]
     helper = cache --timeout=3600
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path =
+[mergetool "sourcetree"]
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[pull]
+	rebase = true
+[rerere]
+	enabled = true
+[help]
+    autocomplete = true
+[merge]
+	tool = diffconflicts
+[mergetool "diffconflicts"]
+	cmd = vim -c DiffConflicts \"$MERGED\" \"$BASE\" \"$LOCAL\" \"$REMOTE\"
+	trustExitCode = true
+[mergetool]
+	keepBackup = false

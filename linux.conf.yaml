@@ -1,0 +1,18 @@
+- clean: ['~']
+- link:
+    # KDE
+    ~/.local/share/konsole/Gruvbox_dark.colorscheme: colors/konsole/Gruvbox_dark.colorscheme
+    ~/.local/share/konsole/base16-ocean.colorscheme: colors/konsole/base16-ocean.colorscheme
+    # Yakuake is not updated..
+    ~/.kde/share/apps/konsole/Gruvbox_dark.colorscheme: colors/konsole/Gruvbox_dark.colorscheme
+    ~/.kde/share/apps/konsole/base16-ocean.colorscheme: colors/konsole/base16-ocean.colorscheme
+    # Other
+
+- shell:
+    - ["./install_linux", Installing linux specific packages]
+    - [git clone https://github.com/faho/kwin-tiling.git $DOTUTILS/kwin-tiling]
+    - [cd $DOTUTILS/kwin-tiling/; plasmapkg2 --type kwinscript -i .]
+    -
+        command: ./install_linux
+        stdin: true
+        stdout: true

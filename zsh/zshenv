@@ -1,7 +1,51 @@
+#
 # First invocation in /etc/zsh/zshenv
+#
+
+if [[ `uname` == 'Linux' ]]
+then
+    export LINUX=1
+else
+    export LINUX=
+fi
+
+if [[ `uname` == 'Darwin' ]]
+then
+    export OSX=1
+else
+    export OSX=
+fi
+
+export ZDOTFILES=$HOME/.dotfiles/zsh
+export DOTUTILS=$HOME/.dotutils
+export XDG_MUSIC_DIR=$HOME/Music
+
+if [ "$ZSHENV_SOURCE" = true ] ; then
+    return
+fi
+
+# TODO better solution than removing path_helper in /etc/zprofile?
+# Disable loading global config files
+setopt no_global_rcs
+
+# TODO
+#export XDG_CONFIG_HOME="$HOME/.config"
+#export DOTUTILS="$XDG_CONFIG_HOME/dotutils" # For zplug, etc..
+# TODO set alternative $ZDOTDIR in .zshenv
+# TODO osx   export PATH="$(brew --prefix coreutils)/libexec/gnubin:$PATH" ?
+
 path=(
-#  /usr/local/{bin,sbin}
-  $HOME/.local/bin # Python etc
-  $HOME/.dotfiles/bin # user local files
+  '.'
+  /usr/local/{bin,sbin}
+  $HOME/.local/bin
+  $HOME/.dotfiles/bin
+  $HOME/.rbenv/bin
   $path
 )
+
+if (( $+commands[rbenv] )); then
+  eval "$(rbenv init -)"
+fi
+
+export ZSHENV_SOURCE=true
+

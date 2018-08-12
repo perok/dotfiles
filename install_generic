@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+PYTHON_PACKAGES=(
+  virtualenvwrapper
+  neovim-remote
+  unidecode # For vim ultisnips
+)
+
+python3 -m pip install --user "${PYTHON_PACKAGES[@]}"

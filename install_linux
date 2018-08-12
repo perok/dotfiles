@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+set -e
+
+sudo apt install \
+    zsh xsel htop synaptic \
+    unrar p7zip \
+    gawk silversearcher-ag colordiff colormake \
+    ranger atool caca-utils highlight libsixel-bin \
+    redshift \
+    mosh zathura mupdf \
+    mpv ffmpeg youtube-dl \
+    python-virtualenv \
+    lnav tig
+
+# FS for Android usb mounting
+sudo apt install  mtpfs
+# wajig large -> list all installed and size
+sudo apt install wajig
+# Autocompletion of words. Used with vim.
+sudo apt install look
+# Samba printer client
+sudo apt install smbclient
+
+# sudo apt-get install arc-kde
+# sudo add-apt-repository ppa:papirus/papirus
+# sudo apt install arc-kde papirus-icon-theme
+# Run kvantummanager
+
+# KDE specific setup
+kwriteconfig5 --file ~/.config/kwinrc --group Windows --key BorderlessMaximizedWindows true
+
+kwin_x11 --replace & disown

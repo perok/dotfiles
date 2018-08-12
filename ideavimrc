@@ -1,0 +1,37 @@
+" source ~/.config/nvim/init.vim
+
+" Leader is space
+nmap <space> <leader>
+
+set surround
+set number              " show line numbers
+set relativenumber      " show relative numbers
+
+" Keep selection when indenting
+vnoremap < <gv
+vnoremap > >gv
+
+" jk is escape
+inoremap jk <esc>
+
+set scrolloff=3         " 3 lines above/below cursor when scrolling
+
+
+" Integrate with system clipboard
+set clipboard=unnamedplus,unnamed
+
+" ============================================================================
+" IDE actions
+" ============================================================================
+
+nnoremap / :action Find<CR>
+nnoremap n :action FindNext<CR>
+nnoremap N :action FindPrevious<CR>
+nnoremap U :action $Redo<CR>
+nnoremap ; :action AceJumpAction<CR>
+nnoremap <Space>o :action GotoClass<CR>
+nnoremap <Space>O :action GotoFile<CR>
+nnoremap <Space>d :action CloseContent<CR>
+nnoremap <Space>j :action RecentFiles<CR>
+nnoremap <Space>k :action FileStructurePopup<CR>
+nnoremap <Space>h :action QuickJavaDoc<CR>

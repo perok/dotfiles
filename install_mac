@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+set -e
+
+brew tap crisidev/homebrew-chunkwm
+brew update
+
+PACKAGES=(
+  --with-logging koekeishiya/formulae/skhd
+  --with-tmp-logging chunkwm
+  reattach-to-user-namespace
+  ag
+  ranger
+  openconnect
+  zsh
+  lnav # Log viewer
+  tig
+  exa # ls replacement
+  thefuck
+)
+
+CASKS=(
+  amethyst
+)
+
+brew install "${PACKAGES[@]}"
+brew cleanup
+brew cask install "${CASKS[@]}"
+brew cask cleanup
+
+# Show filename extensions by default
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+# Show all files by default
+defaults write com.apple.Finder AppleShowAllFiles true
+
+# Because of Apple... $#$#$#" Comment path_helper script in /etc/zprofile
