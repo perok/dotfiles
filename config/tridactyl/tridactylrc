@@ -1,0 +1,11 @@
+" Run `:installnative` for this to work
+
+set searchengine duckduckgo
+set theme dark
+set smoothscroll true
+" Filter the hints
+set hintfiltermode vimperator
+
+fixamo_quiet
+
+" vim: set filetype=vim:
