@@ -49,3 +49,5 @@ fi
 
 export ZSHENV_SOURCE=true
 
+# Fuck Apple and fuck path_helper
+export PATH_SAVE=$PATH

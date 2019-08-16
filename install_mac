@@ -10,6 +10,7 @@ PACKAGES=(
   --with-tmp-logging chunkwm
   reattach-to-user-namespace
   ag
+  ripgrep
   ranger
   openconnect
   zsh
@@ -17,6 +18,7 @@ PACKAGES=(
   tig
   exa # ls replacement
   thefuck
+  --HEAD universal-ctags/universal-ctags/universal-ctags
 )
 
 CASKS=(

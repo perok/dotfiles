@@ -6,19 +6,16 @@
 set guicursor=
 au VimLeave * set guicursor=a:block-blinkon0
 
-set mouse=a
+set mouse=n  " Mouse support in normal mode
 
 
 " TODO {{{
     " Base16 theme .XResources, ranger, vim, zsh?
     " XDG variables not set
     "let g:python3_host_prog = '/path/to/python3'
-    " unimpaired - bunch of useful mappings on ] and [
     " projectionist - jump all over the project with ease
-    " targets - more useful movements
     " swapit - ^a/^x on steroids (mostly used for true/false switch)
     " https://github.com/critiqjo/vim-bufferline
-    " https://github.com/carlitux/deoplete-ternjs
 " }}}
 
 " Core {{{
@@ -55,7 +52,8 @@ Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
-Plug 'tpope/repeat'  " '.' supports non-native commands
+Plug 'tpope/vim-unimpaired'  " Bindings on [ and ]
+Plug 'tpope/vim-repeat'  " '.' supports non-native commands
 Plug 'justinmk/vim-dirvish' " {{{
 augroup plugin_dirvish
     autocmd!
@@ -73,7 +71,7 @@ map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
 map <Leader>h <Plug>(easymotion-linebackward)
 " }}}
-Plug 'godlygeek/tabular'
+Plug 'wellle/targets.vim'  " More useful text object
 
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' } " {{{
 nnoremap <F6> :UndotreeToggle<cr>
@@ -86,21 +84,21 @@ Plug 'whiteinge/diffconflicts'
 
 " Syntax checking
 " TODO change to ALE?
-Plug 'benekastah/neomake' " {{{
-let g:neomake_javascript_enabled_makers = ['eslint']
-" Override eslint with local version where necessary.
-let local_eslint = finddir('node_modules', '.;') . '/.bin/eslint'
-if matchstr(local_eslint, "^\/\\w") == ''
-    let local_eslint = getcwd() . "/" . local_eslint
-endif
-if executable(local_eslint)
-    let g:syntastic_javascript_eslint_exec = local_eslint
-endif
-
-augroup plugin_neomake
-    autocmd!
-    autocmd bufwritepost * Neomake
-augroup END
+"Plug 'benekastah/neomake' " {{{
+"let g:neomake_javascript_enabled_makers = ['eslint']
+"" Override eslint with local version where necessary.
+"let local_eslint = finddir('node_modules', '.;') . '/.bin/eslint'
+"if matchstr(local_eslint, "^\/\\w") == ''
+"    let local_eslint = getcwd() . "/" . local_eslint
+"endif
+"if executable(local_eslint)
+"    let g:syntastic_javascript_eslint_exec = local_eslint
+"endif
+"
+"augroup plugin_neomake
+"    autocmd!
+"    autocmd bufwritepost * Neomake
+"augroup END
 " }}}
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -156,12 +154,16 @@ Plug 'brooth/far.vim'
 
 "set completeopt=longest,menu,menuone
 " Omnicompletion
-Plug 'Shougo/deoplete.nvim' " {{{
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " {{{
+Plug 'deoplete-plugins/deoplete-tag'
+Plug 'deoplete-plugins/deoplete-docker'
+Plug 'deoplete-plugins/deoplete-zsh'
+Plug 'wellle/tmux-complete.vim'
 let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_ignore_case = 'ignorecase'
+
 augroup plugin_deoplete
     " Close the preview window after completion is done.
-    autocmd CompleteDone * pclose!
+    autocmd CompleteDone * silent! pclose!
 augroup END
 " }}}
 
@@ -172,9 +174,6 @@ let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 " }}}
-
-" Use look to get more autocompletion on words with the look command
-Plug 'ujihisa/neco-look', { 'for': 'tex' }
 
 Plug 'airblade/vim-gitgutter' " {{{
 " Always display gitgutter column
@@ -195,16 +194,11 @@ Plug 'morhetz/gruvbox'
 " Plug 'jacoborus/tender'
 " Plug 'cocopon/iceberg.vim'
 
-" Clojure/script/ plugins
-" Plug 'tpope/vim-salve' " Leiningen
-" Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
-
 " Multiple file types
-Plug 'kovisoft/paredit', { 'for': ['clojure', 'scheme'] }
 Plug 'junegunn/rainbow_parentheses.vim' " {{{
 augroup plugin_rainbow_lisp
     autocmd!
-    autocmd FileType lisp,clojure,scheme RainbowParentheses
+    autocmd FileType lisp,clojure,scheme,scala RainbowParentheses
 augroup END
 " }}}
 
@@ -217,18 +211,68 @@ Plug 'mxw/vim-jsx', { 'for': 'javascript' } " {{{
 " }}}
 " Plug 'elzr/vim-json', { 'for': 'json' }
 
-" Latex
-Plug 'matze/vim-tex-fold', { 'for': 'tex' }
+" Plug 'matze/vim-tex-fold', { 'for': 'tex' }
+Plug 'godlygeek/tabular', { 'for': 'tex' }
+" Use look to get more autocompletion on words with the look command
+Plug 'ujihisa/neco-look', { 'for': 'tex' }
 
-" Scala
-" Plug 'ensime/ensime-vim' ", { 'for': 'scala' }
-" let ensime_server_v2=1
 
-Plug 'derekwyatt/vim-scala', { 'for': 'scala' }
+" Tags {{{
+Plug 'majutsushi/tagbar'
+Plug 'ludovicchabant/vim-gutentags'
+ " Move up the directory hierarchy until it has found the file
+set tags=tags;/
+" }}}
 
-" Plug 'airodactyl/neovim-ranger'
-" nnoremap <f9> :tabe %:p:h<cr>
+" Language Server Protocol {{{
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+let g:LanguageClient_serverCommands = {
+    \ 'scala': ['/usr/local/bin/metals-vim'],
+    \ 'elm': ['elm-language-server', '--stdio'],
+    \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
+    \ }
+
+function LC_maps()
+  if has_key(g:LanguageClient_serverCommands, &filetype)
+    " Use LSP instead of Vim built in formatter
+    set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
+
+    nnoremap <F5> :call LanguageClient_contextMenu()<CR>
+    nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<cr>
+    nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
+    nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+  endif
+endfunction
+
+autocmd FileType * call LC_maps()
+" }}}
+
+" Scala {{{
+Plug 'derekwyatt/vim-scala', { 'for': 'scala' } " {{{
+let g:scala_use_default_keymappings = 0
+ let g:scala_use_builtin_tagbar_defs = 0
+" }}}
+" }}}
+
+" Elm {{{
+Plug 'andys8/vim-elm-syntax'
+" TODO does not support 0.19 atm
+"Plug 'elmcast/elm-vim' " {{{
+"let g:elm_setup_keybindings = 0
+" }}}
+" }}}
+
 call plug#end()
+" }}}
+
+" Plugin options {{{
+call deoplete#custom#option({
+\ 'smart_case': v:true,
+\ 'ignore_case': v:true,
+\ })
 " }}}
 
 " Colors {{{
@@ -262,20 +306,13 @@ let g:tex_flavor = "latex"
 if s:is_darwin
     set clipboard=unnamed
 endif
+
+set hidden  " Allow buffer to not be saved
 " }}}
 
 " Autocmd {{{
 augroup vimrc
     autocmd!
-
-    " File types highlighting
-    autocmd BufRead,BufNewFile *.cl setfiletype c " OpenCL kernels
-
-    autocmd BufRead,BufNewFile *.tikz set filetype=tex
-
-    " run node.js
-    autocmd BufRead *.js set makeprg=clear;node\ %
-    autocmd BufRead *.js set autowrite
 
     " Set cursor to last place when reopening file
     autocmd BufReadPost *
@@ -284,6 +321,7 @@ augroup vimrc
                 \ endif
 
     " Do not use relativenumber in insert mode
+    " TODO disable when in term
     autocmd InsertEnter * set norelativenumber
     autocmd InsertLeave * set relativenumber
     " TODO when entering Term. Disable all number showing
@@ -418,11 +456,10 @@ set shiftwidth=4    " Make sure >> indents 1 tab
 " }}}
 
 " UI/Window {{{
-if !has('nvim')
-    set wildmenu            " visual autocomplete for command menu
-endif
 if has('nvim')
     set inccommand=split    " visual substitution
+else
+    set wildmenu            " visual autocomplete for command menu
 endif
 
 set number              " show line numbers
@@ -665,12 +702,17 @@ if has('nvim')
     nnoremap <silent> <leader>st :STerm<CR>
 
     augroup nvim_term
-        autocmd!
-        " Start in insert mode
-        autocmd BufWinEnter,WinEnter term://* startinsert
+    "     autocmd!
+    "     " Start in insert mode
+    "     autocmd BufWinEnter,WinEnter term://* startinsert
+    "
+    " TODO THIS ALSO INFERS WITH FZF.VIM
+        " autocmd TermClose * bd!|q " quit when a terminal closes instead of showing exit code and waiting
     augroup END
 
-    "tnoremap <Esc> <C-\><C-n> TODO disabled because of fzf problems
+    " http://neovim.io/doc/user/nvim_terminal_emulator.html
+    " TODO disabled because of fzf problems
+    " tnoremap <Esc> <C-\><C-n>
     tnoremap jk <C-\><C-n>
 
     " alt+{hjkl} window control for terminal aswell

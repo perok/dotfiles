@@ -1,5 +1,7 @@
 # Created by https://www.gitignore.io/api/vim,linux,intellij
 
+tags
+
 ### Vim ###
 [._]*.s[a-w][a-z]
 [._]s[a-w][a-z]

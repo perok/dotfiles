@@ -13,6 +13,8 @@ Clone and ./install linux or mac
 Todo
 ----
 
+- TMUX in Kitty has problems with >
+- then change to Hasklig Medium
 - enhancd, powerlevel9k, ripgrep, fzy?
 * http://zshwiki.org/home/zle/vi-mode
 * with https://github.com/zsh-users/zsh/blob/master/Functions/Zle/surround

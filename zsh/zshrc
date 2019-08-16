@@ -62,3 +62,5 @@ source_file '~/.sdkman/bin/sdkman-init.sh'
 export GRADLE_OPTS=-Dorg.gradle.daemon=true
 
 #start_tmux
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"

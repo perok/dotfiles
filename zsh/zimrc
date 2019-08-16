@@ -10,7 +10,9 @@
 # The second line of modules may depend on options set by modules in the first line.
 # These dependencies are noted on the respective module's README.md.
 zmodules=(directory environment git git-info history input utility custom
-          prompt completion syntax-highlighting archive fasd ssh)
+          prompt completion syntax-highlighting history-substring-search
+          archive fasd ssh)
+# TODO issues with git branche tagging? :: autosuggestions
 # history-substring-search => use fzf instead. If activate add after
 # `syntax-highlighting`
 
@@ -58,8 +60,7 @@ SPROMPT='zsh: correct %F{red}%R%f to %F{green}%r%f [nyae]? '
 # Documentation of the highlighters can be found here:
 #   https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters.md
 # For (u)rxvt and gnome-terminal users,
-# removing the 'cursor' highlighter will fix the disappearing cursor problem
-zhighlighters=(main brackets) # cursor)
+zhighlighters=(main brackets)
 
 
 #

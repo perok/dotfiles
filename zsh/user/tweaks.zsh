@@ -2,7 +2,8 @@
 # FZF
 if [ -x "$(command -v ag)" ]; then
   # Set ag as the default source for fzf (respect .gitignore etc)
-  export FZF_DEFAULT_COMMAND='ag -l -g ""'
+  # export FZF_DEFAULT_COMMAND='ag -l -g ""'
+  export FZF_DEFAULT_COMMAND='rg --files --hidden'
   # To apply the command to CTRL-T as well
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
@@ -12,7 +13,7 @@ if [ -x "$(command -v ag)" ]; then
   # - Note that ag only lists files not directories
   # - See the source code (completion.{bash,zsh}) for the details.
   _fzf_compgen_path() {
-    ag -g "" "$1"
+    rg --files --hidden "$1"
   }
 fi
 

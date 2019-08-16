@@ -6,6 +6,9 @@ nmap <space> <leader>
 set surround
 set number              " show line numbers
 set relativenumber      " show relative numbers
+set scrolloff=5         " Horizontal offset
+
+set showmode            " Show mode in statusline
 
 " Keep selection when indenting
 vnoremap < <gv
@@ -35,3 +38,4 @@ nnoremap <Space>d :action CloseContent<CR>
 nnoremap <Space>j :action RecentFiles<CR>
 nnoremap <Space>k :action FileStructurePopup<CR>
 nnoremap <Space>h :action QuickJavaDoc<CR>
+set clipboard+=ideaput

@@ -67,3 +67,5 @@
 	trustExitCode = true
 [mergetool]
 	keepBackup = false
+[rebase]
+	autosquash = true

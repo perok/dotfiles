@@ -21,5 +21,7 @@ statuspanel[type="overLink"]{display: none !important;}
 #navigator-toolbox::after { display: none !important; }
 
 /* remove window decorations (Close, Minimize, Fullscreen) */
-#titlebar { display: none !important; }
-#TabsToolbar .titlebar-placeholder { display: none !important; }
+
+ /* One of these are the troublemaker ? TODO */
+/* #titlebar { display: none !important; }
+#TabsToolbar .titlebar-placeholder { display: none !important; } */
