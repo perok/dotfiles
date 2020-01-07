@@ -20,6 +20,10 @@ export ZDOTFILES=$HOME/.dotfiles/zsh
 export DOTUTILS=$HOME/.dotutils
 export XDG_MUSIC_DIR=$HOME/Music
 
+# Define Zim location
+# TODO move below source controller
+ZIM_HOME=${ZDOTDIR:-${HOME}}/.zim
+
 if [ "$ZSHENV_SOURCE" = true ] ; then
     return
 fi
