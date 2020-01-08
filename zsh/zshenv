@@ -44,6 +44,7 @@ path=(
   $HOME/.local/bin
   $HOME/.dotfiles/bin
   $HOME/.rbenv/bin
+  $HOME/Library/Python/2.7/bin
   $path
 )
 

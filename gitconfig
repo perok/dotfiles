@@ -37,6 +37,8 @@
     getroot = !pwd
     difftex = difftool -y -t latex
     git = !exec git
+    # Displays all local branches in the order of their last commit, allowing to see what you worked on when.
+    branches = !"git for-each-ref --sort='-authordate:iso8601' --format=' %(color:green)%(authordate:iso8601)%09%(color:white)%(refname:short)' refs/heads"
 
     # https://stackoverflow.com/questions/1360712/git-stash-cannot-apply-to-a-dirty-working-tree-please-stage-your-changes#3733698
     # 1) creates a patch

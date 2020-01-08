@@ -1,4 +1,8 @@
 
+setlocal formatoptions+=t       " Autowrap text when over tw.
+setlocal spell
+
+" TODO have added the dhruvasagar/vim-table-mode plugin. Which is best?
 " call the :Tabularize command each time you insert a | character.
 if exists(":Tabularize")
   function! s:align()

@@ -2,7 +2,9 @@
 
 set -e
 
+# TODO change to yabairc
 brew tap crisidev/homebrew-chunkwm
+brew tap mopidy/mopidy
 brew update
 
 PACKAGES=(
@@ -19,6 +21,9 @@ PACKAGES=(
   exa # ls replacement
   thefuck
   --HEAD universal-ctags/universal-ctags/universal-ctags
+  mopidy
+  mopidy-spotify
+  ncmpcpp
 )
 
 CASKS=(
@@ -30,9 +35,16 @@ brew cleanup
 brew cask install "${CASKS[@]}"
 brew cask cleanup
 
+# Manual:
+# - https://github.com/erroneousboat/slack-term
+
 # Show filename extensions by default
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 # Show all files by default
 defaults write com.apple.Finder AppleShowAllFiles true
 
 # Because of Apple... $#$#$#" Comment path_helper script in /etc/zprofile
+
+# disable bouncing Dock icons (except Launchpad) for this account
+defaults write com.apple.dock no-bouncing -bool True
+killall Dock

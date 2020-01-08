@@ -10,6 +10,12 @@ Clone and ./install linux or mac
 
     $ sudo ln -s ~/dotfiles/bin/sane-rm /usr/local/bin/rm
 
+## Firefox
+
+- Ensure that all new tabs are opened in same window - In `about:config`
+  - `browser.link.open_newwindow = 3`
+  - `browser.link.open_newwindow.restriction = 0`
+
 Todo
 ----
 

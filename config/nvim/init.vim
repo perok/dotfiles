@@ -81,6 +81,7 @@ if has("persistent_undo")
 endif
 " }}}
 Plug 'whiteinge/diffconflicts'
+Plug 'dhruvasagar/vim-table-mode'
 
 " Syntax checking
 " TODO change to ALE?
@@ -219,9 +220,10 @@ Plug 'ujihisa/neco-look', { 'for': 'tex' }
 
 " Tags {{{
 Plug 'majutsushi/tagbar'
-Plug 'ludovicchabant/vim-gutentags'
+" TODO gives errors on exit
+": Plug 'ludovicchabant/vim-gutentags'
  " Move up the directory hierarchy until it has found the file
-set tags=tags;/
+"set tags=tags;/
 " }}}
 
 " Language Server Protocol {{{
@@ -234,6 +236,7 @@ let g:LanguageClient_serverCommands = {
     \ 'elm': ['elm-language-server', '--stdio'],
     \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
     \ }
+let g:LanguageClient_completionPreferTextEdit = 1
 
 function LC_maps()
   if has_key(g:LanguageClient_serverCommands, &filetype)
@@ -461,6 +464,9 @@ if has('nvim')
 else
     set wildmenu            " visual autocomplete for command menu
 endif
+
+
+set winblend=30         " Transparancy for wildmenu
 
 set number              " show line numbers
 set relativenumber      " show relative numbers
