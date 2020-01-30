@@ -24,6 +24,7 @@ PACKAGES=(
   mopidy
   mopidy-spotify
   ncmpcpp
+  pipx
 )
 
 CASKS=(

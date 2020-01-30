@@ -7,3 +7,6 @@ PYTHON_PACKAGES=(
 )
 
 python3 -m pip install --user "${PYTHON_PACKAGES[@]}"
+
+pipx install \
+  git-of-theseus

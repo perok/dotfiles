@@ -7,8 +7,7 @@ alias ll='l --tree --level=3'
 
 # {{{
 # Update Git commit graph. Will be done by default in Git 2.19 on `git gc`
-alias git_update_graph='git show-ref -s | git commit-graph write --stdin-commits
-'
+alias git_update_graph='git show-ref -s | git commit-graph write --stdin-commits'
 # }}}
 
 # Docker {{{

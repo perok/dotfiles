@@ -1,0 +1,10 @@
+
+
+# Fuck Apple and fuck path_helper continues..
+# First .zshenv is loaded, then /etc/zprofile. In /etc/zprofile Apple has
+# decided to fuck their users. This tries to unfuck us.
+# https://github.com/sorin-ionescu/prezto/issues/381#issuecomment-294549773
+export PATH=$PATH_SAVE:$PATH
+
+# NOOOPE TODO this helped:
+# ``sudo launchctl config user path $PATH` + reboot<Paste>`
