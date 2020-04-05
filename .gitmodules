@@ -4,3 +4,9 @@
 [submodule "colors/gruvbox-idea"]
 	path = colors/gruvbox-idea
 	url = git@github.com:caleb/gruvbox-idea.git
+[submodule "stow-rofi/modules/bitwarden-rofi"]
+	path = stow-rofi/modules/bitwarden-rofi
+	url = https://github.com/mattydebie/bitwarden-rofi
+[submodule "stow-rofi/modules/rofi-bluetooth"]
+	path = stow-rofi/modules/rofi-bluetooth
+	url = git@github.com:ClydeDroid/rofi-bluetooth.git
