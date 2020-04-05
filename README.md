@@ -11,9 +11,16 @@ Clone and ./install linux or mac
     $ sudo ln -s ~/dotfiles/bin/sane-rm /usr/local/bin/rm
 
 # TODO migrate all to stow
+- stow-shell
+  dir colors, inputrc
+- stow-git
+
 
 ## Firefox
 
+- Setup userChrome
+  - Find profile name
+  - `ln -s ~/.dotfiles/firefox/userChrome.css ~/.mozilla/firefox/852x0ns6.default-release/chrome/userChrome.css`
 - Ensure that all new tabs are opened in same window - In `about:config`
   - `browser.link.open_newwindow = 3`
   - `browser.link.open_newwindow.restriction = 0`

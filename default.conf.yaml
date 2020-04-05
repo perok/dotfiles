@@ -17,6 +17,7 @@
     ~/.gitignore_global: gitignore_global
     ~/.inputrc: inputrc
     ~/.latexmkrc: latexmkrc
+    ~/.config/rofi: config/rofi
     ~/.config/pulse/default.pa: config/pulse/default.pa
     # Neovim
     ~/.config/nvim/init.vim: config/nvim/init.vim
@@ -32,12 +33,6 @@
     # Virtualenvs
     ~/.virtualenvs/postactivate: virtualenvs/postactivate
     ~/.virtualenvs/postdeactivate: virtualenvs/postdeactivate
-    # Zsh with zim
-    ~/.zshrc: zsh/zshrc
-    ~/.zlogin: zsh/zlogin
-    ~/.zimrc: zsh/zimrc
-    ~/.zshenv: zsh/zshenv
-    ~/.zprofile: zsh/zprofile
     #~/.zim/modules/prompt/functions/prompt_lambda_setup: zsh/prompts/prompt_lambda_setup
     ~/.dir_colors: colors/dir_colors
     # Other

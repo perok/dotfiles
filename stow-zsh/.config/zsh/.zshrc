@@ -150,15 +150,15 @@ if [[ -v ENHANCD_DIR ]]; then # ENHANCD_DIR installed
 fi
 
 # Custom settings
-source "$ZDOTFILES/user/defaults.zsh"
-source "$ZDOTFILES/user/keybindings.zsh"
-source "$ZDOTFILES/user/funcs.zsh"
-source "$ZDOTFILES/user/tweaks.zsh"
-source "$ZDOTFILES/user/alias.zsh"
+source "$ZDOTDIR/user/defaults.zsh"
+source "$ZDOTDIR/user/keybindings.zsh"
+source "$ZDOTDIR/user/funcs.zsh"
+source "$ZDOTDIR/user/tweaks.zsh"
+source "$ZDOTDIR/user/alias.zsh"
 if [[ -n ${LINUX} ]]; then
-    source $ZDOTFILES/user/linux.zsh
+    source $ZDOTDIR/user/linux.zsh
 else
-    source $ZDOTFILES/user/darwin.zsh
+    source $ZDOTDIR/user/darwin.zsh
 fi
 
 # Utility tools

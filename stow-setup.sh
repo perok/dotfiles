@@ -6,6 +6,7 @@ git submodule update
 # TODO something that verifies that .dotfiles links to current directory
 
 base=(
+  zsh
 )
 
 useronly=(

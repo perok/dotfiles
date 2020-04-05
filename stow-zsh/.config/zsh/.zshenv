@@ -16,12 +16,13 @@ else
     export OSX=
 fi
 
-export ZDOTFILES=$HOME/.dotfiles/zsh
 export XDG_MUSIC_DIR=$HOME/Music
 
 # Define Zim location
 # TODO move below source controller
-ZIM_HOME=${ZDOTDIR:-${HOME}}/.zim
+# TODO move zim to correct folder
+# ZIM_HOME=${ZDOTDIR:-${HOME}}/.zim
+ZIM_HOME=${HOME}/.zim
 
 if [ "$ZSHENV_SOURCE" = true ] ; then
     return
