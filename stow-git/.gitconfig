@@ -24,11 +24,11 @@
     l = log --graph --pretty=format:'%C(yellow)%h%C(cyan)%d%Creset %s %C(white)- %an, %ar%Creset'
     ll = log --stat --abbrev-commit
     # https://stackoverflow.com/questions/1838873/visualizing-branch-topology-in-git/34467298#34467298
-    lg = !"git lg1"
-    lg1 = !"git lg-specific --pretty=longline --all"
-    lg2 = !"git lg-specific --pretty=longlinemsg --all"
-    lg3 = !"git lg-specific --pretty=longlinemsgcomitter --all"
-    lg4 = !"git lg-specific --pretty=longlinemsgcomitterv4 --all"
+    lg = !git lg1
+    lg1 = !git lg-specific --pretty=longline --all
+    lg2 = !git lg-specific --pretty=longlinemsg --all
+    lg3 = !git lg-specific --pretty=longlinemsgcomitter --all
+    lg4 = !git lg-specific --pretty=longlinemsgcomitterv4 --all
     lg-specific = log --graph --abbrev-commit --decorate
 
     # Other
@@ -38,7 +38,7 @@
     difftex = difftool -y -t latex
     git = !exec git
     # Displays all local branches in the order of their last commit, allowing to see what you worked on when.
-    branches = !"git for-each-ref --sort='-authordate:iso8601' --format=' %(color:green)%(authordate:iso8601)%09%(color:white)%(refname:short)' refs/heads"
+    branches = !git for-each-ref --sort='-authordate:iso8601' --format=' %(color:green)%(authordate:iso8601)%09%(color:white)%(refname:short)' refs/heads
 
     # https://stackoverflow.com/questions/1360712/git-stash-cannot-apply-to-a-dirty-working-tree-please-stage-your-changes#3733698
     # 1) creates a patch
@@ -47,7 +47,7 @@
     # 4) if apply (or merge) succeeded it drops the just applied stash item...
     unstash = !git stash show -p | git apply -3 && git stash drop
 [difftool.latex]
-    cmd = latexdiff "$LOCAL" "$REMOTE"
+    cmd = latexdiff $LOCAL $REMOTE
 [credential]
     helper = cache --timeout=3600
 [difftool "sourcetree"]
@@ -71,3 +71,6 @@
 	keepBackup = false
 [rebase]
 	autosquash = true
+[filesystem "Private Build|1.8.0_252-ea|/dev/mapper/vghome-lvhome"]
+	timestampResolution = 1001 microseconds
+	minRacyThreshold = 7883 microseconds

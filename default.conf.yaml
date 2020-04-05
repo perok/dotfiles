@@ -10,11 +10,8 @@
     - mkdir -p ~/.config/nvim/backup
     - mkdir -p ~/.config/nvim/spell
     - mkdir -p ~/.config/zathura
-    - mkdir -p ~/.virtualenvs
 - link:
     ~/.dotfiles: ''
-    ~/.gitconfig: gitconfig
-    ~/.gitignore_global: gitignore_global
     ~/.inputrc: inputrc
     ~/.latexmkrc: latexmkrc
     ~/.config/pulse/default.pa: config/pulse/default.pa

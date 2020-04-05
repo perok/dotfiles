@@ -11,6 +11,7 @@ base=(
 
 useronly=(
   rofi
+  git
   # raneme to div-utilities or somethign? div paa engelsk?
   scripts
 )
