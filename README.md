@@ -10,16 +10,23 @@ Clone and ./install linux or mac
 
     $ sudo ln -s ~/dotfiles/bin/sane-rm /usr/local/bin/rm
 
+# TODO migrate all to stow
+
 ## Firefox
 
 - Ensure that all new tabs are opened in same window - In `about:config`
   - `browser.link.open_newwindow = 3`
   - `browser.link.open_newwindow.restriction = 0`
 
+## AppImage
+
+Install [Appimaged](https://github.com/AppImage/appimaged)
+
 Todo
 ----
 
-- TMUX in Kitty has problems with >
+- Add .local/bin here?
+- Skift til stow?
 - then change to Hasklig Medium
 - enhancd, powerlevel9k, ripgrep, fzy?
 * http://zshwiki.org/home/zle/vi-mode

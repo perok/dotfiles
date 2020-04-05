@@ -21,6 +21,7 @@ set mouse=n  " Mouse support in normal mode
 " Core {{{
 let s:is_darwin = system('uname') =~ "darwin"
 let s:is_linux = system('uname') =~ "Linux"
+let g:python3_host_prog = "/usr/bin/python3"
 
 if !has('nvim') && has('vim_starting')
     " Use utf-8 everywhere
@@ -55,10 +56,6 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'  " Bindings on [ and ]
 Plug 'tpope/vim-repeat'  " '.' supports non-native commands
 Plug 'justinmk/vim-dirvish' " {{{
-augroup plugin_dirvish
-    autocmd!
-    autocmd FileType dirvish call fugitive#detect(@%)
-augroup END
 " }}}
 Plug 'easymotion/vim-easymotion' " {{{
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
@@ -102,8 +99,11 @@ Plug 'dhruvasagar/vim-table-mode'
 "augroup END
 " }}}
 
+
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+" Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim' " {{{
+" TODO use RG
 let g:fzf_command_prefix = 'Fzf'
 function! s:find_git_root()
     return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
@@ -112,7 +112,7 @@ endfunction
 " If in git repo, go to root of repo and use fzf there
 command! ProjectFiles execute 'Files' s:find_git_root()
 
-nnoremap <C-p> :FZF<CR>
+nnoremap <C-p> :FzfFiles<CR>
 nnoremap <silent> <leader>b :FzfBuffers<CR>
 nnoremap <silent> <leader>m :FzfHistory<CR>
 nnoremap <silent> <leader>; :FzfBLines<CR>
@@ -151,11 +151,12 @@ let g:fzf_colors =
 
 " }}}
 " Search and replace across files
-Plug 'brooth/far.vim'
+" Plug 'brooth/far.vim'
 
 "set completeopt=longest,menu,menuone
 " Omnicompletion
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " {{{
+Plug 'Shougo/deoplete-lsp'
 Plug 'deoplete-plugins/deoplete-tag'
 Plug 'deoplete-plugins/deoplete-docker'
 Plug 'deoplete-plugins/deoplete-zsh'
@@ -203,15 +204,6 @@ augroup plugin_rainbow_lisp
 augroup END
 " }}}
 
-" Javascript
-" http://davidosomething.com/blog/vim-for-javascript/
-Plug 'othree/yajs.vim', { 'for': 'javascript' } " JS syntax
-Plug 'itspriddle/vim-javascript-indent', { 'for': 'javascript' } " JS indent
-Plug 'mxw/vim-jsx', { 'for': 'javascript' } " {{{
-"let g:jsx_ext_required = 0 " Allow JSX in normal JS files
-" }}}
-" Plug 'elzr/vim-json', { 'for': 'json' }
-
 " Plug 'matze/vim-tex-fold', { 'for': 'tex' }
 Plug 'godlygeek/tabular', { 'for': 'tex' }
 " Use look to get more autocompletion on words with the look command
@@ -227,30 +219,33 @@ Plug 'majutsushi/tagbar'
 " }}}
 
 " Language Server Protocol {{{
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
-let g:LanguageClient_serverCommands = {
-    \ 'scala': ['/usr/local/bin/metals-vim'],
-    \ 'elm': ['elm-language-server', '--stdio'],
-    \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
-    \ }
-let g:LanguageClient_completionPreferTextEdit = 1
+"Plug 'autozimu/LanguageClient-neovim', {
+Plug 'neovim/nvim-lsp'
 
-function LC_maps()
-  if has_key(g:LanguageClient_serverCommands, &filetype)
-    " Use LSP instead of Vim built in formatter
-    set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
 
-    nnoremap <F5> :call LanguageClient_contextMenu()<CR>
-    nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<cr>
-    nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
-    nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
-  endif
-endfunction
+"    \ 'branch': 'next',
+"    \ 'do': 'bash install.sh',
+"    \ }
+"let g:LanguageClient_serverCommands = {
+"    \ 'scala': ['/usr/local/bin/metals-vim'],
+"    \ 'elm': ['elm-language-server', '--stdio'],
+"    \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
+"    \ }
+"let g:LanguageClient_completionPreferTextEdit = 1
+"
+"function LC_maps()
+"  if has_key(g:LanguageClient_serverCommands, &filetype)
+"    " Use LSP instead of Vim built in formatter
+"    set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
+"
+"    nnoremap <F5> :call LanguageClient_contextMenu()<CR>
+"    nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<cr>
+"    nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
+"    nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+"  endif
+"endfunction
 
-autocmd FileType * call LC_maps()
+"autocmd FileType * call LC_maps()
 " }}}
 
 " Scala {{{
@@ -262,13 +257,29 @@ let g:scala_use_default_keymappings = 0
 
 " Elm {{{
 Plug 'andys8/vim-elm-syntax'
-" TODO does not support 0.19 atm
-"Plug 'elmcast/elm-vim' " {{{
-"let g:elm_setup_keybindings = 0
-" }}}
 " }}}
 
 call plug#end()
+
+lua << EOF
+require'nvim_lsp'.metals.setup{}
+
+require'nvim_lsp'.elmls.setup{}
+EOF
+
+autocmd Filetype scala setlocal omnifunc=v:lua.vim.lsp.omnifunc
+autocmd Filetype elm setlocal omnifunc=v:lua.vim.lsp.omnifunc
+
+" TODO Chiel92/vim-autoformat and setup scala formatter
+"autocmd BufWrite * :Autoformat
+
+  nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
+  nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
+  nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
+  nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
+  nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
+  nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
+  nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
 " }}}
 
 " Plugin options {{{

@@ -17,7 +17,6 @@ else
 fi
 
 export ZDOTFILES=$HOME/.dotfiles/zsh
-export DOTUTILS=$HOME/.dotutils
 export XDG_MUSIC_DIR=$HOME/Music
 
 # Define Zim location
@@ -28,31 +27,18 @@ if [ "$ZSHENV_SOURCE" = true ] ; then
     return
 fi
 
-# TODO better solution than removing path_helper in /etc/zprofile?
-# Disable loading global config files
-setopt no_global_rcs
 
 # TODO
 #export XDG_CONFIG_HOME="$HOME/.config"
-#export DOTUTILS="$XDG_CONFIG_HOME/dotutils" # For zplug, etc..
-# TODO set alternative $ZDOTDIR in .zshenv
-# TODO osx   export PATH="$(brew --prefix coreutils)/libexec/gnubin:$PATH" ?
 
-path=(
-  '.'
-  /usr/local/{bin,sbin}
-  $HOME/.local/bin
-  $HOME/.dotfiles/bin
-  $HOME/.rbenv/bin
-  $HOME/Library/Python/2.7/bin
-  $path
-)
 
 if (( $+commands[rbenv] )); then
+  path=(
+    $path
+    $HOME/.rbenv/bin
+  )
   eval "$(rbenv init -)"
 fi
 
 export ZSHENV_SOURCE=true
 
-# Fuck Apple and fuck path_helper
-export PATH_SAVE=$PATH

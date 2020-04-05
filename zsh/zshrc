@@ -163,15 +163,43 @@ fi
 
 # Utility tools
 source ~/.fzf.zsh # Load after personal settings
-export NVM_DIR="$HOME/.nvm"
+
 export WORKON_HOME=$HOME/.virtualenvs
+
 export SDKMAN_DIR="$HOME/.sdkman"
-source_file "$NVM_DIR/nvm.sh"
-source_file '~/.local/bin/virtualenvwrapper_lazy.sh'
-source_file '~/.sdkman/bin/sdkman-init.sh'
+source_file ~/.sdkman/bin/sdkman-init.sh
+
+export NVM_SYMLINK_CURRENT=true
+export NVM_DIR="$HOME/.nvm"
+source_file $NVM_DIR/nvm.sh
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# Note: Due to the use of nodejs instead of node name in some distros, yarn might complain about node not being installed.
+# A workaround for this is to add an alias in your .bashrc file
+alias node=nodejs
+
 
 export GRADLE_OPTS=-Dorg.gradle.daemon=true
 
-#start_tmux
+# Add a manually kept in sync completion folder using
+# $DOT_DIR_HOME_OR_WHAT_ICALLEDIT
+# https://get-coursier.io/docs/cli-overview.html#zsh-completions
+#
+# # TODO
+# - Bootstrap coursier with coursier (cs install cs installs to .local/coursier
+#     remove dev/bin
+# - Install sbt through cs
 
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+#start_tmux
+# TODO hvor kommer yarn bin fra?
+path=(
+  $path
+  "$HOME/dev/bin"
+  # Trengs local bin?
+  "$HOME/.local/bin"
+  "$HOME/.cargo/bin"
+  `yarn global bin`
+  "$HOME/.local/share/coursier/bin"
+)
+
+# Broot launcher
+source /home/perok/.config/broot/launcher/bash/br

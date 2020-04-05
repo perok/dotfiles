@@ -17,9 +17,9 @@
     ~/.gitignore_global: gitignore_global
     ~/.inputrc: inputrc
     ~/.latexmkrc: latexmkrc
+    ~/.config/pulse/default.pa: config/pulse/default.pa
     # Neovim
     ~/.config/nvim/init.vim: config/nvim/init.vim
-    ~/.config/nvim/ftplugin: config/nvim/ftplugin
     ~/.config/nvim/after: config/nvim/after
     ~/.config/nvim/ftdetect: config/nvim/ftdetect
     ~/.config/nvim/spell/en.utf-8.add: config/nvim/spell/en.utf-8.add
@@ -48,8 +48,9 @@
     # TODO ranger
 
 - shell:
-    - ["./install_generic", Installing packages]
-    - ["[ ! -d ~/.zim ] && wget https://raw.githubusercontent.com/zimfw/zimfw/master/zimfw.zsh ${ZDOTDIR:-${HOME}}/.zim && source ~/.zim/zimfw.zsh install || exit 0", Installing zim]
+  #- ["./install_generic", Installing packages]
+      # TODO install coursier
+    - ["[ ! -d ~/.zim ] && curl -fsSL https://raw.githubusercontent.com/zimfw/install/master/install.zsh | zsh", Installing zim]
     - ["[ ! -d ~/.tmux/plugins/tpm ] &&  git clone https://github.com/tmux-plugins/tpm ${HOME}/.tmux/plugins/tpm || exit 0", Installing tpm]
     - ["./colors/gruvbox-idea/install.bash", Installing Gruvbox Idea colorscheme]
     #- [git submodule foreach git pull origin master, Updating submodules to origin master]

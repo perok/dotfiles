@@ -1,7 +1,0 @@
-- clean: ['~']
-- link:
-    ~/.chunkwmrc: osx/chunkwmrc
-    ~/.skhdrc: osx/skhdrc
-    ~/.yabairc: osx/yabairc
-- shell:
-    - [./install_mac, Installing mac tools]
