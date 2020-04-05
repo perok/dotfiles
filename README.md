@@ -13,7 +13,7 @@ Clone and ./install linux or mac
 # TODO migrate all to stow
 - stow-shell
   dir colors, inputrc
-- stow-git
+- TMUX 3.1 will support XDG spec. Move tmux config file to correct location
 
 
 ## Firefox
