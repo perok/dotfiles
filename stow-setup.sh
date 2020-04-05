@@ -14,6 +14,7 @@ useronly=(
   git
   # raneme to div-utilities or somethign? div paa engelsk?
   scripts
+  latex
 )
 
 stowit() {

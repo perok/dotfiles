@@ -13,7 +13,6 @@
 - link:
     ~/.dotfiles: ''
     ~/.inputrc: inputrc
-    ~/.latexmkrc: latexmkrc
     ~/.config/pulse/default.pa: config/pulse/default.pa
     # Neovim
     ~/.config/nvim/init.vim: config/nvim/init.vim
