@@ -120,7 +120,9 @@ bindkey '^N' history-substring-search-down
 bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
 
-# TODO remaining old setup
+# ------------------------------
+# Other settings
+# ------------------------------
 
 # Fix locale warning from terminal in Intellij
 export LC_CTYPE=en_US.UTF-8
@@ -143,11 +145,18 @@ PURE_PROMPT_SYMBOL='λ'
 #
 
 # TODO Verify that works
-# zplug check returns true if the given repository exists
 if [[ -v ENHANCD_DIR ]]; then # ENHANCD_DIR installed
   # setting if enhancd is available
   export ENHANCD_FILTER=fzf-tmux
 fi
+
+path=(
+  $path
+  "$HOME/.local/bin"
+  "$HOME/.cargo/bin"
+  `yarn global bin`
+  "$HOME/.local/share/coursier/bin"
+)
 
 # Custom settings
 source "$ZDOTDIR/user/defaults.zsh"
@@ -155,19 +164,10 @@ source "$ZDOTDIR/user/keybindings.zsh"
 source "$ZDOTDIR/user/funcs.zsh"
 source "$ZDOTDIR/user/tweaks.zsh"
 source "$ZDOTDIR/user/alias.zsh"
-if [[ -n ${LINUX} ]]; then
-    source $ZDOTDIR/user/linux.zsh
-else
-    source $ZDOTDIR/user/darwin.zsh
-fi
 
-# Utility tools
-source ~/.fzf.zsh # Load after personal settings
-
-export WORKON_HOME=$HOME/.virtualenvs
-
+# SDKMan for Java
 export SDKMAN_DIR="$HOME/.sdkman"
-source_file ~/.sdkman/bin/sdkman-init.sh
+source_file $SDKMAN_DIR/bin/sdkman-init.sh
 
 export NVM_SYMLINK_CURRENT=true
 export NVM_DIR="$HOME/.nvm"
@@ -177,29 +177,21 @@ source_file $NVM_DIR/nvm.sh
 # A workaround for this is to add an alias in your .bashrc file
 alias node=nodejs
 
-
 export GRADLE_OPTS=-Dorg.gradle.daemon=true
 
-# Add a manually kept in sync completion folder using
-# $DOT_DIR_HOME_OR_WHAT_ICALLEDIT
-# https://get-coursier.io/docs/cli-overview.html#zsh-completions
-#
-# # TODO
-# - Bootstrap coursier with coursier (cs install cs installs to .local/coursier
-#     remove dev/bin
-# - Install sbt through cs
+if (( $+commands[rbenv] )); then
+  path=(
+    $path
+    $HOME/.rbenv/bin
+  )
+  eval "$(rbenv init -)"
+fi
 
+# TODO ?
 #start_tmux
-# TODO hvor kommer yarn bin fra?
-path=(
-  $path
-  "$HOME/dev/bin"
-  # Trengs local bin?
-  "$HOME/.local/bin"
-  "$HOME/.cargo/bin"
-  `yarn global bin`
-  "$HOME/.local/share/coursier/bin"
-)
 
 # Broot launcher
-source /home/perok/.config/broot/launcher/bash/br
+source ~/.config/broot/launcher/bash/br
+
+# Utility tools
+source ~/.fzf.zsh # Load after personal settings
