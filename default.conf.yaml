@@ -11,21 +11,11 @@
     - mkdir -p ~/.config/nvim/spell
     - mkdir -p ~/.config/zathura
 - link:
-    ~/.dotfiles: ''
-    ~/.inputrc: inputrc
     # Neovim
     ~/.config/nvim/init.vim: config/nvim/init.vim
     ~/.config/nvim/after: config/nvim/after
     ~/.config/nvim/ftdetect: config/nvim/ftdetect
     ~/.config/nvim/spell/en.utf-8.add: config/nvim/spell/en.utf-8.add
-    ~/.ideavimrc: ideavimrc
-    #~/.zim/modules/prompt/functions/prompt_lambda_setup: zsh/prompts/prompt_lambda_setup
-    ~/.dir_colors: colors/dir_colors
-    # Other
-    ~/.ctags.d: ctags.d
-    ~/.config/zathura/zathurarc: config/zathura/zathurarc
-    ~/.config/tridactyl/tridactylrc: config/tridactyl/tridactylrc
-    # TODO ranger
 
 - shell:
   #- ["./install_generic", Installing packages]

@@ -5,17 +5,25 @@ git submodule update
 
 # TODO something that verifies that .dotfiles links to current directory
 
-base=(
+declare -a base=(
+  shell
   zsh
 )
 
-useronly=(
-  rofi
+declare -a useronly=(
   tmux
   git
   # raneme to div-utilities or somethign? div paa engelsk?
   scripts
+  rofi
   latex
+  alacritty
+  pulseaudio
+  kde
+  zathura
+  firefox
+  idea
+  ctags
 )
 
 stowit() {
