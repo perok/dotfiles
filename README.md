@@ -4,16 +4,15 @@
 Installation guide
 ------------------
 
-Uses: https://github.com/anishathalye/dotbot/
+1) Install stow
+2) Run `./setup-stow.sh`
+2) Run `./install.sh`
 
-Clone and ./install linux or mac
 
-    $ sudo ln -s ~/dotfiles/bin/sane-rm /usr/local/bin/rm
 
-# TODO migrate all to stow
-- stow-shell
-  dir colors, inputrc
+## TODO
 - TMUX 3.1 will support XDG spec. Move tmux config file to correct location
+- Fix Stow for `$sudo ln -s ~/dotfiles/bin/sane-rm /usr/local/bin/rm`
 
 
 ## Firefox
@@ -32,10 +31,7 @@ Install [Appimaged](https://github.com/AppImage/appimaged)
 Todo
 ----
 
-- Add .local/bin here?
-- Skift til stow?
 - then change to Hasklig Medium
-- enhancd, powerlevel9k, ripgrep, fzy?
 * http://zshwiki.org/home/zle/vi-mode
 * with https://github.com/zsh-users/zsh/blob/master/Functions/Zle/surround
 * http://vimrcfu.com/snippet/77
