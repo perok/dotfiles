@@ -24,7 +24,6 @@
     # Other
     ~/.ctags.d: ctags.d
     ~/.config/zathura/zathurarc: config/zathura/zathurarc
-    ~/.config/cmus/rc: config/cmus/rc
     ~/.config/tridactyl/tridactylrc: config/tridactyl/tridactylrc
     # TODO ranger
 
