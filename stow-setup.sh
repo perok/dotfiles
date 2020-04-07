@@ -14,6 +14,7 @@ declare -a useronly=(
   tmux
   git
   # raneme to div-utilities or somethign? div paa engelsk?
+  nvim
   scripts
   rofi
   latex
