@@ -71,7 +71,9 @@ if has("persistent_undo")
     set undodir=~/.undodir/
 endif
 " }}}
-Plug 'whiteinge/diffconflicts'
+Plug 'whiteinge/diffconflicts' " {{{
+" Call :DiffConflicts to convert a file containing conflict markers into a two-way diff.
+" }}}
 
 " Syntax checking
 Plug 'dense-analysis/ale' " {{{
@@ -90,7 +92,6 @@ Plug 'vim-pandoc/vim-pandoc-syntax'
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim' " {{{
-" TODO use RG
 let g:fzf_command_prefix = 'Fzf'
 function! s:find_git_root()
     return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
@@ -200,11 +201,23 @@ augroup END
 " Plug 'dhruvasagar/vim-table-mode'
 
 " Tags {{{
+" Generate tags on best effort
+Plug 'ludovicchabant/vim-gutentags'
+" Use RipGrep to ensure that only non-ignored files generate tags
+let g:gutentags_file_list_command = 'rg --files'
+
+" Refresh Lightline statusline on Gutentags changes
+augroup MyGutentagsStatusLineRefresher
+    autocmd!
+    autocmd User GutentagsUpdating call lightline#update()
+    autocmd User GutentagsUpdated call lightline#update()
+augroup END
+
+" Move up the directory hierarchy until it has found the file
+set tags=tags;/
+
 Plug 'majutsushi/tagbar'
-" TODO gives errors on exit - Incorrect ctags installation?
-": Plug 'ludovicchabant/vim-gutentags'
- " Move up the directory hierarchy until it has found the file
-"set tags=tags;/
+nmap <F8> :TagbarToggle<CR>
 " }}}
 
 " Language Server Protocol {{{
@@ -505,7 +518,10 @@ let g:lightline = {
   \ 'colorscheme': 'gruvbox',
   \ 'mode_map': { 'c': 'NORMAL' },
   \ 'active': {
-  \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ]
+  \   'left': [
+  \     [ 'mode', 'paste', 'gutentagsRunning' ],
+  \     [ 'fugitive', 'filename' ],
+  \   ]
   \ },
   \ 'component_function': {
   \   'modified': 'LightLineModified',
@@ -516,6 +532,7 @@ let g:lightline = {
   \   'filetype': 'LightLineFiletype',
   \   'fileencoding': 'LightLineFileencoding',
   \   'mode': 'LightLineMode',
+  \   'gutentagsRunning': 'LightLineGutentagsRunning',
   \ },
   \ 'separator': { 'left': '', 'right': '' },
   \ 'subseparator': { 'left': '', 'right': '' }
@@ -558,6 +575,10 @@ endfunction
 
 function! LightLineMode()
   return winwidth(0) > 60 ? lightline#mode() : ''
+endfunction
+
+function! LightLineGutentagsRunning()
+  return gutentags#statusline('[', ']')
 endfunction
 " }}}
 
