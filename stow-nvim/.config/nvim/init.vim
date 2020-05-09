@@ -33,7 +33,7 @@ if empty(glob('~/.config/nvim/autoload/plug.vim'))
 endif
 " }}}
 
-    " Plugins {{{
+" Plugins {{{
 call plug#begin()
 
 Plug 'editorconfig/editorconfig-vim'
@@ -208,33 +208,7 @@ Plug 'majutsushi/tagbar'
 " }}}
 
 " Language Server Protocol {{{
-"Plug 'autozimu/LanguageClient-neovim', {
 Plug 'neovim/nvim-lsp'
-
-
-"    \ 'branch': 'next',
-"    \ 'do': 'bash install.sh',
-"    \ }
-"let g:LanguageClient_serverCommands = {
-"    \ 'scala': ['/usr/local/bin/metals-vim'],
-"    \ 'elm': ['elm-language-server', '--stdio'],
-"    \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
-"    \ }
-"let g:LanguageClient_completionPreferTextEdit = 1
-"
-"function LC_maps()
-"  if has_key(g:LanguageClient_serverCommands, &filetype)
-"    " Use LSP instead of Vim built in formatter
-"    set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
-"
-"    nnoremap <F5> :call LanguageClient_contextMenu()<CR>
-"    nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<cr>
-"    nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
-"    nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
-"  endif
-"endfunction
-
-"autocmd FileType * call LC_maps()
 " }}}
 
 Plug 'derekwyatt/vim-scala', { 'for': 'scala' } " {{{
@@ -270,13 +244,13 @@ EOF
 autocmd Filetype scala setlocal omnifunc=v:lua.vim.lsp.omnifunc
 autocmd Filetype elm setlocal omnifunc=v:lua.vim.lsp.omnifunc
 
-  nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
-  nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
-  nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
-  nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
-  nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
-  nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
-  nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
+nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
+nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
+nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
+nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
 " }}}
 
 " Colors {{{
@@ -455,10 +429,9 @@ set shiftwidth=4    " Make sure >> indents 1 tab
 " UI/Window {{{
 if has('nvim')
     set inccommand=split    " visual substitution
-else
-    set wildmenu            " visual autocomplete for command menu
 endif
 
+set wildmenu            " visual autocomplete for command menu
 
 set winblend=30         " Transparancy for wildmenu
 
