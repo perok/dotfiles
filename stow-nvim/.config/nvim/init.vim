@@ -11,16 +11,11 @@ set mouse=n  " Mouse support in normal mode
 
 " TODO {{{
     " Base16 theme .XResources, ranger, vim, zsh?
-    " XDG variables not set
-    "let g:python3_host_prog = '/path/to/python3'
-    " projectionist - jump all over the project with ease
     " swapit - ^a/^x on steroids (mostly used for true/false switch)
     " https://github.com/critiqjo/vim-bufferline
 " }}}
 
 " Core {{{
-let s:is_darwin = system('uname') =~ "darwin"
-let s:is_linux = system('uname') =~ "Linux"
 let g:python3_host_prog = "/usr/bin/python3"
 
 if !has('nvim') && has('vim_starting')
@@ -38,7 +33,7 @@ if empty(glob('~/.config/nvim/autoload/plug.vim'))
 endif
 " }}}
 
-" Plugins {{{
+    " Plugins {{{
 call plug#begin()
 
 Plug 'editorconfig/editorconfig-vim'
@@ -55,18 +50,17 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'  " Bindings on [ and ]
 Plug 'tpope/vim-repeat'  " '.' supports non-native commands
-Plug 'justinmk/vim-dirvish' " {{{
-" }}}
-Plug 'easymotion/vim-easymotion' " {{{
-let g:EasyMotion_do_mapping = 0 " Disable default mappings
-let g:EasyMotion_smartcase = 1  " Turn on case insensitive feature
-let g:EasyMotion_startofline = 0    " keep cursor column when JK motion
-nmap s <Plug>(easymotion-s)
-" JK motions: Line motions
-map <Leader>l <Plug>(easymotion-lineforward)
-map <Leader>j <Plug>(easymotion-j)
-map <Leader>k <Plug>(easymotion-k)
-map <Leader>h <Plug>(easymotion-linebackward)
+Plug 'justinmk/vim-dirvish'
+Plug 'justinmk/vim-sneak' " {{{
+" Move around with s{char}{char}
+
+let g:sneak#label = 1 " label mode to imitate vim-easymotion
+
+" Use sneak over standard mappings
+map f <Plug>Sneak_f
+map F <Plug>Sneak_F
+map t <Plug>Sneak_t
+map T <Plug>Sneak_T
 " }}}
 Plug 'wellle/targets.vim'  " More useful text object
 
@@ -78,30 +72,23 @@ if has("persistent_undo")
 endif
 " }}}
 Plug 'whiteinge/diffconflicts'
-Plug 'dhruvasagar/vim-table-mode'
 
 " Syntax checking
-" TODO change to ALE?
-"Plug 'benekastah/neomake' " {{{
-"let g:neomake_javascript_enabled_makers = ['eslint']
-"" Override eslint with local version where necessary.
-"let local_eslint = finddir('node_modules', '.;') . '/.bin/eslint'
-"if matchstr(local_eslint, "^\/\\w") == ''
-"    let local_eslint = getcwd() . "/" . local_eslint
-"endif
-"if executable(local_eslint)
-"    let g:syntastic_javascript_eslint_exec = local_eslint
-"endif
-"
-"augroup plugin_neomake
-"    autocmd!
-"    autocmd bufwritepost * Neomake
-"augroup END
+Plug 'dense-analysis/ale' " {{{
+" Only run linters named in ale_linters settings.
+let g:ale_linters_explicit = 1
+" Available linters https://github.com/dense-analysis/ale/tree/master/ale_linters
+let g:ale_linters = {
+\   'sh': ['shellcheck', 'shell'],
+\}
 " }}}
 
+" For markdown
+" https://github.com/iamcco/markdown-preview.nvim ?
+Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc-syntax'
 
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-" Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim' " {{{
 " TODO use RG
 let g:fzf_command_prefix = 'Fzf'
@@ -150,8 +137,6 @@ let g:fzf_colors =
   \ 'header':  ['fg', 'Comment'] }
 
 " }}}
-" Search and replace across files
-" Plug 'brooth/far.vim'
 
 "set completeopt=longest,menu,menuone
 " Omnicompletion
@@ -161,7 +146,10 @@ Plug 'deoplete-plugins/deoplete-tag'
 Plug 'deoplete-plugins/deoplete-docker'
 Plug 'deoplete-plugins/deoplete-zsh'
 Plug 'wellle/tmux-complete.vim'
+" Use look to get more autocompletion on words with the look command
+Plug 'ujihisa/neco-look', { 'for': 'tex' }
 let g:deoplete#enable_at_startup = 1
+
 
 augroup plugin_deoplete
     " Close the preview window after completion is done.
@@ -169,13 +157,15 @@ augroup plugin_deoplete
 augroup END
 " }}}
 
-"Plug 'honza/vim-snippets'
 Plug 'SirVer/ultisnips' " {{{
-inoremap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+" TODO tab is owned by Deoplete?
+"inoremap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+"let g:UltiSnipsExpandTrigger="<tab>"
+"let g:UltiSnipsJumpForwardTrigger="<tab>"
+"let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 " }}}
+" Snippets are separated from the engine. Add this if you want them:
+Plug 'honza/vim-snippets'
 
 Plug 'airblade/vim-gitgutter' " {{{
 " Always display gitgutter column
@@ -205,14 +195,13 @@ augroup END
 " }}}
 
 " Plug 'matze/vim-tex-fold', { 'for': 'tex' }
-Plug 'godlygeek/tabular', { 'for': 'tex' }
-" Use look to get more autocompletion on words with the look command
-Plug 'ujihisa/neco-look', { 'for': 'tex' }
-
+" TODO tabular vs vim-table-mode?
+" Plug 'godlygeek/tabular', { 'for': 'tex' }
+" Plug 'dhruvasagar/vim-table-mode'
 
 " Tags {{{
 Plug 'majutsushi/tagbar'
-" TODO gives errors on exit
+" TODO gives errors on exit - Incorrect ctags installation?
 ": Plug 'ludovicchabant/vim-gutentags'
  " Move up the directory hierarchy until it has found the file
 "set tags=tags;/
@@ -248,11 +237,9 @@ Plug 'neovim/nvim-lsp'
 "autocmd FileType * call LC_maps()
 " }}}
 
-" Scala {{{
 Plug 'derekwyatt/vim-scala', { 'for': 'scala' } " {{{
 let g:scala_use_default_keymappings = 0
- let g:scala_use_builtin_tagbar_defs = 0
-" }}}
+let g:scala_use_builtin_tagbar_defs = 0
 " }}}
 
 " Elm {{{
@@ -261,17 +248,27 @@ Plug 'andys8/vim-elm-syntax'
 
 call plug#end()
 
+
+" Extra plugin configuration {{{
+" TODO what was this for?
+call deoplete#custom#var('omni', 'input_patterns', {
+  \ 'pandoc': '@'
+  \})
+call deoplete#custom#option({
+\ 'smart_case': v:true,
+\ 'ignore_case': v:true,
+\ })
+" }}}
+
 lua << EOF
 require'nvim_lsp'.metals.setup{}
 
 require'nvim_lsp'.elmls.setup{}
 EOF
 
+" TODO should wrap aucmds
 autocmd Filetype scala setlocal omnifunc=v:lua.vim.lsp.omnifunc
 autocmd Filetype elm setlocal omnifunc=v:lua.vim.lsp.omnifunc
-
-" TODO Chiel92/vim-autoformat and setup scala formatter
-"autocmd BufWrite * :Autoformat
 
   nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
   nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
@@ -280,13 +277,6 @@ autocmd Filetype elm setlocal omnifunc=v:lua.vim.lsp.omnifunc
   nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
   nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
   nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
-" }}}
-
-" Plugin options {{{
-call deoplete#custom#option({
-\ 'smart_case': v:true,
-\ 'ignore_case': v:true,
-\ })
 " }}}
 
 " Colors {{{
@@ -316,10 +306,6 @@ endif
 
 " General  {{{
 let g:tex_flavor = "latex"
-
-if s:is_darwin
-    set clipboard=unnamed
-endif
 
 set hidden  " Allow buffer to not be saved
 " }}}
@@ -406,17 +392,11 @@ vnoremap <c-k> :m-2<cr>gv=gv
 
 " window navigation alt+{h,j,k,l}
 " '<M-...>' Alt-key or meta-key
-if s:is_darwin
-    nnoremap <M-h> <C-w>h
-    nnoremap <M-j> <C-w>j
-    nnoremap <M-k> <C-w>k
-    nnoremap <M-l> <C-w>l
-else
-    nnoremap <A-h> <C-w>h
-    nnoremap <A-j> <C-w>j
-    nnoremap <A-k> <C-w>k
-    nnoremap <A-l> <C-w>l
-endif
+" TODO does these work?
+nnoremap <A-h> <C-w>h
+nnoremap <A-j> <C-w>j
+nnoremap <A-k> <C-w>k
+nnoremap <A-l> <C-w>l
 
 " Window resizing
 nmap <left>  :3wincmd <<cr>
@@ -452,6 +432,9 @@ set pastetoggle=<F2>
 
 " make F5 compile
 map <F5> :make!<cr>
+
+" Allow moving cursor outside existing text
+set virtualedit=all
 " }}}
 
 " Tab Navigation {{{
@@ -546,24 +529,24 @@ set noshowmode            " Do not show default mode in statusline
 " set statusline+=\ %y      " Filetype
 
 let g:lightline = {
-      \ 'colorscheme': 'gruvbox',
-      \ 'mode_map': { 'c': 'NORMAL' },
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ]
-      \ },
-      \ 'component_function': {
-      \   'modified': 'LightLineModified',
-      \   'readonly': 'LightLineReadonly',
-      \   'fugitive': 'LightLineFugitive',
-      \   'filename': 'LightLineFilename',
-      \   'fileformat': 'LightLineFileformat',
-      \   'filetype': 'LightLineFiletype',
-      \   'fileencoding': 'LightLineFileencoding',
-      \   'mode': 'LightLineMode',
-      \ },
-      \ 'separator': { 'left': '', 'right': '' },
-      \ 'subseparator': { 'left': '', 'right': '' }
-      \ }
+  \ 'colorscheme': 'gruvbox',
+  \ 'mode_map': { 'c': 'NORMAL' },
+  \ 'active': {
+  \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ]
+  \ },
+  \ 'component_function': {
+  \   'modified': 'LightLineModified',
+  \   'readonly': 'LightLineReadonly',
+  \   'fugitive': 'LightLineFugitive',
+  \   'filename': 'LightLineFilename',
+  \   'fileformat': 'LightLineFileformat',
+  \   'filetype': 'LightLineFiletype',
+  \   'fileencoding': 'LightLineFileencoding',
+  \   'mode': 'LightLineMode',
+  \ },
+  \ 'separator': { 'left': '', 'right': '' },
+  \ 'subseparator': { 'left': '', 'right': '' }
+\ }
 
 function! LightLineModified()
   return &ft =~ 'help\|startify' ? '' : &modified ? '+' : &modifiable ? '' : '-'
@@ -614,6 +597,9 @@ set smartcase
 
 " turn off search highlight
 nnoremap <silent> <Esc> :nohlsearch<Bar>:echo<CR>
+
+" Use RipGrep for grepping. Respects gitignore, etc
+set grepprg=rg\ -H\ --no-heading\ --vimgrep
 " }}}
 
 " Folding {{{

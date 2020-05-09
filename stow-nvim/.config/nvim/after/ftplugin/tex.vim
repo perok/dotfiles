@@ -1,4 +1,3 @@
-
 setlocal formatoptions+=t       " Autowrap text when over tw.
 setlocal spell
 " TODO move this to syntax/tex.vim. Does noe need au

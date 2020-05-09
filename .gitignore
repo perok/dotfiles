@@ -2,6 +2,8 @@
 # Do not want to keep Zsh history
 .zhistory
 
+.zcompcache
+
 # Created by https://www.gitignore.io/api/vim,zsh,linux,visualstudiocode,tags
 # Edit at https://www.gitignore.io/?templates=vim,zsh,linux,visualstudiocode,tags
 

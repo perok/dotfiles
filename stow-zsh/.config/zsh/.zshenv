@@ -1,6 +1,8 @@
 #
 # First invocation in /etc/zsh/zshenv
 #
+# TODO Will be sourced for entire desktop session?
+#
 
 export XDG_MUSIC_DIR=$HOME/Music
 

@@ -47,7 +47,6 @@ WORDCHARS=${WORDCHARS//[\/]}
 #
 
 # Append `../` to your input for each `.` you type after an initial `..`
-# TODO working?
 zstyle ':zim:input' double-dot-expand yes
 
 #
