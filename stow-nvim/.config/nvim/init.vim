@@ -36,6 +36,9 @@ endif
 " Plugins {{{
 call plug#begin()
 
+Plug 'liuchengxu/vim-which-key'
+nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
+
 Plug 'editorconfig/editorconfig-vim'
 
 Plug 'mhinz/vim-startify' " {{{
@@ -45,12 +48,21 @@ let g:startify_change_to_dir = 0
 " }}}
 Plug 'itchyny/lightline.vim'
 Plug 'tpope/vim-eunuch'
+" Trick from
+" https://github.com/justinmk/vim-dirvish/issues/70#issuecomment-626258095
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'  " Bindings on [ and ]
 Plug 'tpope/vim-repeat'  " '.' supports non-native commands
 Plug 'justinmk/vim-dirvish'
+" Use p in dirvish to show subdirectories
+" Trick from https://github.com/justinmk/vim-dirvish/issues/70#issuecomment-626258095
+augroup dirvish_config
+    autocmd!
+    autocmd FileType dirvish
+                \ nnoremap <silent><buffer> p ddO<Esc>:let @"=substitute(@", '\n', '', 'g')<CR>:r ! find "<C-R>"" -maxdepth 1 -print0 \| xargs -0 ls -Fd<CR>:silent! keeppatterns %s/\/\//\//g<CR>:silent! keeppatterns %s/[^a-zA-Z0-9\/]$//g<CR>:silent! keeppatterns g/^$/d<CR>:noh<CR>
+augroup END
 Plug 'justinmk/vim-sneak' " {{{
 " Move around with s{char}{char}
 
@@ -64,6 +76,7 @@ map T <Plug>Sneak_T
 " }}}
 Plug 'wellle/targets.vim'  " More useful text object
 
+
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' } " {{{
 nnoremap <F6> :UndotreeToggle<cr>
 if has("persistent_undo")
@@ -73,6 +86,7 @@ endif
 " }}}
 Plug 'whiteinge/diffconflicts' " {{{
 " Call :DiffConflicts to convert a file containing conflict markers into a two-way diff.
+" TODO git use this as default?
 " }}}
 
 " Syntax checking
@@ -89,6 +103,8 @@ let g:ale_linters = {
 " https://github.com/iamcco/markdown-preview.nvim ?
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
+" Do not add extra keyboard mappings
+let g:pandoc#keyboard#use_default_mappings = 0
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim' " {{{
@@ -111,11 +127,18 @@ nnoremap <silent> <leader>. :FzfLines<CR>
 "xmap <leader><tab> <plug>(fzf-maps-x)
 "omap <leader><tab> <plug>(fzf-maps-o)
 
+" TODO FzfHistory sorted by oldfiles?
+command! FZFMru call fzf#run({
+\  'source':  v:oldfiles,
+\  'sink':    'e',
+\  'options': '-m -x +s',
+\  'down':    '40%'})
+
 " Better command history with q:
 command! CmdHist call fzf#vim#command_history({'right': '40'})
 nnoremap q: :CmdHist<CR>
 
-" Better search history
+" Better search istory
 command! QHist call fzf#vim#search_history({'right': '40'})
 nnoremap q/ :QHist<CR>
 
@@ -137,29 +160,36 @@ let g:fzf_colors =
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
 
+" TODO change to floating FZF https://github.com/junegunn/fzf.vim/issues/664
+" Hide statusline when in FZF buffer
+autocmd! FileType fzf set laststatus=0 noshowmode noruler
+  \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+
 " }}}
 
-"set completeopt=longest,menu,menuone
 " Omnicompletion
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " {{{
-Plug 'Shougo/deoplete-lsp'
-Plug 'deoplete-plugins/deoplete-tag'
-Plug 'deoplete-plugins/deoplete-docker'
-Plug 'deoplete-plugins/deoplete-zsh'
-Plug 'wellle/tmux-complete.vim'
-" Use look to get more autocompletion on words with the look command
-Plug 'ujihisa/neco-look', { 'for': 'tex' }
-let g:deoplete#enable_at_startup = 1
+"Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " {{{
+"set completeopt=longest,menu,menuone
+"Plug 'Shougo/deoplete-lsp'
+"Plug 'deoplete-plugins/deoplete-tag'
+"Plug 'deoplete-plugins/deoplete-docker'
+"Plug 'deoplete-plugins/deoplete-zsh'
+"Plug 'wellle/tmux-complete.vim'
+"" Use look to get more autocompletion on words with the look command
+"Plug 'ujihisa/neco-look', { 'for': 'tex' }
+"let g:deoplete#enable_at_startup = 1
 
 
-augroup plugin_deoplete
-    " Close the preview window after completion is done.
-    autocmd CompleteDone * silent! pclose!
-augroup END
+"augroup plugin_deoplete
+"    " Close the preview window after completion is done.
+"    autocmd CompleteDone * silent! pclose!
+"augroup END
 " }}}
 
 Plug 'SirVer/ultisnips' " {{{
 " TODO tab is owned by Deoplete?
+" TODO adds tab bindings - is this change good enough?
+let g:UltiSnipsExpandTrigger = "<nop>"
 "inoremap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 "let g:UltiSnipsExpandTrigger="<tab>"
 "let g:UltiSnipsJumpForwardTrigger="<tab>"
@@ -168,10 +198,11 @@ Plug 'SirVer/ultisnips' " {{{
 " Snippets are separated from the engine. Add this if you want them:
 Plug 'honza/vim-snippets'
 
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+
 Plug 'airblade/vim-gitgutter' " {{{
 " Always display gitgutter column
 let g:gitgutter_map_keys = 0 " Activate stuff when I need it..
-set signcolumn=yes
 " }}}
 
 Plug 'nathanaelkane/vim-indent-guides' " {{{
@@ -182,7 +213,9 @@ let g:indent_guides_guide_size = 1
 
 " Colorschemes
 Plug 'morhetz/gruvbox'
-" Plug 'chriskempson/base16-vim'
+Plug 'chriskempson/base16-vim'
+Plug 'dawikur/base16-vim-airline-themes'
+Plug 'mhartington/oceanic-next'
 " Plug 'Soares/base16.nvim'
 " Plug 'jacoborus/tender'
 " Plug 'cocopon/iceberg.vim'
@@ -202,35 +235,69 @@ augroup END
 
 " Tags {{{
 " Generate tags on best effort
-Plug 'ludovicchabant/vim-gutentags'
-" Use RipGrep to ensure that only non-ignored files generate tags
-let g:gutentags_file_list_command = 'rg --files'
-
-" Refresh Lightline statusline on Gutentags changes
-augroup MyGutentagsStatusLineRefresher
-    autocmd!
-    autocmd User GutentagsUpdating call lightline#update()
-    autocmd User GutentagsUpdated call lightline#update()
-augroup END
-
-" Move up the directory hierarchy until it has found the file
-set tags=tags;/
-
-Plug 'majutsushi/tagbar'
-nmap <F8> :TagbarToggle<CR>
+" Plug 'ludovicchabant/vim-gutentags'
+" " Use RipGrep to ensure that only non-ignored files generate tags
+" let g:gutentags_file_list_command = 'rg --files'
+"
+" " Refresh Lightline statusline on Gutentags changes
+" augroup MyGutentagsStatusLineRefresher
+"     autocmd!
+"     autocmd User GutentagsUpdating call lightline#update()
+"     autocmd User GutentagsUpdated call lightline#update()
+" augroup END
+"
+"
+" " Move up the directory hierarchy until it has found the file
+" set tags=tags;/
+"
+" Plug 'majutsushi/tagbar'
+" nmap <F8> :TagbarToggle<CR>
 " }}}
 
-" Language Server Protocol {{{
-Plug 'neovim/nvim-lsp'
-" }}}
+" LSP: Language Server Protocol {{{
+Plug 'neovim/nvim-lspconfig'
 
-Plug 'derekwyatt/vim-scala', { 'for': 'scala' } " {{{
-let g:scala_use_default_keymappings = 0
-let g:scala_use_builtin_tagbar_defs = 0
-" }}}
+Plug 'nvim-lua/completion-nvim'
+" TODO add ultisips and chained completions
+" TODO why does smiley show with warning unicode?
+" TODO errer on startup lua
+" TODO completion menu does not show automagically
+" TODO tab does not work
 
-" Elm {{{
-Plug 'andys8/vim-elm-syntax'
+" Use <Tab> and <S-Tab> to navigate through popup menu
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+" Set completeopt to have a better completion experience
+set completeopt=menuone,noinsert,noselect
+" Avoid showing message extra message when using completion
+set shortmess+=c
+" map <c-p> to manually trigger completion
+imap <silent> <c-p> <Plug>(completion_trigger)
+" Enable snippets for completion
+let g:completion_enable_snippet = 'UltiSnips'
+
+Plug 'steelsojka/completion-buffers'
+Plug 'nvim-treesitter/completion-treesitter'
+"Plug 'kristijanhusak/completion-tags'
+"            \      {'complete_items': ['tags']},
+
+let g:completion_chain_complete_list = {
+			\'default' : {
+			\	'default' : [
+            \      {'complete_items': ['lsp', 'snippet']},
+            \      {'complete_items': ['ts']},
+            \      {'complete_items': ['buffers']},
+            \      {'mode': '<c-p>'},
+            \      {'mode': '<c-n>'}
+			\	],
+			\},
+			\}
+let g:completion_auto_change_source = 1
+
+Plug 'scalameta/nvim-metals'  " LSP server for Scala
+" Decoration color. Available options shown by :highlights
+let g:metals_decoration_color = 'Conceal'
 " }}}
 
 call plug#end()
@@ -238,32 +305,85 @@ call plug#end()
 
 " Extra plugin configuration {{{
 " TODO what was this for?
-call deoplete#custom#var('omni', 'input_patterns', {
-  \ 'pandoc': '@'
-  \})
-call deoplete#custom#option({
-\ 'smart_case': v:true,
-\ 'ignore_case': v:true,
-\ })
+"call deoplete#custom#var('omni', 'input_patterns', {
+"  \ 'pandoc': '@'
+"  \})
+"call deoplete#custom#option({
+"\ 'smart_case': v:true,
+"\ 'ignore_case': v:true,
+"\ })
 " }}}
 
 lua << EOF
-require'nvim_lsp'.metals.setup{}
-
-require'nvim_lsp'.elmls.setup{}
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = {'scala', 'html', 'javascript', 'yaml', 'css', 'lua', 'json', 'elm', 'bash'},
+  highlight = {enable = true}
+}
 EOF
 
-" TODO should wrap aucmds
-autocmd Filetype scala setlocal omnifunc=v:lua.vim.lsp.omnifunc
-autocmd Filetype elm setlocal omnifunc=v:lua.vim.lsp.omnifunc
+call sign_define("LspDiagnosticsSignError", {"text" : "✘", "texthl" : "LspDiagnosticsDefaultError"})
+call sign_define("LspDiagnosticsSignWarning", {"text" : "", "texthl" : "LspDiagnosticsDefaultWarning"})
 
-nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
-nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
-nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
-nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
-nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
-nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
-nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
+lua << EOF
+  --local nvim_lsp = require'lspconfig'
+
+  metals_config = require'metals'.bare_config
+  metals_config.settings = {
+    showImplicitArguments = true
+  }
+
+  metals_config.on_attach = function()
+    require'completion'.on_attach();
+  end
+
+  metals_config.init_options.statusBarProvider = 'on'
+
+  metals_config.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+    vim.lsp.diagnostic.on_publish_diagnostics, {
+      virtual_text = {
+        prefix = '',
+      }
+    }
+  )
+EOF
+
+"" vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+""  vim.lsp.diagnostic.on_publish_diagnostics, {
+""    -- This is disabled by default. I'm still unsure if I like this on
+""    virtual_text = false,
+""
+""    -- This is similar to:
+""    -- let g:diagnostic_show_sign = 1
+""    -- To configure sign display,
+""    --  see: ":help vim.lsp.diagnostic.set_signs()"
+""    signs = true,
+""  }
+"" )
+
+augroup lsp
+  au!
+  au FileType scala,sbt lua require('metals').initialize_or_attach(metals_config)
+augroup end
+
+autocmd Filetype scala,elm setlocal omnifunc=v:lua.vim.lsp.omnifunc
+
+nnoremap <silent> gd          <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> K           <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> gi          <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> gr          <cmd>lua vim.lsp.buf.references()<CR>
+" Here is an example of how to use telescope as an alternative to the default references
+" TODO add telescope? https://github.com/nvim-lua/telescope.nvim
+" nnoremap <silent> <leader>s   <cmd>lua require'telescope.builtin'.lsp_references{}<CR>
+"nnoremap <silent> gs          <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
+nnoremap <silent> gds         <cmd>lua vim.lsp.buf.document_symbol()<CR>
+nnoremap <silent> gws         <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
+nnoremap <silent> <leader>rn  <cmd>lua vim.lsp.buf.rename()<CR>
+nnoremap <silent> <leader>f   <cmd>lua vim.lsp.buf.formatting()<CR>
+nnoremap <silent> <leader>ca  <cmd>lua vim.lsp.buf.code_action()<CR>
+nnoremap <silent> <leader>ws  <cmd>lua require 'metals.decoration'.show_hover_message()<CR>
+nnoremap <silent> [c          <cmd>lua vim.lsp.diagnostic.goto_prev { wrap = false }<CR>
+nnoremap <silent> ]c          <cmd>lua vim.lsp.diagnostic.goto_next { wrap = false }<CR>
+nnoremap <silent> go          <cmd>lua vim.lsp.diagnostic.set_loclist()<CR>
 " }}}
 
 " Colors {{{
@@ -275,14 +395,14 @@ if has("termguicolors")
 endif
 
 if has('vim_starting')
-    colorscheme gruvbox
+    "colorscheme gruvbox
     "let g:base16colorspace=256
     "colorscheme base16-ocean
     "colorscheme iceberg
     "let g:base16colorspace=256
     "colorscheme base16-ocean
     " colorscheme twilight
-    " colorscheme oceanicnext
+    colorscheme OceanicNext
 endif
 
 
@@ -341,10 +461,12 @@ inoremap jk <esc>
 " Yank to end of line
 nnoremap Y y$
 " Move from position to $ one line down
-nnoremap K i<CR><Esc>d^==kg_lD
+" nnoremap K i<CR><Esc>d^==kg_lD
+" TODO above crashed with metals mapping
 
 " move vertically by visual line
 " https://stackoverflow.com/questions/20975928/moving-the-cursor-through-long-soft-wrapped-lines-in-vim/21000307#21000307
+" TODO make silent
 noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
 noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 
@@ -378,8 +500,9 @@ vnoremap <c-j> :m'>+<cr>gv=gv
 vnoremap <c-k> :m-2<cr>gv=gv
 
 " window navigation alt+{h,j,k,l}
-" '<M-...>' Alt-key or meta-key
 " TODO does these work?
+" '<M-...>' Alt-key or meta-key
+" This? https://vi.stackexchange.com/questions/2350/how-to-map-alt-key
 nnoremap <A-h> <C-w>h
 nnoremap <A-j> <C-w>j
 nnoremap <A-k> <C-w>k
@@ -442,9 +565,12 @@ set shiftwidth=4    " Make sure >> indents 1 tab
 " UI/Window {{{
 if has('nvim')
     set inccommand=split    " visual substitution
+else " Settings that are not default in vim
+    set wildmenu            " visual autocomplete for command menu
 endif
 
-set wildmenu            " visual autocomplete for command menu
+set signcolumn=yes      " Always show left vertical information line
+
 
 set winblend=30         " Transparancy for wildmenu
 
@@ -480,7 +606,7 @@ set formatoptions=cqjr
 set list listchars=tab:»·,trail:·,precedes:←,extends:→
 
 " Vertical and horizontal split lines for unicode
-set fillchars=vert:│ " ,fold:-
+set fillchars=vert:│,fold:-
 
 " Highlight colors are thin lines
 highlight VertSplit cterm=none ctermbg=none ctermfg=247
@@ -514,12 +640,14 @@ set noshowmode            " Do not show default mode in statusline
 " set statusline+=%l/%L     " Current line / total lines
 " set statusline+=\ %y      " Filetype
 
+  "\     [ 'lspErrors', 'lspWarnings' ]
 let g:lightline = {
-  \ 'colorscheme': 'gruvbox',
+  \ 'colorscheme': 'nord',
   \ 'mode_map': { 'c': 'NORMAL' },
   \ 'active': {
   \   'left': [
-  \     [ 'mode', 'paste', 'gutentagsRunning' ],
+  \     [ 'mode', 'paste', 'lspMetalsStatus', 'gutentagsRunning' ],
+  \     [ 'lspError', 'lspWarnings' ],
   \     [ 'fugitive', 'filename' ],
   \   ]
   \ },
@@ -532,6 +660,9 @@ let g:lightline = {
   \   'filetype': 'LightLineFiletype',
   \   'fileencoding': 'LightLineFileencoding',
   \   'mode': 'LightLineMode',
+  \   'lspError': 'LspErrors',
+  \   'lspWarnings': 'LspWarnings',
+  \   'lspMetalsStatus': 'LightLineMetalsStatus',
   \   'gutentagsRunning': 'LightLineGutentagsRunning',
   \ },
   \ 'separator': { 'left': '', 'right': '' },
@@ -578,7 +709,24 @@ function! LightLineMode()
 endfunction
 
 function! LightLineGutentagsRunning()
-  return gutentags#statusline('[', ']')
+  return ''
+  -- gutentags#statusline('[', ']')
+endfunction
+
+"-----------------------------------------------------------------------------
+" LSP statusline
+"-----------------------------------------------------------------------------
+function! LspErrors() abort
+  return metals#errors()
+endfunction
+
+" metals warnings and errors
+function! LspWarnings() abort
+  return metals#warnings()
+endfunction
+
+function! LightLineMetalsStatus()
+  return metals#status()
 endfunction
 " }}}
 
@@ -702,6 +850,7 @@ if has('nvim')
     "     autocmd!
     "     " Start in insert mode
     "     autocmd BufWinEnter,WinEnter term://* startinsert
+    " autocmd TermEnter * startinsert " TODO new?
     "
     " TODO THIS ALSO INFERS WITH FZF.VIM
         " autocmd TermClose * bd!|q " quit when a terminal closes instead of showing exit code and waiting
