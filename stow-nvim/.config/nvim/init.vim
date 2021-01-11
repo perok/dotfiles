@@ -26,36 +26,29 @@ endif
 " Leader is space
 nmap <space> <leader>
 
-" auto-install vim-plug
-if empty(glob('~/.config/nvim/autoload/plug.vim'))
-    silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    autocmd VimEnter * PlugInstall
-endif
-" }}}
-
 " Plugins {{{
-call plug#begin()
+call plugpac#begin()
 
-Plug 'liuchengxu/vim-which-key'
+Pack 'liuchengxu/vim-which-key'
 nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
 
-Plug 'editorconfig/editorconfig-vim'
+Pack 'editorconfig/editorconfig-vim'
 
-Plug 'mhinz/vim-startify' " {{{
+Pack 'mhinz/vim-startify' " {{{
 let g:startify_custom_header = []
 let g:startify_change_to_dir = 0
 " let g:startify_change_to_vcs_root = 1
 " }}}
-Plug 'itchyny/lightline.vim'
-Plug 'tpope/vim-eunuch'
+Pack 'itchyny/lightline.vim'
+Pack 'tpope/vim-eunuch'
 " Trick from
 " https://github.com/justinmk/vim-dirvish/issues/70#issuecomment-626258095
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-unimpaired'  " Bindings on [ and ]
-Plug 'tpope/vim-repeat'  " '.' supports non-native commands
-Plug 'justinmk/vim-dirvish'
+Pack 'tpope/vim-commentary'
+Pack 'tpope/vim-fugitive'
+Pack 'tpope/vim-surround'
+Pack 'tpope/vim-unimpaired'  " Bindings on [ and ]
+Pack 'tpope/vim-repeat'  " '.' supports non-native commands
+Pack 'justinmk/vim-dirvish'
 " Use p in dirvish to show subdirectories
 " Trick from https://github.com/justinmk/vim-dirvish/issues/70#issuecomment-626258095
 augroup dirvish_config
@@ -63,34 +56,33 @@ augroup dirvish_config
     autocmd FileType dirvish
                 \ nnoremap <silent><buffer> p ddO<Esc>:let @"=substitute(@", '\n', '', 'g')<CR>:r ! find "<C-R>"" -maxdepth 1 -print0 \| xargs -0 ls -Fd<CR>:silent! keeppatterns %s/\/\//\//g<CR>:silent! keeppatterns %s/[^a-zA-Z0-9\/]$//g<CR>:silent! keeppatterns g/^$/d<CR>:noh<CR>
 augroup END
-Plug 'justinmk/vim-sneak' " {{{
+Pack 'justinmk/vim-sneak' " {{{
 " Move around with s{char}{char}
 
 let g:sneak#label = 1 " label mode to imitate vim-easymotion
 
 " Use sneak over standard mappings
-map f <Plug>Sneak_f
-map F <Plug>Sneak_F
-map t <Plug>Sneak_t
-map T <Plug>Sneak_T
+map f <Pack>Sneak_f
+map F <Pack>Sneak_F
+map t <Pack>Sneak_t
+map T <Pack>Sneak_T
 " }}}
-Plug 'wellle/targets.vim'  " More useful text object
+Pack 'wellle/targets.vim'  " More useful text object
 
-
-Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' } " {{{
+Pack 'mbbill/undotree', { 'on': 'UndotreeToggle' } " {{{
 nnoremap <F6> :UndotreeToggle<cr>
 if has("persistent_undo")
     set undofile
     set undodir=~/.undodir/
 endif
 " }}}
-Plug 'whiteinge/diffconflicts' " {{{
+Pack 'whiteinge/diffconflicts' " {{{
 " Call :DiffConflicts to convert a file containing conflict markers into a two-way diff.
 " TODO git use this as default?
 " }}}
 
 " Syntax checking
-Plug 'dense-analysis/ale' " {{{
+Pack 'dense-analysis/ale' " {{{
 " Only run linters named in ale_linters settings.
 let g:ale_linters_explicit = 1
 " Available linters https://github.com/dense-analysis/ale/tree/master/ale_linters
@@ -101,13 +93,13 @@ let g:ale_linters = {
 
 " For markdown
 " https://github.com/iamcco/markdown-preview.nvim ?
-Plug 'vim-pandoc/vim-pandoc'
-Plug 'vim-pandoc/vim-pandoc-syntax'
+Pack 'vim-pandoc/vim-pandoc'
+Pack 'vim-pandoc/vim-pandoc-syntax'
 " Do not add extra keyboard mappings
 let g:pandoc#keyboard#use_default_mappings = 0
 
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim' " {{{
+Pack 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Pack 'junegunn/fzf.vim' " {{{
 let g:fzf_command_prefix = 'Fzf'
 function! s:find_git_root()
     return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
@@ -168,15 +160,15 @@ autocmd! FileType fzf set laststatus=0 noshowmode noruler
 " }}}
 
 " Omnicompletion
-"Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " {{{
+"Pack 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePackins' } " {{{
 "set completeopt=longest,menu,menuone
-"Plug 'Shougo/deoplete-lsp'
-"Plug 'deoplete-plugins/deoplete-tag'
-"Plug 'deoplete-plugins/deoplete-docker'
-"Plug 'deoplete-plugins/deoplete-zsh'
-"Plug 'wellle/tmux-complete.vim'
+"Pack 'Shougo/deoplete-lsp'
+"Pack 'deoplete-plugins/deoplete-tag'
+"Pack 'deoplete-plugins/deoplete-docker'
+"Pack 'deoplete-plugins/deoplete-zsh'
+"Pack 'wellle/tmux-complete.vim'
 "" Use look to get more autocompletion on words with the look command
-"Plug 'ujihisa/neco-look', { 'for': 'tex' }
+"Pack 'ujihisa/neco-look', { 'for': 'tex' }
 "let g:deoplete#enable_at_startup = 1
 
 
@@ -186,7 +178,7 @@ autocmd! FileType fzf set laststatus=0 noshowmode noruler
 "augroup END
 " }}}
 
-Plug 'SirVer/ultisnips' " {{{
+Pack 'SirVer/ultisnips' " {{{
 " TODO tab is owned by Deoplete?
 " TODO adds tab bindings - is this change good enough?
 let g:UltiSnipsExpandTrigger = "<nop>"
@@ -196,46 +188,46 @@ let g:UltiSnipsExpandTrigger = "<nop>"
 "let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 " }}}
 " Snippets are separated from the engine. Add this if you want them:
-Plug 'honza/vim-snippets'
+Pack 'honza/vim-snippets'
 
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+Pack 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
 
-Plug 'airblade/vim-gitgutter' " {{{
+Pack 'airblade/vim-gitgutter' " {{{
 " Always display gitgutter column
 let g:gitgutter_map_keys = 0 " Activate stuff when I need it..
 " }}}
 
-Plug 'nathanaelkane/vim-indent-guides' " {{{
+Pack 'nathanaelkane/vim-indent-guides' " {{{
 let g:indent_guides_enable_on_vim_startup = 1
 let g:indent_guides_start_level = 2
 let g:indent_guides_guide_size = 1
 " }}}
 
 " Colorschemes
-Plug 'morhetz/gruvbox'
-Plug 'chriskempson/base16-vim'
-Plug 'dawikur/base16-vim-airline-themes'
-Plug 'mhartington/oceanic-next'
-" Plug 'Soares/base16.nvim'
-" Plug 'jacoborus/tender'
-" Plug 'cocopon/iceberg.vim'
+Pack 'morhetz/gruvbox'
+Pack 'chriskempson/base16-vim'
+Pack 'dawikur/base16-vim-airline-themes'
+Pack 'mhartington/oceanic-next'
+" Pack 'Soares/base16.nvim'
+" Pack 'jacoborus/tender'
+" Pack 'cocopon/iceberg.vim'
 
 " Multiple file types
-Plug 'junegunn/rainbow_parentheses.vim' " {{{
+Pack 'junegunn/rainbow_parentheses.vim' " {{{
 augroup plugin_rainbow_lisp
     autocmd!
     autocmd FileType lisp,clojure,scheme,scala RainbowParentheses
 augroup END
 " }}}
 
-" Plug 'matze/vim-tex-fold', { 'for': 'tex' }
+" Pack 'matze/vim-tex-fold', { 'for': 'tex' }
 " TODO tabular vs vim-table-mode?
-" Plug 'godlygeek/tabular', { 'for': 'tex' }
-" Plug 'dhruvasagar/vim-table-mode'
+" Pack 'godlygeek/tabular', { 'for': 'tex' }
+" Pack 'dhruvasagar/vim-table-mode'
 
 " Tags {{{
 " Generate tags on best effort
-" Plug 'ludovicchabant/vim-gutentags'
+" Pack 'ludovicchabant/vim-gutentags'
 " " Use RipGrep to ensure that only non-ignored files generate tags
 " let g:gutentags_file_list_command = 'rg --files'
 "
@@ -250,14 +242,14 @@ augroup END
 " " Move up the directory hierarchy until it has found the file
 " set tags=tags;/
 "
-" Plug 'majutsushi/tagbar'
+" Pack 'majutsushi/tagbar'
 " nmap <F8> :TagbarToggle<CR>
 " }}}
 
 " LSP: Language Server Protocol {{{
-Plug 'neovim/nvim-lspconfig'
+Pack 'neovim/nvim-lspconfig'
 
-Plug 'nvim-lua/completion-nvim'
+Pack 'nvim-lua/completion-nvim'
 " TODO add ultisips and chained completions
 " TODO why does smiley show with warning unicode?
 " TODO errer on startup lua
@@ -273,13 +265,13 @@ set completeopt=menuone,noinsert,noselect
 " Avoid showing message extra message when using completion
 set shortmess+=c
 " map <c-p> to manually trigger completion
-imap <silent> <c-p> <Plug>(completion_trigger)
+imap <silent> <c-p> <Pack>(completion_trigger)
 " Enable snippets for completion
 let g:completion_enable_snippet = 'UltiSnips'
 
-Plug 'steelsojka/completion-buffers'
-Plug 'nvim-treesitter/completion-treesitter'
-"Plug 'kristijanhusak/completion-tags'
+Pack 'steelsojka/completion-buffers'
+Pack 'nvim-treesitter/completion-treesitter'
+"Pack 'kristijanhusak/completion-tags'
 "            \      {'complete_items': ['tags']},
 
 let g:completion_chain_complete_list = {
@@ -295,12 +287,12 @@ let g:completion_chain_complete_list = {
 			\}
 let g:completion_auto_change_source = 1
 
-Plug 'scalameta/nvim-metals'  " LSP server for Scala
+Pack 'scalameta/nvim-metals'  " LSP server for Scala
 " Decoration color. Available options shown by :highlights
 let g:metals_decoration_color = 'Conceal'
 " }}}
 
-call plug#end()
+call plugpac#end()
 
 
 " Extra plugin configuration {{{

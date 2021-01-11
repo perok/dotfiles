@@ -4,3 +4,6 @@
 [submodule "stow-rofi/modules/rofi-bluetooth"]
 	path = stow-rofi/modules/rofi-bluetooth
 	url = git@github.com:ClydeDroid/rofi-bluetooth.git
+[submodule "stow-nvim/.config/nvim/pack/minpac/opt/minpac"]
+	path = stow-nvim/.config/nvim/pack/minpac/opt/minpac
+	url = https://github.com/k-takata/minpac.git
