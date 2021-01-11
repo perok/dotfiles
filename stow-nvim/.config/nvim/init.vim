@@ -25,9 +25,11 @@ endif
 
 " Leader is space
 nmap <space> <leader>
+" }}}
 
 " Plugins {{{
 call plugpac#begin()
+Pack 'k-takata/minpac', {'type': 'opt'}
 
 Pack 'liuchengxu/vim-which-key'
 nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
