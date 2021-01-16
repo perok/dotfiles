@@ -50,24 +50,32 @@ Pack 'tpope/vim-fugitive'
 Pack 'tpope/vim-surround'
 Pack 'tpope/vim-unimpaired'  " Bindings on [ and ]
 Pack 'tpope/vim-repeat'  " '.' supports non-native commands
-Pack 'justinmk/vim-dirvish'
-" Use p in dirvish to show subdirectories
+Pack 'justinmk/vim-dirvish' " {{{
+
+" Replace netrw
+let g:loaded_netrwPlugin = 1
+command! -nargs=? -complete=dir Explore Dirvish <args>
+command! -nargs=? -complete=dir Sexplore belowright split | silent Dirvish <args>
+
+" Use t in dirvish to show subdirectories
 " Trick from https://github.com/justinmk/vim-dirvish/issues/70#issuecomment-626258095
 augroup dirvish_config
     autocmd!
     autocmd FileType dirvish
-                \ nnoremap <silent><buffer> p ddO<Esc>:let @"=substitute(@", '\n', '', 'g')<CR>:r ! find "<C-R>"" -maxdepth 1 -print0 \| xargs -0 ls -Fd<CR>:silent! keeppatterns %s/\/\//\//g<CR>:silent! keeppatterns %s/[^a-zA-Z0-9\/]$//g<CR>:silent! keeppatterns g/^$/d<CR>:noh<CR>
+            \ nnoremap <silent><buffer> t ddO<Esc>:let @"=substitute(@", '\n', '', 'g')<CR>:r ! find "<C-R>"" -maxdepth 1 -print0 \| xargs -0 ls -Fd<CR>:silent! keeppatterns %s/\/\//\//g<CR>:silent! keeppatterns %s/[^a-zA-Z0-9\/]$//g<CR>:silent! keeppatterns g/^$/d<CR>:noh<CR>
+
 augroup END
+" }}}
 Pack 'justinmk/vim-sneak' " {{{
 " Move around with s{char}{char}
 
 let g:sneak#label = 1 " label mode to imitate vim-easymotion
 
 " Use sneak over standard mappings
-map f <Pack>Sneak_f
-map F <Pack>Sneak_F
-map t <Pack>Sneak_t
-map T <Pack>Sneak_T
+map f <Plug>Sneak_f
+map F <Plug>Sneak_F
+map t <Plug>Sneak_t
+map T <Plug>Sneak_T
 " }}}
 Pack 'wellle/targets.vim'  " More useful text object
 
