@@ -285,7 +285,7 @@ set completeopt=menuone,noinsert,noselect
 " Avoid showing message extra message when using completion
 set shortmess+=c
 " map <c-p> to manually trigger completion
-imap <silent> <c-p> <Pack>(completion_trigger)
+imap <silent> <c-p> <Plug>(completion_trigger)
 " Enable snippets for completion
 let g:completion_enable_snippet = 'UltiSnips'
 
