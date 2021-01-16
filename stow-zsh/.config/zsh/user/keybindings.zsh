@@ -38,5 +38,5 @@ bindkey '^h' backward-delete-char
 # ctrl-w removed word backwards
 bindkey '^w' backward-kill-word
 # ctrl-r starts searching history backward
-bindkey '^r' history-incremental-search-backward
+#bindkey '^r' history-incremental-search-backward
 # }}

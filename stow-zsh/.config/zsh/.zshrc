@@ -149,29 +149,15 @@ if [[ -v ENHANCD_DIR ]]; then # ENHANCD_DIR installed
   export ENHANCD_FILTER=fzf-tmux
 fi
 
-path=(
-  $path
-  "$HOME/.local/bin"
-  "$HOME/.cargo/bin"
-  `yarn global bin`
-  "$HOME/.local/share/coursier/bin"
-)
-
-# Custom settings
-source "$ZDOTDIR/user/defaults.zsh"
-source "$ZDOTDIR/user/keybindings.zsh"
-source "$ZDOTDIR/user/funcs.zsh"
-source "$ZDOTDIR/user/tweaks.zsh"
-source "$ZDOTDIR/user/alias.zsh"
-
 # SDKMan for Java
 export SDKMAN_DIR="$HOME/.sdkman"
 source_file $SDKMAN_DIR/bin/sdkman-init.sh
 
 export NVM_SYMLINK_CURRENT=true
 export NVM_DIR="$HOME/.nvm"
-source_file $NVM_DIR/nvm.sh
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+export NVM_DIR="$HOME/.nvm"
 # Note: Due to the use of nodejs instead of node name in some distros, yarn might complain about node not being installed.
 # A workaround for this is to add an alias in your .bashrc file
 alias node=nodejs
@@ -194,3 +180,24 @@ source ~/.config/broot/launcher/bash/br
 
 # Utility tools
 source ~/.fzf.zsh # Load after personal settings
+
+# GHCUp
+[ -f "/home/perok/.ghcup/env" ] && source "/home/perok/.ghcup/env" # ghcup-env
+
+path=(
+  $path
+  "$HOME/.local/bin"
+  "$HOME/.cargo/bin"
+  `yarn global bin`
+  "$HOME/.local/share/coursier/bin"
+)
+
+# Custom settings
+source "$ZDOTDIR/user/defaults.zsh"
+source "$ZDOTDIR/user/keybindings.zsh"
+source "$ZDOTDIR/user/funcs.zsh"
+source "$ZDOTDIR/user/tweaks.zsh"
+source "$ZDOTDIR/user/alias.zsh"
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
