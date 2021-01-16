@@ -210,7 +210,7 @@ let g:UltiSnipsExpandTrigger = "<nop>"
 " Snippets are separated from the engine. Add this if you want them:
 Pack 'honza/vim-snippets'
 
-Pack 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+Pack 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate'}  " We recommend updating the parsers on update
 
 Pack 'airblade/vim-gitgutter' " {{{
 " Always display gitgutter column
@@ -329,35 +329,19 @@ call plugpac#end()
 lua << EOF
 require'nvim-treesitter.configs'.setup {
   ensure_installed = {'scala', 'html', 'javascript', 'yaml', 'css', 'lua', 'json', 'elm', 'bash'},
-  highlight = {enable = true}
+  highlight = {
+    enable = true
+  }
 }
 EOF
 
 call sign_define("LspDiagnosticsSignError", {"text" : "✘", "texthl" : "LspDiagnosticsDefaultError"})
 call sign_define("LspDiagnosticsSignWarning", {"text" : "", "texthl" : "LspDiagnosticsDefaultWarning"})
 
-lua << EOF
-  --local nvim_lsp = require'lspconfig'
-
-  metals_config = require'metals'.bare_config
-  metals_config.settings = {
-    showImplicitArguments = true
-  }
-
-  metals_config.on_attach = function()
-    require'completion'.on_attach();
-  end
-
-  metals_config.init_options.statusBarProvider = 'on'
-
-  metals_config.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-    vim.lsp.diagnostic.on_publish_diagnostics, {
-      virtual_text = {
-        prefix = '',
-      }
-    }
-  )
-EOF
+" Needed for symbol highlights to work correctly (source: nvim_metals)
+hi! link LspReferenceText CursorColumn
+hi! link LspReferenceRead CursorColumn
+hi! link LspReferenceWrite CursorColumn
 
 "" vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 ""  vim.lsp.diagnostic.on_publish_diagnostics, {
@@ -372,30 +356,64 @@ EOF
 ""  }
 "" )
 
+lua << EOF
+  local shared_diagnostic_settings = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics,
+                                                  {virtual_text = {prefix = ''}})
+  local lsp_config = require'lspconfig'
+
+  lsp_config.util.default_config = vim.tbl_extend('force', lsp_config.util.default_config, {
+    handlers = {['textDocument/publishDiagnostics'] = shared_diagnostic_settings},
+    on_attach = require'completion'.on_attach
+  })
+
+  local completion_nvim = require'completion'
+
+  lsp_config.vimls.setup{}
+  lsp_config.elmls.setup{}
+  lsp_config.dockerls.setup{}
+  lsp_config.cssls.setup{}
+  lsp_config.yamlls.setup{}
+
+  metals_config = require'metals'.bare_config
+  metals_config.settings = {
+    showImplicitArguments = true
+  }
+
+  metals_config.on_attach = function()
+    require'completion'.on_attach();
+  end
+
+  metals_config.init_options.statusBarProvider = 'on'
+
+  metals_config.handlers['textDocument/publishDiagnostics'] = shared_diagnostic_settings
+EOF
+
 augroup lsp
   au!
   au FileType scala,sbt lua require('metals').initialize_or_attach(metals_config)
 augroup end
 
-autocmd Filetype scala,elm setlocal omnifunc=v:lua.vim.lsp.omnifunc
+autocmd Filetype scala,elm,vim setlocal omnifunc=v:lua.vim.lsp.omnifunc
+autocmd BufWritePre *.scala,*.sbt,*.elm lua vim.lsp.buf.formatting_sync(nil, 1000)
 
-nnoremap <silent> gd          <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <nowait> <silent> <leader>g  <cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> K           <cmd>lua vim.lsp.buf.hover()<CR>
 nnoremap <silent> gi          <cmd>lua vim.lsp.buf.implementation()<CR>
 nnoremap <silent> gr          <cmd>lua vim.lsp.buf.references()<CR>
 " Here is an example of how to use telescope as an alternative to the default references
 " TODO add telescope? https://github.com/nvim-lua/telescope.nvim
 " nnoremap <silent> <leader>s   <cmd>lua require'telescope.builtin'.lsp_references{}<CR>
-"nnoremap <silent> gs          <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 nnoremap <silent> gds         <cmd>lua vim.lsp.buf.document_symbol()<CR>
 nnoremap <silent> gws         <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 nnoremap <silent> <leader>rn  <cmd>lua vim.lsp.buf.rename()<CR>
 nnoremap <silent> <leader>f   <cmd>lua vim.lsp.buf.formatting()<CR>
 nnoremap <silent> <leader>ca  <cmd>lua vim.lsp.buf.code_action()<CR>
-nnoremap <silent> <leader>ws  <cmd>lua require 'metals.decoration'.show_hover_message()<CR>
+nnoremap <silent> <leader>ws  <cmd>lua require"metals".worksheet_hover()<CR>
+nnoremap <silent> <leader>a   <cmd>lua require"metals".open_all_diagnostics()<CR>
+" Buffer diagnostic only
+nnoremap <silent> <leader>d   <cmd>lua vim.lsp.diagnostic.set_loclist()<CR>
 nnoremap <silent> [c          <cmd>lua vim.lsp.diagnostic.goto_prev { wrap = false }<CR>
 nnoremap <silent> ]c          <cmd>lua vim.lsp.diagnostic.goto_next { wrap = false }<CR>
-nnoremap <silent> go          <cmd>lua vim.lsp.diagnostic.set_loclist()<CR>
 " }}}
 
 " Colors {{{
