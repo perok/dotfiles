@@ -215,6 +215,8 @@ Pack 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate'}  " We recommend upd
 Pack 'airblade/vim-gitgutter' " {{{
 " Always display gitgutter column
 let g:gitgutter_map_keys = 0 " Activate stuff when I need it..
+" Might cause perf issues? https://github.com/neovim/neovim/issues/12587
+set updatetime=100 " Reduce time for CursorHold events
 " }}}
 
 Pack 'nathanaelkane/vim-indent-guides' " {{{
