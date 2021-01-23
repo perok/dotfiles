@@ -24,15 +24,26 @@ if !has('nvim') && has('vim_starting')
 endif
 
 " Leader is space
-nmap <space> <leader>
+let g:mapleader="\<space>"
+let g:maplocalleader=","
 " }}}
 
 " Plugins {{{
 call plugpac#begin()
 Pack 'k-takata/minpac', {'type': 'opt'}
 
-Pack 'liuchengxu/vim-which-key'
-nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
+Pack 'liuchengxu/vim-which-key' " {{{
+set timeoutlen=500 " Default timeout is 1000ms
+nnoremap <silent> <leader>      :<c-u>WhichKey '<Space>'<CR>
+nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
+call which_key#register('<Space>', 'g:which_key_map')
+let g:which_key_map =  {}
+
+" Hide status line when WhichKey is active
+autocmd! FileType which_key
+autocmd  FileType which_key set laststatus=0 noshowmode noruler
+  \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+" }}}
 
 Pack 'editorconfig/editorconfig-vim'
 
