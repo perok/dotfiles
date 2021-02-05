@@ -31,7 +31,7 @@ let g:maplocalleader=","
 " Plugins {{{
 lua require('plugins')
 
-" WhichKey {{{
+" vim-which-key {{{
 set timeoutlen=500 " Default timeout is 1000ms
 nnoremap <silent> <leader>      :<c-u>WhichKey '<Space>'<CR>
 nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
@@ -51,7 +51,7 @@ let g:startify_change_to_dir = 0
 " Trick from
 " https://github.com/justinmk/vim-dirvish/issues/70#issuecomment-626258095
 
-" {{{ Dirvish
+" Dirvish {{{
 " Replace netrw
 let g:loaded_netrwPlugin = 1
 command! -nargs=? -complete=dir Explore Dirvish <args>
@@ -66,7 +66,7 @@ augroup dirvish_config
 
 augroup END
 " }}}
-" sneak {{{
+" vim-sneak {{{
 " Move around with s{char}{char}
 
 let g:sneak#label = 1 " label mode to imitate vim-easymotion
@@ -201,8 +201,7 @@ nmap <F8> :Vista nvim_lsp<CR>
 " }}}
 
 " LSP: Language Server Protocol {{{
-
-"Pack 'nvim-lua/completion-nvim'
+" nvim-compe {{{
 set completeopt=menu,menuone,noselect
 
 let g:compe = {}
@@ -240,6 +239,7 @@ inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 " Decoration color. Available options shown by :highlights
 " let g:metals_decoration_color = 'Conceal'
+" }}}
 " }}}
 
 " Extra plugin configuration {{{
@@ -294,10 +294,10 @@ EOF
 augroup lsp
   au!
   au FileType scala,sbt lua require('metals').initialize_or_attach(metals_config)
+  autocmd Filetype scala,elm,vim setlocal omnifunc=v:lua.vim.lsp.omnifunc
+  autocmd BufWritePre *.scala,*.sbt,*.elm lua vim.lsp.buf.formatting_sync(nil, 1000)
 augroup end
 
-autocmd Filetype scala,elm,vim setlocal omnifunc=v:lua.vim.lsp.omnifunc
-autocmd BufWritePre *.scala,*.sbt,*.elm lua vim.lsp.buf.formatting_sync(nil, 1000)
 
 nnoremap <nowait> <silent> <leader>g  <cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> K           <cmd>lua vim.lsp.buf.hover()<CR>
@@ -399,7 +399,6 @@ nnoremap Y y$
 
 " move vertically by visual line
 " https://stackoverflow.com/questions/20975928/moving-the-cursor-through-long-soft-wrapped-lines-in-vim/21000307#21000307
-" TODO make silent
 noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
 noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 
@@ -580,7 +579,7 @@ let g:lightline = {
   \ 'mode_map': { 'c': 'NORMAL' },
   \ 'active': {
   \   'left': [
-  \     [ 'mode', 'paste', 'lspMetalsStatus', 'gutentagsRunning' ],
+  \     [ 'mode', 'paste', 'lspMetalsStatus'],
   \     [ 'lspError', 'lspWarnings' ],
   \     [ 'fugitive', 'filename' ],
   \   ]
@@ -597,7 +596,6 @@ let g:lightline = {
   \   'lspError': 'LspErrors',
   \   'lspWarnings': 'LspWarnings',
   \   'lspMetalsStatus': 'LightLineMetalsStatus',
-  \   'gutentagsRunning': 'LightLineGutentagsRunning',
   \ },
   \ 'separator': { 'left': '', 'right': '' },
   \ 'subseparator': { 'left': '', 'right': '' }
@@ -640,11 +638,6 @@ endfunction
 
 function! LightLineMode()
   return winwidth(0) > 60 ? lightline#mode() : ''
-endfunction
-
-function! LightLineGutentagsRunning()
-  return ''
-  -- gutentags#statusline('[', ']')
 endfunction
 
 "-----------------------------------------------------------------------------
