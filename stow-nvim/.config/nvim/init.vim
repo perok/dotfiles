@@ -605,10 +605,10 @@ noremap <Leader>tp :tabprevious<CR>
 " }}}
 
 " Spaces and tabs {{{
-set tabstop=4       " number of visual spaces per TAB
-set softtabstop=4   " number of spaces in tab when editing
+set tabstop=2       " number of visual spaces per TAB
+set softtabstop=2   " number of spaces in tab when editing
 set expandtab       " tabs are spaces
-set shiftwidth=4    " Make sure >> indents 1 tab
+set shiftwidth=2    " Make sure >> indents 1 tab
 " }}}
 
 " UI/Window {{{
@@ -621,7 +621,8 @@ endif
 set signcolumn=yes      " Always show left vertical information line
 
 
-set winblend=30         " Transparancy for wildmenu
+set winblend=10         " Transparancy for wildmenu
+set pumblend=10         " Transparancy for pum
 
 set number              " show line numbers
 set relativenumber      " show relative numbers
