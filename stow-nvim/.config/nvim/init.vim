@@ -337,34 +337,33 @@ hi! link LspReferenceWrite CursorColumn
 
 lua << EOF
   local shared_diagnostic_settings = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics,
-                                                  {virtual_text = {prefix = ''}})
+                                                  {virtual_text = {prefix = '', truncated = true}})
   local lsp_config = require'lspconfig'
+  local capabilities = vim.lsp.protocol.make_client_capabilities()
+  capabilities.textDocument.completion.completionItem.snippetSupport = true
+
 
   lsp_config.util.default_config = vim.tbl_extend('force', lsp_config.util.default_config, {
     handlers = {['textDocument/publishDiagnostics'] = shared_diagnostic_settings},
-    on_attach = require'completion'.on_attach
+    capabilities = capabilities
   })
 
-  local completion_nvim = require'completion'
-
-  lsp_config.vimls.setup{}
-  lsp_config.elmls.setup{}
-  lsp_config.dockerls.setup{}
-  lsp_config.cssls.setup{}
-  lsp_config.yamlls.setup{}
+  lsp_config.vimls.setup {}
+  lsp_config.elmls.setup {}
+  lsp_config.dockerls.setup {}
+  lsp_config.cssls.setup {}
+  lsp_config.yamlls.setup {}
+  lsp_config.html.setup {}
 
   metals_config = require'metals'.bare_config
   metals_config.settings = {
     showImplicitArguments = true
   }
 
-  metals_config.on_attach = function()
-    require'completion'.on_attach();
-  end
-
+  -- Enables `metals#status()`
   metals_config.init_options.statusBarProvider = 'on'
-
   metals_config.handlers['textDocument/publishDiagnostics'] = shared_diagnostic_settings
+  metals_config.capabilities = capabilities
 EOF
 
 augroup lsp
