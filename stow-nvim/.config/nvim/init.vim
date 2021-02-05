@@ -267,6 +267,15 @@ augroup END
 " Pack 'majutsushi/tagbar'
 " nmap <F8> :TagbarToggle<CR>
 " }}}
+Pack 'liuchengxu/vista.vim'
+let g:vista_default_executive = 'nvim_lsp'
+nmap <F8> :Vista nvim_lsp<CR>
+"TODO Vista finder nvim_lsp -> nvim-telescope
+
+Pack 'nvim-lua/popup.nvim'
+Pack 'nvim-lua/plenary.nvim'
+Pack 'nvim-telescope/telescope.nvim'
+Pack 'nvim-telescope/telescope-symbols.nvim'
 
 " LSP: Language Server Protocol {{{
 Pack 'neovim/nvim-lspconfig'
