@@ -193,21 +193,16 @@ let g:fzf_colors =
   \ 'header':  ['fg', 'Comment'] }
 " }}}
 
-" Omnicompletion
 Pack 'voldikss/vim-floaterm'
 command! Ranger FloatermNew ranger
 
-Pack 'SirVer/ultisnips' " {{{
-" TODO tab is owned by Deoplete?
-" TODO adds tab bindings - is this change good enough?
-let g:UltiSnipsExpandTrigger = "<nop>"
-"inoremap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-"let g:UltiSnipsExpandTrigger="<tab>"
-"let g:UltiSnipsJumpForwardTrigger="<tab>"
-"let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-" }}}
-" Snippets are separated from the engine. Add this if you want them:
-Pack 'honza/vim-snippets'
+" Omnicompletion
+Pack 'onsails/lspkind-nvim'
+" Fanyc vscode like icons for lsp
+lua << EOF
+require('lspkind').init()
+EOF
+Pack 'hrsh7th/vim-vsnip'
 
 Pack 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate'}  " We recommend updating the parsers on update
 
@@ -280,43 +275,42 @@ Pack 'nvim-telescope/telescope-symbols.nvim'
 " LSP: Language Server Protocol {{{
 Pack 'neovim/nvim-lspconfig'
 
-Pack 'nvim-lua/completion-nvim'
-" TODO add ultisips and chained completions
-" TODO why does smiley show with warning unicode?
-" TODO errer on startup lua
-" TODO completion menu does not show automagically
-" TODO tab does not work
+"Pack 'nvim-lua/completion-nvim'
+Pack 'hrsh7th/nvim-compe'
+set completeopt=menu,menuone,noselect
+
+let g:compe = {}
+let g:compe.enabled = v:true
+let g:compe.autocomplete = v:true
+let g:compe.debug = v:false
+let g:compe.min_length = 1
+let g:compe.preselect = 'enable'
+let g:compe.throttle_time = 80
+let g:compe.source_timeout = 200
+let g:compe.incomplete_delay = 400
+let g:compe.max_abbr_width = 100
+let g:compe.max_kind_width = 100
+let g:compe.max_menu_width = 100
+
+let g:compe.source = {}
+let g:compe.source.path = v:true
+let g:compe.source.buffer = v:true
+let g:compe.source.calc = v:true
+let g:compe.source.vsnip = v:true
+let g:compe.source.nvim_lsp = v:true
+let g:compe.source.nvim_lua = v:true
+let g:compe.source.spell = v:true
+let g:compe.source.tags = v:true
+let g:compe.source.snippets_nvim = v:true
+let g:compe.source.treesitter = v:true
+
+inoremap <silent><expr> <C-Space> compe#complete()
+inoremap <silent><expr> <CR>      compe#confirm('<CR>')
+inoremap <silent><expr> <C-e>     compe#close('<C-e>')
 
 " Use <Tab> and <S-Tab> to navigate through popup menu
 inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-
-" Set completeopt to have a better completion experience
-set completeopt=menuone,noinsert,noselect
-" Avoid showing message extra message when using completion
-set shortmess+=c
-" map <c-p> to manually trigger completion
-imap <silent> <c-p> <Plug>(completion_trigger)
-" Enable snippets for completion
-let g:completion_enable_snippet = 'UltiSnips'
-
-Pack 'steelsojka/completion-buffers'
-Pack 'nvim-treesitter/completion-treesitter'
-"Pack 'kristijanhusak/completion-tags'
-"            \      {'complete_items': ['tags']},
-
-let g:completion_chain_complete_list = {
-			\'default' : {
-			\	'default' : [
-            \      {'complete_items': ['lsp', 'snippet']},
-            \      {'complete_items': ['ts']},
-            \      {'complete_items': ['buffers']},
-            \      {'mode': '<c-p>'},
-            \      {'mode': '<c-n>'}
-			\	],
-			\},
-			\}
-let g:completion_auto_change_source = 1
 
 Pack 'scalameta/nvim-metals'  " LSP server for Scala
 " Decoration color. Available options shown by :highlights
