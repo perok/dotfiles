@@ -115,13 +115,15 @@ let g:ale_linters = {
 
 " For markdown
 " https://github.com/iamcco/markdown-preview.nvim ?
-Pack 'vim-pandoc/vim-pandoc'
-Pack 'vim-pandoc/vim-pandoc-syntax'
+Pack 'vim-pandoc/vim-pandoc', { 'for': ['markdown', 'pandoc'] }
+Pack 'vim-pandoc/vim-pandoc-syntax', { 'for': ['markdown', 'pandoc'] }
 " Do not add extra keyboard mappings
 let g:pandoc#keyboard#use_default_mappings = 0
 
 Pack 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Pack 'junegunn/fzf.vim' " {{{
+" Read: https://github.com/junegunn/fzf/blob/master/README-VIM.md
+
 let g:fzf_command_prefix = 'Fzf'
 function! s:find_git_root()
     return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
@@ -209,6 +211,8 @@ let g:fzf_colors =
 "    autocmd CompleteDone * silent! pclose!
 "augroup END
 " }}}
+Pack 'voldikss/vim-floaterm'
+command! Ranger FloatermNew ranger
 
 Pack 'SirVer/ultisnips' " {{{
 " TODO tab is owned by Deoplete?
@@ -233,6 +237,7 @@ set updatetime=100 " Reduce time for CursorHold events
 
 Pack 'nathanaelkane/vim-indent-guides' " {{{
 let g:indent_guides_enable_on_vim_startup = 1
+let g:indent_guides_exclude_filetypes = ['help', 'startify']
 let g:indent_guides_start_level = 2
 let g:indent_guides_guide_size = 1
 " }}}
