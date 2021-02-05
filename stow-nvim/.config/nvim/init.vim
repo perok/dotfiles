@@ -195,12 +195,6 @@ let g:indent_guides_start_level = 2
 let g:indent_guides_guide_size = 1
 " }}}
 
-" Multiple file types
-augroup plugin_rainbow_lisp
-    autocmd!
-    autocmd FileType lisp,clojure,scheme,scala RainbowParentheses
-augroup END
-
 let g:vista_default_executive = 'nvim_lsp'
 nmap <F8> :Vista nvim_lsp<CR>
 "TODO Vista finder nvim_lsp -> nvim-telescope

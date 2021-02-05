@@ -30,7 +30,12 @@ return require('packer').startup(function()
   use { 'tpope/vim-fugitive' }
 
   use { 'itchyny/lightline.vim' }
-  use { 'junegunn/rainbow_parentheses.vim' }
+  use {
+    'junegunn/rainbow_parentheses.vim',
+    ft = { 'lisp', 'clojure', 'scheme', 'scala'},
+    cmd = 'RainbowParentheses',
+    config = 'vim.cmd[[RainbowParentheses]]'
+}
   use { 'airblade/vim-gitgutter' }  -- TODO? https://github.com/lewis6991/gitsigns.nvim
   use { 'nathanaelkane/vim-indent-guides' }
 
