@@ -194,23 +194,6 @@ let g:fzf_colors =
 " }}}
 
 " Omnicompletion
-"Pack 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePackins' } " {{{
-"set completeopt=longest,menu,menuone
-"Pack 'Shougo/deoplete-lsp'
-"Pack 'deoplete-plugins/deoplete-tag'
-"Pack 'deoplete-plugins/deoplete-docker'
-"Pack 'deoplete-plugins/deoplete-zsh'
-"Pack 'wellle/tmux-complete.vim'
-"" Use look to get more autocompletion on words with the look command
-"Pack 'ujihisa/neco-look', { 'for': 'tex' }
-"let g:deoplete#enable_at_startup = 1
-
-
-"augroup plugin_deoplete
-"    " Close the preview window after completion is done.
-"    autocmd CompleteDone * silent! pclose!
-"augroup END
-" }}}
 Pack 'voldikss/vim-floaterm'
 command! Ranger FloatermNew ranger
 
@@ -335,16 +318,6 @@ call plugpac#end()
 
 
 " Extra plugin configuration {{{
-" TODO what was this for?
-"call deoplete#custom#var('omni', 'input_patterns', {
-"  \ 'pandoc': '@'
-"  \})
-"call deoplete#custom#option({
-"\ 'smart_case': v:true,
-"\ 'ignore_case': v:true,
-"\ })
-" }}}
-
 lua << EOF
 require'nvim-treesitter.configs'.setup {
   ensure_installed = {'scala', 'html', 'javascript', 'yaml', 'css', 'lua', 'json', 'elm', 'bash'},
@@ -361,19 +334,6 @@ call sign_define("LspDiagnosticsSignWarning", {"text" : "", "texthl" : "LspDi
 hi! link LspReferenceText CursorColumn
 hi! link LspReferenceRead CursorColumn
 hi! link LspReferenceWrite CursorColumn
-
-"" vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-""  vim.lsp.diagnostic.on_publish_diagnostics, {
-""    -- This is disabled by default. I'm still unsure if I like this on
-""    virtual_text = false,
-""
-""    -- This is similar to:
-""    -- let g:diagnostic_show_sign = 1
-""    -- To configure sign display,
-""    --  see: ":help vim.lsp.diagnostic.set_signs()"
-""    signs = true,
-""  }
-"" )
 
 lua << EOF
   local shared_diagnostic_settings = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics,
