@@ -29,10 +29,9 @@ let g:maplocalleader=","
 " }}}
 
 " Plugins {{{
-call plugpac#begin()
-Pack 'k-takata/minpac', {'type': 'opt'}
+lua require('plugins')
 
-Pack 'liuchengxu/vim-which-key' " {{{
+" WhichKey {{{
 set timeoutlen=500 " Default timeout is 1000ms
 nnoremap <silent> <leader>      :<c-u>WhichKey '<Space>'<CR>
 nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
@@ -45,25 +44,14 @@ autocmd  FileType which_key set laststatus=0 noshowmode noruler
   \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 " }}}
 
-Pack 'editorconfig/editorconfig-vim'
-
-Pack 'mhinz/vim-startify' " {{{
 let g:startify_custom_header = []
 let g:startify_change_to_dir = 0
 " let g:startify_change_to_vcs_root = 1
-" }}}
-Pack 'kevinhwang91/nvim-bqf'
-Pack 'itchyny/lightline.vim'
-Pack 'tpope/vim-eunuch'
+
 " Trick from
 " https://github.com/justinmk/vim-dirvish/issues/70#issuecomment-626258095
-Pack 'tpope/vim-commentary'
-Pack 'tpope/vim-fugitive'
-Pack 'tpope/vim-surround'
-Pack 'tpope/vim-unimpaired'  " Bindings on [ and ]
-Pack 'tpope/vim-repeat'  " '.' supports non-native commands
-Pack 'justinmk/vim-dirvish' " {{{
 
+" {{{ Dirvish
 " Replace netrw
 let g:loaded_netrwPlugin = 1
 command! -nargs=? -complete=dir Explore Dirvish <args>
@@ -78,7 +66,7 @@ augroup dirvish_config
 
 augroup END
 " }}}
-Pack 'justinmk/vim-sneak' " {{{
+" sneak {{{
 " Move around with s{char}{char}
 
 let g:sneak#label = 1 " label mode to imitate vim-easymotion
@@ -89,22 +77,17 @@ map F <Plug>Sneak_F
 map t <Plug>Sneak_t
 map T <Plug>Sneak_T
 " }}}
-Pack 'wellle/targets.vim'  " More useful text object
 
-Pack 'mbbill/undotree', { 'on': 'UndotreeToggle' } " {{{
+" Undotree {{{
 nnoremap <F6> :UndotreeToggle<cr>
 if has("persistent_undo")
     set undofile
     set undodir=~/.undodir/
 endif
 " }}}
-Pack 'whiteinge/diffconflicts' " {{{
-" Call :DiffConflicts to convert a file containing conflict markers into a two-way diff.
-" TODO git use this as default?
-" }}}
 
 " Syntax checking
-Pack 'dense-analysis/ale' " {{{
+" ALE {{{
 " Only run linters named in ale_linters settings.
 let g:ale_linters_explicit = 1
 " Available linters https://github.com/dense-analysis/ale/tree/master/ale_linters
@@ -115,15 +98,12 @@ let g:ale_linters = {
 
 " For markdown
 " https://github.com/iamcco/markdown-preview.nvim ?
-Pack 'vim-pandoc/vim-pandoc', { 'for': ['markdown', 'pandoc'] }
-Pack 'vim-pandoc/vim-pandoc-syntax', { 'for': ['markdown', 'pandoc'] }
 " Do not add extra keyboard mappings
 let g:pandoc#keyboard#use_default_mappings = 0
 
-Pack 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Pack 'junegunn/fzf.vim' " {{{
 " Read: https://github.com/junegunn/fzf/blob/master/README-VIM.md
 
+" FzF {{{
 let g:fzf_command_prefix = 'Fzf'
 function! s:find_git_root()
     return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
@@ -193,90 +173,42 @@ let g:fzf_colors =
   \ 'header':  ['fg', 'Comment'] }
 " }}}
 
-Pack 'voldikss/vim-floaterm'
 command! Ranger FloatermNew ranger
 
 " Omnicompletion
-Pack 'onsails/lspkind-nvim'
 " Fanyc vscode like icons for lsp
 lua << EOF
 require('lspkind').init()
 EOF
-Pack 'hrsh7th/vim-vsnip'
 
-Pack 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate'}  " We recommend updating the parsers on update
-
-Pack 'airblade/vim-gitgutter' " {{{
+" GitGutter {{{
 " Always display gitgutter column
 let g:gitgutter_map_keys = 0 " Activate stuff when I need it..
 " Might cause perf issues? https://github.com/neovim/neovim/issues/12587
 set updatetime=100 " Reduce time for CursorHold events
 " }}}
 
-Pack 'nathanaelkane/vim-indent-guides' " {{{
+" Indent guides {{{
 let g:indent_guides_enable_on_vim_startup = 1
 let g:indent_guides_exclude_filetypes = ['help', 'startify']
 let g:indent_guides_start_level = 2
 let g:indent_guides_guide_size = 1
 " }}}
 
-" Colorschemes
-Pack 'morhetz/gruvbox'
-Pack 'chriskempson/base16-vim'
-Pack 'dawikur/base16-vim-airline-themes'
-Pack 'mhartington/oceanic-next'
-" Pack 'Soares/base16.nvim'
-" Pack 'jacoborus/tender'
-" Pack 'cocopon/iceberg.vim'
-
 " Multiple file types
-Pack 'junegunn/rainbow_parentheses.vim' " {{{
 augroup plugin_rainbow_lisp
     autocmd!
     autocmd FileType lisp,clojure,scheme,scala RainbowParentheses
 augroup END
-" }}}
 
-" Pack 'matze/vim-tex-fold', { 'for': 'tex' }
-" TODO tabular vs vim-table-mode?
-" Pack 'godlygeek/tabular', { 'for': 'tex' }
-" Pack 'dhruvasagar/vim-table-mode'
-
-" Tags {{{
-" Generate tags on best effort
-" Pack 'ludovicchabant/vim-gutentags'
-" " Use RipGrep to ensure that only non-ignored files generate tags
-" let g:gutentags_file_list_command = 'rg --files'
-"
-" " Refresh Lightline statusline on Gutentags changes
-" augroup MyGutentagsStatusLineRefresher
-"     autocmd!
-"     autocmd User GutentagsUpdating call lightline#update()
-"     autocmd User GutentagsUpdated call lightline#update()
-" augroup END
-"
-"
-" " Move up the directory hierarchy until it has found the file
-" set tags=tags;/
-"
-" Pack 'majutsushi/tagbar'
-" nmap <F8> :TagbarToggle<CR>
-" }}}
-Pack 'liuchengxu/vista.vim'
 let g:vista_default_executive = 'nvim_lsp'
 nmap <F8> :Vista nvim_lsp<CR>
 "TODO Vista finder nvim_lsp -> nvim-telescope
-
-Pack 'nvim-lua/popup.nvim'
-Pack 'nvim-lua/plenary.nvim'
-Pack 'nvim-telescope/telescope.nvim'
-Pack 'nvim-telescope/telescope-symbols.nvim'
+" }}}
 
 " LSP: Language Server Protocol {{{
-Pack 'neovim/nvim-lspconfig'
 
 "Pack 'nvim-lua/completion-nvim'
-Pack 'hrsh7th/nvim-compe'
 set completeopt=menu,menuone,noselect
 
 let g:compe = {}
@@ -312,13 +244,9 @@ inoremap <silent><expr> <C-e>     compe#close('<C-e>')
 inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
-Pack 'scalameta/nvim-metals'  " LSP server for Scala
 " Decoration color. Available options shown by :highlights
-let g:metals_decoration_color = 'Conceal'
+" let g:metals_decoration_color = 'Conceal'
 " }}}
-
-call plugpac#end()
-
 
 " Extra plugin configuration {{{
 lua << EOF
