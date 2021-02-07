@@ -770,10 +770,12 @@ if has('nvim')
     nnoremap <silent> <leader>st :STerm<CR>
 
     augroup nvim_term
-    "     autocmd!
+    autocmd!
     "     " Start in insert mode
     "     autocmd BufWinEnter,WinEnter term://* startinsert
     " autocmd TermEnter * startinsert " TODO new?
+
+    autocmd TermOpen * setlocal nonumber norelativenumber
     "
     " TODO THIS ALSO INFERS WITH FZF.VIM
         " autocmd TermClose * bd!|q " quit when a terminal closes instead of showing exit code and waiting
@@ -782,7 +784,7 @@ if has('nvim')
     " http://neovim.io/doc/user/nvim_terminal_emulator.html
     " TODO disabled because of fzf problems
     " tnoremap <Esc> <C-\><C-n>
-    tnoremap jk <C-\><C-n>
+    "tnoremap jk <C-\><C-n>
 
     " alt+{hjkl} window control for terminal aswell
     tnoremap <A-h> <C-\><C-n><C-w>h
