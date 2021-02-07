@@ -520,7 +520,8 @@ set showmatch           " highlight matching [{()}]
 set sidescroll=1        " Horizontally scroll 1 at a time
 set breakindent         " Keep indent level when wrappping line
 set textwidth=80        " Width of text for wrapping
-let &colorcolumn=join(range(81,999),",") " Color column from 81 outwards
+"let &colorcolumn=join(range(81,999),",") " Color column from 81 outwards
+set colorcolumn=80
 " let colorcolumn=+1      " TODO not working?
 
 " t - autowrap to textwidth
