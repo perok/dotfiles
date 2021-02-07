@@ -14,6 +14,11 @@ Installation guide
 - TMUX 3.1 will support XDG spec. Move tmux config file to correct location
 - Fix Stow for `$sudo ln -s ~/dotfiles/bin/sane-rm /usr/local/bin/rm`
 
+## Fonts
+
+- Nerd Fonts (Hasklug)
+- Fira Code
+
 
 ## Firefox
 
