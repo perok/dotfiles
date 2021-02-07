@@ -437,8 +437,8 @@ nnoremap <A-k> <C-w>k
 nnoremap <A-l> <C-w>l
 
 " Window resizing
-nmap <left>  :3wincmd <<cr>
-nmap <right> :3wincmd ><cr>
+nmap <left>  :3wincmd ><cr>
+nmap <right> :3wincmd <<cr>
 nmap <up>    :3wincmd +<cr>
 nmap <down>  :3wincmd -<cr>
 
