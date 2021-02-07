@@ -65,7 +65,11 @@ return require('packer').startup(function()
     -- We recommend updating the parsers on update
     run = ':TSUpdate'
   }
-  use { 'onsails/lspkind-nvim' }
+  use {
+    -- Fanyc vscode like icons for lsp
+    'onsails/lspkind-nvim',
+    config = function() require('lspkind').init() end
+  }
   use { 'neovim/nvim-lspconfig' }
   use { 'scalameta/nvim-metals' } -- LSP server for Scala
   use {

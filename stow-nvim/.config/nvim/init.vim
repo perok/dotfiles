@@ -176,10 +176,6 @@ let g:fzf_colors =
 command! Ranger FloatermNew ranger
 
 " Omnicompletion
-" Fanyc vscode like icons for lsp
-lua << EOF
-require('lspkind').init()
-EOF
 
 " GitGutter {{{
 " Always display gitgutter column
