@@ -35,6 +35,7 @@ declare -a useronly=(
   latex
   alacritty
   pulseaudio
+  pipewire
   kde
   zathura
   firefox
