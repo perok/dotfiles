@@ -197,59 +197,10 @@ nmap <F8> :Vista nvim_lsp<CR>
 " }}}
 
 " LSP: Language Server Protocol {{{
-" nvim-compe {{{
-set completeopt=menuone,noselect
-" set completeopt=menu,noinsert,noselect
-
-lua << EOF
-require("compe").setup({
-  enabled = true,
-  autocomplete = true,
-  debug = false,
-  min_length = 1,
-  preselect = 'enable',
-  throttle_time = 80,
-  source_timeout = 200,
-  incomplete_delay = 400,
-  max_abbr_width = 100,
-  max_kind_width = 100,
-  max_menu_width = 100,
-
-  documentation = true,
-
-  source = {
-    path = true,
-    buffer = true,
-    calc = true,
-    emoji = true,
-    spell = true,
-    tags = true,
-    treesitter = true,
-    vsnip = {
-      filetypes = { "scala", "sbt", "java" },
-    },
-    nvim_lsp = {
-      priority = 1000,
-      filetypes = { "scala", "sbt", "java" },
-    },
-  },
-})
-EOF
-
-" This one bugs out completion updating. Not recommended in
-" general either
-"let g:compe.source.omni = { 'filetypes': ['tex'] }
-
-" remove `Pattern not found` error
-set shortmess+=c
-
-inoremap <silent><expr> <C-Space> compe#complete()
-inoremap <silent><expr> <CR>      compe#confirm('<CR>')
-inoremap <silent><expr> <C-e>     compe#close('<C-e>')
-
-" Decoration color. Available options shown by :highlights
-" let g:metals_decoration_color = 'Conceal'
-" }}}
+"let g:metals_server_version = '0.10.0+115-23c25680-SNAPSHOT'
+"
+" nvim-cmp {{{
+set completeopt-=longest
 " }}}
 
 " Extra plugin configuration {{{
