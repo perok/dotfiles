@@ -212,12 +212,66 @@ lua << EOF
     float = { border = "single" }
   })
 
+  local opts = { noremap = true, silent = true }
 
-  -- Force syncronous formatting when :wq (lukas-reineke/lsp-format.nvim is async)
-  vim.cmd [[cabbrev wq execute "lua vim.lsp.buf.formatting_sync()" <bar> wq]]
+  -- Diagnostic keymaps
+  vim.api.nvim_set_keymap('n', '<leader>d', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
+  vim.api.nvim_set_keymap('n', ']e', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+  vim.api.nvim_set_keymap('n', '[e', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+  vim.api.nvim_set_keymap('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+ -- " Buffer diagnostic only
+ -- nnoremap <silent> <leader>d   <cmd>lua vim.diagnostic.setloclist()<CR>
+ -- nnoremap <silent> ]e          <cmd>lua vim.lsp.diagnostic.goto_next()<CR>
+ -- nnoremap <silent> [e          <cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
 
-  local on_attach = function(client)
+
+  local flags = {
+    -- This will be the default in neovim 0.7+
+    debounce_text_changes = 150,
+  }
+
+  local on_attach = function(client, bufnr)
     require "lsp-format".on_attach(client)
+
+    -- Force syncronous formatting when :wq (lukas-reineke/lsp-format.nvim is async)
+    vim.cmd [[cabbrev wq execute "lua vim.lsp.buf.formatting_sync()" <bar> wq]]
+
+    --
+    -- Keybindings
+    --
+
+    --vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gds', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]], opts)
+    --vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>so', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]], opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gws', [[<cmd>lua vim.lsp.buf.workspace_symbol()<CR>]], opts)
+
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+ -- " TODO I want this?
+ -- " nnoremap <silent> <leader>sh  <cmd>lua vim.lsp.buf.signature_help()<CR>
+
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>aa', '<cmd>lua vim.diagnostic.setqflist()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ae', '<cmd>lua vim.diagnostic.setqflist({severity = "E"})<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>aw', '<cmd>lua vim.diagnostic.setqflist({severity = "W"})<CR>', opts)
+
+
+
+-- " Metals specific
+-- " map("n", "<leader>tt", [[<cmd>lua require("metals.tvp").toggle_tree_view()<CR>]])
+-- " map("n", "<leader>tr", [[<cmd>lua require("metals.tvp").reveal_in_tree()<CR>]])
+
+
   end
 
   --local shared_diagnostic_settings = vim.lsp.with(
@@ -226,25 +280,26 @@ lua << EOF
   --    virtual_text = false --{prefix = '', truncated = true}
   --  }
   --)
-  local lsp_config = require'lspconfig'
+  local lspconfig = require('lspconfig')
   local capabilities = vim.lsp.protocol.make_client_capabilities()
 
   capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
   capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-  -- Enforce default setup
-  lsp_config.util.default_config = vim.tbl_extend('force', lsp_config.util.default_config, {
-    capabilities = capabilities
-  })
+  local servers = { 'vimls', 'elmls', 'dockerls', 'cssls', 'tsserver', 'yamlls', 'html', 'bashls', 'solargraph', 'terraformls', 'purescriptls', 'hls', 'sqlls' }
 
+  for _, lsp in ipairs(servers) do
+    lspconfig[lsp].setup {
+      on_attach = on_attach,
+      capabilities = capabilities,
+      flags = flags,
+    }
+  end
 
-  lsp_config.vimls.setup {}
-  lsp_config.elmls.setup { on_attach = on_attach }
-  lsp_config.dockerls.setup {}
-  lsp_config.cssls.setup {}
-  lsp_config.tsserver.setup {}
-  lsp_config.yamlls.setup {}
-  lsp_config.jsonls.setup {
+  lspconfig.jsonls.setup {
+    on_attach = on_attach,
+    capabilities = capabilities,
+    flags = flags,
     commands = {
       Format = {
         function()
@@ -253,17 +308,12 @@ lua << EOF
       },
     },
   }
-  lsp_config.html.setup {}
-  lsp_config.bashls.setup {}
-  lsp_config.solargraph.setup {}
-  lsp_config.terraformls.setup { on_attach = on_attach }
-  lsp_config.purescriptls.setup {}
-  lsp_config.hls.setup {} -- Haskell
-  lsp_config.sqlls.setup {} -- Haskell
 
   -- Configure Scala LSP server
   metals_config = require'metals'.bare_config()
   metals_config.capabilities = capabilities
+  metals_config.flags = flags
+
   metals_config.settings = {
     showImplicitArguments = true
   }
@@ -308,6 +358,9 @@ lua << EOF
 
     on_attach(client)
 
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ws', '<cmd>lua require"metals".worksheet_hover()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'v', 'K', '<Esc><cmd>lua require("metals").type_of_range()<CR>', opts)
+
     -- TODO configure dap keybindings
     require("metals").setup_dap()
   end
@@ -315,7 +368,7 @@ lua << EOF
   vim.cmd([[augroup lsp]])
   vim.cmd([[autocmd!]])
   -- vim.cmd([[autocmd FileType scala setlocal omnifunc=v:lua.vim.lsp.omnifunc]])
-  vim.cmd([[autocmd FileType scala,java,elm,vim setlocal omnifunc=v:lua.vim.lsp.omnifunc]])
+  --vim.cmd([[autocmd FileType scala,java,elm,vim setlocal omnifunc=v:lua.vim.lsp.omnifunc]]) -- TODO disable? See https://github.com/neovim/nvim-lspconfig/wiki/Autocompletion#nvim-cmp
   vim.cmd([[autocmd FileType scala,sbt,java lua require("metals").initialize_or_attach(metals_config)]])
   --vim.cmd([[autocmd BufWritePre *.scala,*.sbt,*.elm lua vim.lsp.buf.formatting_sync(nil, 1000)]])
   vim.cmd([[augroup END]])
@@ -323,33 +376,6 @@ lua << EOF
 
 EOF
 " }}}
-
-nnoremap <silent> gD          <cmd>lua vim.lsp.buf.definition()<CR>
-" nnoremap <silent> gD          <cmd>lua vim.lsp.buf.declaration()<CR>
-nnoremap <silent> K           <cmd>lua vim.lsp.buf.hover()<CR>
-vnoremap <silent> K           <Esc><cmd>lua require("metals").type_of_range()<CR>
-nnoremap <silent> gi          <cmd>lua vim.lsp.buf.implementation()<CR>
-nnoremap <silent> gr          <cmd>lua vim.lsp.buf.references()<CR>
-" TODO I want this?
-" nnoremap <silent> <leader>sh  <cmd>lua vim.lsp.buf.signature_help()<CR>
-"                                      vim.lsp.buf.document_symbol()
-nnoremap <silent> gds         <cmd>lua require"telescope.builtin".lsp_document_symbols()<CR>
-nnoremap <silent> gws         <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
-nnoremap <silent> <leader>rn  <cmd>lua vim.lsp.buf.rename()<CR>
-nnoremap <silent> <leader>ca  <cmd>lua vim.lsp.buf.code_action()<CR>
-nnoremap <silent> <leader>ws  <cmd>lua require"metals".worksheet_hover()<CR>
-nnoremap <silent> <leader>aa   <cmd>lua vim.diagnostic.setqflist()<CR>
-nnoremap <silent> <leader>ae   <cmd>lua vim.diagnostic.setqflist({severity = "E"})<CR>
-nnoremap <silent> <leader>aw   <cmd>lua vim.diagnostic.setqflist({severity = "W"})<CR>
-" Buffer diagnostic only
-nnoremap <silent> <leader>d   <cmd>lua vim.diagnostic.setloclist()<CR>
-nnoremap <silent> ]e          <cmd>lua vim.lsp.diagnostic.goto_next()<CR>
-nnoremap <silent> [e          <cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
-nnoremap <silent> <leader>f   <cmd>lua vim.lsp.buf.formatting()<CR>
-
-" Metals specific
-" map("n", "<leader>tt", [[<cmd>lua require("metals.tvp").toggle_tree_view()<CR>]])
-" map("n", "<leader>tr", [[<cmd>lua require("metals.tvp").reveal_in_tree()<CR>]])
 " }}}
 
 " Colors {{{
