@@ -10,9 +10,7 @@ set mouse=n  " Mouse support in normal mode
 
 
 " TODO {{{
-    " Base16 theme .XResources, ranger, vim, zsh?
-    " swapit - ^a/^x on steroids (mostly used for true/false switch)
-    " https://github.com/critiqjo/vim-bufferline
+" https://github.com/critiqjo/vim-bufferline
 " }}}
 
 " Core {{{
@@ -29,19 +27,50 @@ let g:maplocalleader=","
 " }}}
 
 " Plugins {{{
+" nvim-tree {{{
+" TODO move to plugins when setting is available in lua
+let g:nvim_tree_group_empty = 1
+" }}}
+"
+
+augroup Packer
+  autocmd!
+  autocmd BufWritePost plugins.lua PackerCompile
+augroup end
 lua require('plugins')
 
 " vim-which-key {{{
 set timeoutlen=500 " Default timeout is 1000ms
-nnoremap <silent> <leader>      :<c-u>WhichKey '<Space>'<CR>
-nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
-call which_key#register('<Space>', 'g:which_key_map')
-let g:which_key_map =  {}
+" nnoremap <silent> <leader>      :<c-u>WhichKey '<Space>'<CR>
+" nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
+" call which_key#register('<Space>', 'g:which_key_map')
+" let g:which_key_map =  {}
 
 " Hide status line when WhichKey is active
 autocmd! FileType which_key
 autocmd  FileType which_key set laststatus=0 noshowmode noruler
   \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+" TODO this is just an example
+"let g:which_key_map['w'] = {
+"      \ 'name' : '+windows' ,
+"      \ 'w' : ['<C-W>w'     , 'other-window']          ,
+"      \ 'd' : ['<C-W>c'     , 'delete-window']         ,
+"      \ '-' : ['<C-W>s'     , 'split-window-below']    ,
+"      \ '|' : ['<C-W>v'     , 'split-window-right']    ,
+"      \ '2' : ['<C-W>v'     , 'layout-double-columns'] ,
+"      \ 'h' : ['<C-W>h'     , 'window-left']           ,
+"      \ 'j' : ['<C-W>j'     , 'window-below']          ,
+"      \ 'l' : ['<C-W>l'     , 'window-right']          ,
+"      \ 'k' : ['<C-W>k'     , 'window-up']             ,
+"      \ 'H' : ['<C-W>5<'    , 'expand-window-left']    ,
+"      \ 'J' : [':resize +5'  , 'expand-window-below']   ,
+"      \ 'L' : ['<C-W>5>'    , 'expand-window-right']   ,
+"      \ 'K' : [':resize -5'  , 'expand-window-up']      ,
+"      \ '=' : ['<C-W>='     , 'balance-window']        ,
+"      \ 's' : ['<C-W>s'     , 'split-window-below']    ,
+"      \ 'v' : ['<C-W>v'     , 'split-window-below']    ,
+"      \ '?' : ['Windows'    , 'fzf-window']            ,
+"      \ }
 " }}}
 
 let g:startify_custom_header = []
@@ -53,6 +82,7 @@ let g:startify_change_to_dir = 0
 
 " Dirvish {{{
 " Replace netrw
+let g:loaded_netrw = 1
 let g:loaded_netrwPlugin = 1
 command! -nargs=? -complete=dir Explore Dirvish <args>
 command! -nargs=? -complete=dir Sexplore belowright split | silent Dirvish <args>
@@ -69,15 +99,14 @@ augroup END
 " vim-sneak {{{
 " Move around with s{char}{char}
 
-let g:sneak#label = 1 " label mode to imitate vim-easymotion
+" let g:sneak#label = 1 " label mode to imitate vim-easymotion
 
 " Use sneak over standard mappings
-map f <Plug>Sneak_f
-map F <Plug>Sneak_F
-map t <Plug>Sneak_t
-map T <Plug>Sneak_T
+" map f <Plug>Sneak_f
+" map F <Plug>Sneak_F
+" map t <Plug>Sneak_t
+" map T <Plug>Sneak_T
 " }}}
-
 " Undotree {{{
 nnoremap <F6> :UndotreeToggle<cr>
 if has("persistent_undo")
@@ -86,119 +115,43 @@ if has("persistent_undo")
 endif
 " }}}
 
-" Syntax checking
-" ALE {{{
-" Only run linters named in ale_linters settings.
-let g:ale_linters_explicit = 1
-" Available linters https://github.com/dense-analysis/ale/tree/master/ale_linters
-let g:ale_linters = {
-\   'sh': ['shellcheck', 'shell'],
-\}
-" }}}
 
 " For markdown
 " https://github.com/iamcco/markdown-preview.nvim ?
 " Do not add extra keyboard mappings
 let g:pandoc#keyboard#use_default_mappings = 0
 
-" Read: https://github.com/junegunn/fzf/blob/master/README-VIM.md
+" Telescope setup {{{
 
-" FzF {{{
-let g:fzf_command_prefix = 'Fzf'
-function! s:find_git_root()
-    return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
-endfunction
+nnoremap <C-p> <cmd>Telescope find_files hidden=true<cr>
+nnoremap <C-a> <cmd>Telescope commands<cr>
 
-" If in git repo, go to root of repo and use fzf there
-command! ProjectFiles execute 'Files' s:find_git_root()
-
-nnoremap <C-p> :FzfFiles<CR>
-nnoremap <silent> <leader>b :FzfBuffers<CR>
-nnoremap <silent> <leader>m :FzfHistory<CR>
-nnoremap <silent> <leader>; :FzfBLines<CR>
-nnoremap <silent> <leader>. :FzfLines<CR>
-"nnoremap <silent> <leader>gl :Commits<CR>
-"nnoremap <silent> <leader>ga :BCommits<CR>
-"nmap <leader><tab> <plug>(fzf-maps-n)
-"xmap <leader><tab> <plug>(fzf-maps-x)
-"omap <leader><tab> <plug>(fzf-maps-o)
-
-" TODO FzfHistory sorted by oldfiles?
-command! FzfMru call fzf#run(fzf#wrap({
-\  'source':  v:oldfiles,
-\ }))
-
-" Delegate everything to Ripgrep (not fuzzy search over first result)
-function! RipgrepFzf(query, fullscreen)
-  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
-  let initial_command = printf(command_fmt, shellescape(a:query))
-  let reload_command = printf(command_fmt, '{q}')
-  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
-  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
-endfunction
-
-command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
-
-" Enable per-command history
-" - History files will be stored in the specified directory
-" - When set, CTRL-N and CTRL-P will be bound to 'next-history' and
-"   'previous-history' instead of 'down' and 'up'.
-let g:fzf_history_dir = '~/.local/share/fzf-history'
-
-" Better command history with q:
-command! CmdHist call fzf#vim#command_history({'right': '40'})
-nnoremap q: :CmdHist<CR>
-
-" Better search history
-command! QHist call fzf#vim#search_history({'right': '40'})
-nnoremap q/ :QHist<CR>
-
-" let g:fzf_files_options =
-"   \ '--preview "(highlight -O ansi {} || cat {}) 2> /dev/null | head -'.&lines.'"'
-
-" Customize fzf colors to match your color scheme
-let g:fzf_colors =
-\ { 'fg':      ['fg', 'Normal'],
-  \ 'bg':      ['bg', 'Normal'],
-  \ 'hl':      ['fg', 'Comment'],
-  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-  \ 'hl+':     ['fg', 'Statement'],
-  \ 'info':    ['fg', 'PreProc'],
-  \ 'border':  ['fg', 'Ignore'],
-  \ 'prompt':  ['fg', 'Conditional'],
-  \ 'pointer': ['fg', 'Exception'],
-  \ 'marker':  ['fg', 'Keyword'],
-  \ 'spinner': ['fg', 'Label'],
-  \ 'header':  ['fg', 'Comment'] }
+nnoremap <silent> <leader>b  <cmd>lua require('telescope.builtin').buffers()<CR>
+lua << EOF
+vim.api.nvim_set_keymap('n', '<leader><space>', [[<cmd>lua require('telescope.builtin').buffers()<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>sf', [[<cmd>lua require('telescope.builtin').find_files({previewer = false})<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>sb', [[<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>sh', [[<cmd>lua require('telescope.builtin').help_tags()<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>st', [[<cmd>lua require('telescope.builtin').tags()<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>sd', [[<cmd>lua require('telescope.builtin').grep_string()<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>sp', [[<cmd>lua require('telescope.builtin').live_grep()<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>so', [[<cmd>lua require('telescope.builtin').tags{ only_current_buffer = true }<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>?', [[<cmd>lua require('telescope.builtin').oldfiles()<CR>]], { noremap = true, silent = true })
+EOF
 " }}}
 
 command! Ranger FloatermNew ranger
 
 " Omnicompletion
 
-" GitGutter {{{
-" Always display gitgutter column
-let g:gitgutter_map_keys = 0 " Activate stuff when I need it..
-" Might cause perf issues? https://github.com/neovim/neovim/issues/12587
-set updatetime=100 " Reduce time for CursorHold events
-" }}}
-
-" Indent guides {{{
-let g:indent_guides_enable_on_vim_startup = 1
-let g:indent_guides_exclude_filetypes = ['help', 'startify']
-let g:indent_guides_start_level = 2
-let g:indent_guides_guide_size = 1
-" }}}
-
 let g:vista_default_executive = 'nvim_lsp'
 nmap <F8> :Vista nvim_lsp<CR>
 "TODO Vista finder nvim_lsp -> nvim-telescope
+
 " }}}
 
 " LSP: Language Server Protocol {{{
-"let g:metals_server_version = '0.10.0+115-23c25680-SNAPSHOT'
-"
+
 " nvim-cmp {{{
 set completeopt-=longest
 " }}}
@@ -206,78 +159,197 @@ set completeopt-=longest
 " Extra plugin configuration {{{
 lua << EOF
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = {'scala', 'html', 'javascript', 'yaml', 'css', 'lua', 'json', 'elm', 'bash'},
+  ensure_installed = {'scala', 'html', 'javascript', 'yaml', 'css', 'lua', 'http', 'json', 'elm', 'bash', 'python', 'ruby'},
   highlight = {
+    enable = true
+  },
+  -- To make use 'JoosepAlviste/nvim-ts-context-commentstring' work
+  context_commentstring = {
+    enable = true
+  },
+  rainbow = { -- For plugin 'p00f/nvim-ts-rainbow'
+    enable = true,
+    -- disable = { '' }, -- FT's
+    extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
+    max_file_lines = nil, -- Do not enable for files with more than n lines, int
+    -- colors = {}, -- table of hex strings
+    -- termcolors = {} -- table of colour name strings
+  },
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = 'gnn',
+      node_incremental = 'grn',
+      scope_incremental = 'grc',
+      node_decremental = 'grm',
+    },
+  },
+  indent = {
     enable = true
   }
 }
 EOF
 
-call sign_define("LspDiagnosticsSignError", {"text" : "✘", "texthl" : "LspDiagnosticsDefaultError"})
-call sign_define("LspDiagnosticsSignWarning", {"text" : "", "texthl" : "LspDiagnosticsDefaultWarning"})
+
+sign define DiagnosticSignError text=✘ texthl=DiagnosticSignError linehl=0 numhl=1
+sign define DiagnosticSignWarn text= texthl=DiagnosticsSignWarn linehl=0 numhl=1
 
 " Needed for symbol highlights to work correctly (source: nvim_metals)
 hi! link LspReferenceText CursorColumn
 hi! link LspReferenceRead CursorColumn
 hi! link LspReferenceWrite CursorColumn
 
+hi! link LspSagaFinderSelection CursorColumn
+
+let g:cursorhold_updatetime = 100 " https://github.com/antoinemadec/FixCursorHold.nvim - for diagnostic_open
 lua << EOF
-  local shared_diagnostic_settings = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics,
-                                                  {virtual_text = {prefix = '', truncated = true}})
+  -- Diagnostics configuration
+  vim.cmd([[au CursorHold,CursorHoldI * lua vim.diagnostic.open_float(0,{scope = "cursor"})]])
+  vim.diagnostic.config({
+    virtual_text = false,
+    sign = true,
+    -- update_in_insert = true,
+    float = { border = "single" }
+  })
+
+
+  -- Force syncronous formatting when :wq (lukas-reineke/lsp-format.nvim is async)
+  vim.cmd [[cabbrev wq execute "lua vim.lsp.buf.formatting_sync()" <bar> wq]]
+
+  local on_attach = function(client)
+    require "lsp-format".on_attach(client)
+  end
+
+  --local shared_diagnostic_settings = vim.lsp.with(
+  --  vim.lsp.diagnostic.on_publish_diagnostics,
+  --  {
+  --    virtual_text = false --{prefix = '', truncated = true}
+  --  }
+  --)
   local lsp_config = require'lspconfig'
   local capabilities = vim.lsp.protocol.make_client_capabilities()
+
+  capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
   capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-
+  -- Enforce default setup
   lsp_config.util.default_config = vim.tbl_extend('force', lsp_config.util.default_config, {
-    handlers = {['textDocument/publishDiagnostics'] = shared_diagnostic_settings},
     capabilities = capabilities
   })
 
+
   lsp_config.vimls.setup {}
-  lsp_config.elmls.setup {}
+  lsp_config.elmls.setup { on_attach = on_attach }
   lsp_config.dockerls.setup {}
   lsp_config.cssls.setup {}
+  lsp_config.tsserver.setup {}
   lsp_config.yamlls.setup {}
+  lsp_config.jsonls.setup {
+    commands = {
+      Format = {
+        function()
+          vim.lsp.buf.range_formatting({}, { 0, 0 }, { vim.fn.line("$"), 0 })
+        end,
+      },
+    },
+  }
   lsp_config.html.setup {}
+  lsp_config.bashls.setup {}
+  lsp_config.solargraph.setup {}
+  lsp_config.terraformls.setup { on_attach = on_attach }
+  lsp_config.purescriptls.setup {}
+  lsp_config.hls.setup {} -- Haskell
+  lsp_config.sqlls.setup {} -- Haskell
 
-  metals_config = require'metals'.bare_config
+  -- Configure Scala LSP server
+  metals_config = require'metals'.bare_config()
+  metals_config.capabilities = capabilities
   metals_config.settings = {
     showImplicitArguments = true
   }
 
   -- Enables `metals#status()`
   metals_config.init_options.statusBarProvider = 'on'
-  metals_config.handlers['textDocument/publishDiagnostics'] = shared_diagnostic_settings
-  metals_config.capabilities = capabilities
+
+  -- Debug settings if you're using nvim-dap
+  local dap = require("dap")
+  dap.configurations.scala = {
+    {
+      type = "scala",
+      request = "launch",
+      name = "Run",
+      metals = {
+        runType = "run",
+        args = { "firstArg", "secondArg", "thirdArg" },
+      },
+    },
+    {
+      type = "scala",
+      request = "launch",
+      name = "Test File",
+      metals = {
+        runType = "testFile",
+      },
+    },
+    {
+      type = "scala",
+      request = "launch",
+      name = "Test Target",
+      metals = {
+        runType = "testTarget",
+      },
+    },
+  }
+
+  metals_config.on_attach = function(client, bufnr)
+    vim.cmd([[autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()]])
+    vim.cmd([[autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()]])
+    vim.cmd([[autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]])
+
+    on_attach(client)
+
+    -- TODO configure dap keybindings
+    require("metals").setup_dap()
+  end
+
+  vim.cmd([[augroup lsp]])
+  vim.cmd([[autocmd!]])
+  -- vim.cmd([[autocmd FileType scala setlocal omnifunc=v:lua.vim.lsp.omnifunc]])
+  vim.cmd([[autocmd FileType scala,java,elm,vim setlocal omnifunc=v:lua.vim.lsp.omnifunc]])
+  vim.cmd([[autocmd FileType scala,sbt,java lua require("metals").initialize_or_attach(metals_config)]])
+  --vim.cmd([[autocmd BufWritePre *.scala,*.sbt,*.elm lua vim.lsp.buf.formatting_sync(nil, 1000)]])
+  vim.cmd([[augroup END]])
+
+
 EOF
+" }}}
 
-augroup lsp
-  au!
-  au FileType scala,sbt lua require('metals').initialize_or_attach(metals_config)
-  autocmd Filetype scala,elm,vim setlocal omnifunc=v:lua.vim.lsp.omnifunc
-  autocmd BufWritePre *.scala,*.sbt,*.elm lua vim.lsp.buf.formatting_sync(nil, 1000)
-augroup end
-
-
-nnoremap <nowait> <silent> <leader>g  <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> gD          <cmd>lua vim.lsp.buf.definition()<CR>
+" nnoremap <silent> gD          <cmd>lua vim.lsp.buf.declaration()<CR>
 nnoremap <silent> K           <cmd>lua vim.lsp.buf.hover()<CR>
+vnoremap <silent> K           <Esc><cmd>lua require("metals").type_of_range()<CR>
 nnoremap <silent> gi          <cmd>lua vim.lsp.buf.implementation()<CR>
 nnoremap <silent> gr          <cmd>lua vim.lsp.buf.references()<CR>
-" Here is an example of how to use telescope as an alternative to the default references
-" TODO add telescope? https://github.com/nvim-lua/telescope.nvim
-" nnoremap <silent> <leader>s   <cmd>lua require'telescope.builtin'.lsp_references{}<CR>
-nnoremap <silent> gds         <cmd>lua vim.lsp.buf.document_symbol()<CR>
+" TODO I want this?
+" nnoremap <silent> <leader>sh  <cmd>lua vim.lsp.buf.signature_help()<CR>
+"                                      vim.lsp.buf.document_symbol()
+nnoremap <silent> gds         <cmd>lua require"telescope.builtin".lsp_document_symbols()<CR>
 nnoremap <silent> gws         <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 nnoremap <silent> <leader>rn  <cmd>lua vim.lsp.buf.rename()<CR>
-nnoremap <silent> <leader>f   <cmd>lua vim.lsp.buf.formatting()<CR>
 nnoremap <silent> <leader>ca  <cmd>lua vim.lsp.buf.code_action()<CR>
 nnoremap <silent> <leader>ws  <cmd>lua require"metals".worksheet_hover()<CR>
-nnoremap <silent> <leader>a   <cmd>lua require"metals".open_all_diagnostics()<CR>
+nnoremap <silent> <leader>aa   <cmd>lua vim.diagnostic.setqflist()<CR>
+nnoremap <silent> <leader>ae   <cmd>lua vim.diagnostic.setqflist({severity = "E"})<CR>
+nnoremap <silent> <leader>aw   <cmd>lua vim.diagnostic.setqflist({severity = "W"})<CR>
 " Buffer diagnostic only
-nnoremap <silent> <leader>d   <cmd>lua vim.lsp.diagnostic.set_loclist()<CR>
-nnoremap <silent> [c          <cmd>lua vim.lsp.diagnostic.goto_prev { wrap = false }<CR>
-nnoremap <silent> ]c          <cmd>lua vim.lsp.diagnostic.goto_next { wrap = false }<CR>
+nnoremap <silent> <leader>d   <cmd>lua vim.diagnostic.setloclist()<CR>
+nnoremap <silent> ]e          <cmd>lua vim.lsp.diagnostic.goto_next()<CR>
+nnoremap <silent> [e          <cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
+nnoremap <silent> <leader>f   <cmd>lua vim.lsp.buf.formatting()<CR>
+
+" Metals specific
+" map("n", "<leader>tt", [[<cmd>lua require("metals.tvp").toggle_tree_view()<CR>]])
+" map("n", "<leader>tr", [[<cmd>lua require("metals.tvp").reveal_in_tree()<CR>]])
 " }}}
 
 " Colors {{{
@@ -288,7 +360,17 @@ if has("termguicolors")
     set termguicolors   " enable true color support
 endif
 
+
+" lua << EOF
+" local nightfox = require('nightfox')
+" nightfox.setup({
+"   fox = "nordfox", -- change the colorscheme to use nordfox
+" })
+" nightfox.load()
+" EOF
+
 if has('vim_starting')
+    colorscheme kanagawa
     "colorscheme gruvbox
     "let g:base16colorspace=256
     "colorscheme base16-ocean
@@ -296,7 +378,16 @@ if has('vim_starting')
     "let g:base16colorspace=256
     "colorscheme base16-ocean
     " colorscheme twilight
-    colorscheme OceanicNext
+    " colorscheme tokyonight
+    " let g:nightfox_style = "nordfox"
+    " colorscheme nightfox
+    " colorscheme tokyonight
+    " colorscheme OceanicNext
+    " Enables transparancy in NeoVim. (removes background colors)
+    "hi Normal guibg=NONE ctermbg=NONE
+    "hi LineNr guibg=NONE ctermbg=NONE
+    "hi SignColumn guibg=NONE ctermbg=NONE
+    "hi EndOfBuffer guibg=NONE ctermbg=NONE
 endif
 
 
@@ -312,6 +403,15 @@ set hidden  " Allow buffer to not be saved
 " }}}
 
 " Autocmd {{{
+
+augroup cursorline
+  " Show cursorlines only at active buffer
+  autocmd!
+  autocmd WinEnter,BufEnter *\(NvimTree_*\)\@<! setlocal cursorline cursorcolumn
+  autocmd WinLeave,BufLeave *\(NvimTree_*\)\@<!  setlocal nocursorline nocursorcolumn
+  autocmd TermOpen * setlocal nocursorline nocursorcolumn
+augroup END
+
 augroup vimrc
     autocmd!
 
@@ -322,10 +422,13 @@ augroup vimrc
                 \ endif
 
     " Do not use relativenumber in insert mode
-    " TODO disable when in term
-    autocmd InsertEnter * set norelativenumber
-    autocmd InsertLeave * set relativenumber
-    " TODO when entering Term. Disable all number showing
+    " This only applies for things that has filetype set (not terminal)
+    autocmd InsertEnter *\(NvimTree_*\|^$\)\@<!  setlocal norelativenumber
+    autocmd InsertLeave *\(NvimTree_*\|^$\)\@<!  setlocal relativenumber
+    " TODO norelativenumber when leaving the buffer
+    " autocmd BufLeave *\(NvimTree\)\@<! : setlocal norelativenumber
+    " autocmd BufEnter *\(NvimTree\)\@<! : setlocal relativenumber
+    autocmd TermOpen * setlocal nonumber norelativenumber
 
     " Do not use relative number when focus is lost
     " TODO not working in neovim
@@ -385,8 +488,8 @@ nnoremap <expr><silent> <Bar> v:count == 0 ? "<C-W>v<C-W><Right>" : ":<C-U>norma
 nnoremap <expr><silent> _     v:count == 0 ? "<C-W>s<C-W><Down>"  : ":<C-U>normal! ".v:count."_<CR>"
 
 " Moving lines and selections with Ctrl-J and K
-nnoremap <c-k> :m-2<cr>==
-nnoremap <c-j> :m+<cr>==
+"nnoremap <c-k> :m-2<cr>==
+"nnoremap <c-j> :m+<cr>==
 inoremap <c-j> <esc>:m+<cr>==gi
 inoremap <c-k> <esc>:m-2<cr>==gi
 vnoremap <c-j> :m'>+<cr>gv=gv
@@ -396,16 +499,31 @@ vnoremap <c-k> :m-2<cr>gv=gv
 " TODO does these work?
 " '<M-...>' Alt-key or meta-key
 " This? https://vi.stackexchange.com/questions/2350/how-to-map-alt-key
-nnoremap <A-h> <C-w>h
-nnoremap <A-j> <C-w>j
-nnoremap <A-k> <C-w>k
-nnoremap <A-l> <C-w>l
+" TODO note that we are using vim-tmux-navigator with c-hjkl atm
+" Or should we defined vim-tmux-navigator with alt?
+let g:tmux_navigator_no_mappings = 1
+
+nnoremap <silent> <A-h> :TmuxNavigateLeft<cr>
+nnoremap <silent> <A-j> :TmuxNavigateDown<cr>
+nnoremap <silent> <A-k> :TmuxNavigateUp<cr>
+nnoremap <silent> <A-l> :TmuxNavigateRight<cr>
+nnoremap <silent> <A-\> :TmuxNavigatePrevious<cr>
+"nnoremap <A-h> <C-w>h
+"nnoremap <A-j> <C-w>j
+"nnoremap <A-k> <C-w>k
+"nnoremap <A-l> <C-w>l
+"" alt+{hjkl} window control for terminal aswell
+tnoremap <A-h> <C-\><C-n><C-w>h
+tnoremap <A-j> <C-\><C-n><C-w>j
+tnoremap <A-k> <C-\><C-n><C-w>k
+tnoremap <A-l> <C-\><C-n><C-w>l
 
 " Window resizing
-nmap <left>  :3wincmd ><cr>
-nmap <right> :3wincmd <<cr>
-nmap <up>    :3wincmd +<cr>
-nmap <down>  :3wincmd -<cr>
+" Problematic with home key row mod on laptop without double click repeat
+" nmap <left>  :3wincmd ><cr>
+" nmap <right> :3wincmd <<cr>
+" nmap <up>    :3wincmd +<cr>
+" nmap <down>  :3wincmd -<cr>
 
 " Allow saving files with as root
 cmap w!! SudoWrite
@@ -525,112 +643,39 @@ set splitright
 "set winminheight=5
 " }}}
 
-" Statusline {{{
-set noshowmode            " Do not show default mode in statusline
-
-" set statusline=%{fugitive#statusline()} " Git status
-" set statusline+=%m%r%w%{HasPaste()}   " File flags
-" set statusline+=\ %f      " Path to the file
-" set statusline+=%=        " Switch to the right side
-" set statusline+=%l/%L     " Current line / total lines
-" set statusline+=\ %y      " Filetype
-
-  "\     [ 'lspErrors', 'lspWarnings' ]
-let g:lightline = {
-  \ 'colorscheme': 'nord',
-  \ 'mode_map': { 'c': 'NORMAL' },
-  \ 'active': {
-  \   'left': [
-  \     [ 'mode', 'paste', 'lspMetalsStatus'],
-  \     [ 'lspError', 'lspWarnings' ],
-  \     [ 'fugitive', 'filename' ],
-  \   ]
-  \ },
-  \ 'component_function': {
-  \   'modified': 'LightLineModified',
-  \   'readonly': 'LightLineReadonly',
-  \   'fugitive': 'LightLineFugitive',
-  \   'filename': 'LightLineFilename',
-  \   'fileformat': 'LightLineFileformat',
-  \   'filetype': 'LightLineFiletype',
-  \   'fileencoding': 'LightLineFileencoding',
-  \   'mode': 'LightLineMode',
-  \   'lspError': 'LspErrors',
-  \   'lspWarnings': 'LspWarnings',
-  \   'lspMetalsStatus': 'LightLineMetalsStatus',
-  \ },
-  \ 'separator': { 'left': '', 'right': '' },
-  \ 'subseparator': { 'left': '', 'right': '' }
-\ }
-
-function! LightLineModified()
-  return &ft =~ 'help\|startify' ? '' : &modified ? '+' : &modifiable ? '' : '-'
-endfunction
-
-function! LightLineReadonly()
-  return &ft !~? 'help\|startify' && &readonly ? '' : ''
-endfunction
-
-function! LightLineFilename()
-  return ('' != LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
-        \ (&ft =~ 'dirvish\|startify' ? '' :
-        \  '' != expand('%:t') ? expand('%:t') : '[No Name]') .
-        \ ('' != LightLineModified() ? ' ' . LightLineModified() : '')
-endfunction
-
-function! LightLineFugitive()
-  if &ft !~? 'help\|dirvish\|startify' && exists("*fugitive#head")
-    let _ = fugitive#head()
-    return strlen(_) ? ' '._ : ''
-  endif
-  return ''
-endfunction
-
-function! LightLineFileformat()
-  return winwidth(0) > 70 ? &fileformat : ''
-endfunction
-
-function! LightLineFiletype()
-  return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype : 'no ft') : ''
-endfunction
-
-function! LightLineFileencoding()
-  return winwidth(0) > 70 ? (strlen(&fenc) ? &fenc : &enc) : ''
-endfunction
-
-function! LightLineMode()
-  return winwidth(0) > 60 ? lightline#mode() : ''
-endfunction
-
-"-----------------------------------------------------------------------------
-" LSP statusline
-"-----------------------------------------------------------------------------
-function! LspErrors() abort
-  return metals#errors()
-endfunction
-
-" metals warnings and errors
-function! LspWarnings() abort
-  return metals#warnings()
-endfunction
-
-function! LightLineMetalsStatus()
-  return metals#status()
-endfunction
-" }}}
-
 " Searching {{{
 if !has('nvim')
     set incsearch           " search as characters are entered
     set hlsearch            " highlight matches
 endif
+
+" Case insensitive searching UNLESS /C or capital in search
+set ignorecase
 set smartcase
+
+" Hightlight on yank
+augroup YankHighlight
+  autocmd!
+  autocmd TextYankPost * silent! lua vim.highlight.on_yank()
+augroup end
 
 " turn off search highlight
 nnoremap <silent> <Esc> :nohlsearch<Bar>:echo<CR>
 
 " Use RipGrep for grepping. Respects gitignore, etc
-set grepprg=rg\ -H\ --no-heading\ --vimgrep
+set grepprg=rg\ -H\ --smart-case\ --hidden\ --no-heading\ --vimgrep
+set grepformat=%f:%l:%c:%m
+augroup quickfix
+    " Open quickfix window after :grep
+    autocmd!
+    autocmd QuickFixCmdPost [^l]* cwindow
+    autocmd QuickFixCmdPost l* lwindow
+augroup END
+
+
+"set grepprg=rg\ --vimgrep
+"set grepformat^=%f:%l:%c:%m
+
 " }}}
 
 " Folding {{{
@@ -726,6 +771,17 @@ endfunction " }}}
 " }}}
 
 " Terminal {{{
+" FloatTerm
+nnoremap   <silent>   <F7>    :FloatermNew<CR>
+tnoremap   <silent>   <F7>    <C-\><C-n>:FloatermNew<CR>
+nnoremap   <silent>   <F8>    :FloatermPrev<CR>
+tnoremap   <silent>   <F8>    <C-\><C-n>:FloatermPrev<CR>
+nnoremap   <silent>   <F9>    :FloatermNext<CR>
+tnoremap   <silent>   <F9>    <C-\><C-n>:FloatermNext<CR>
+nnoremap   <silent>   <F12>   :FloatermToggle<CR>
+tnoremap   <silent>   <F12>   <C-\><C-n>:FloatermToggle<CR>
+" TODO I want F12? disabled yakuake
+
 if has('nvim')
     set sh=zsh
 
@@ -735,28 +791,58 @@ if has('nvim')
 
     nnoremap <silent> <leader>st :STerm<CR>
 
-    augroup nvim_term
-    autocmd!
-    "     " Start in insert mode
-    "     autocmd BufWinEnter,WinEnter term://* startinsert
-    " autocmd TermEnter * startinsert " TODO new?
+    function s:TerminalClose()
+      " Only run close when no filetype (normal terminal)
+      if &filetype ==# ''
+        :q
+      endif
+    endfunction
 
-    autocmd TermOpen * setlocal nonumber norelativenumber
-    "
-    " TODO THIS ALSO INFERS WITH FZF.VIM
-        " autocmd TermClose * bd!|q " quit when a terminal closes instead of showing exit code and waiting
+    augroup nvim_term
+      autocmd!
+      "     " Start in insert mode
+      "     autocmd BufWinEnter,WinEnter term://* startinsert
+      " autocmd TermEnter * startinsert " TODO new?
+
+      " quit when a terminal closes instead of showing exit code and waiting
+      " Disabled because https://vi.stackexchange.com/a/17923
+      "autocmd TermClose * call s:TerminalClose()
+    augroup END
+
+    " Extension of vim-tmux-navigator
+    function s:AddTerminalNavigation()
+      if &filetype ==# ''
+        tnoremap <buffer> <silent> <c-h> <c-\><c-n>:TmuxNavigateLeft<cr>
+        tnoremap <buffer> <silent> <c-j> <c-\><c-n>:TmuxNavigateDown<cr>
+        tnoremap <buffer> <silent> <c-k> <c-\><c-n>:TmuxNavigateUp<cr>
+        tnoremap <buffer> <silent> <c-l> <c-\><c-n>:TmuxNavigateRight<cr>
+      endif
+    endfunction
+
+    " TODO do I want this at all?
+    augroup TerminalNavigation
+      autocmd!
+      "autocmd TermOpen * call s:AddTerminalNavigation()
+      "" https://github.com/junegunn/fzf.vim/issues/982
+      "autocmd FileType fzf tnoremap <C-j> <nop>
+      "autocmd FileType fzf tnoremap <C-k> <nop>
     augroup END
 
     " http://neovim.io/doc/user/nvim_terminal_emulator.html
     " TODO disabled because of fzf problems
-    " tnoremap <Esc> <C-\><C-n>
+    "tnoremap <Esc> <C-\><C-n>
+    "Alternative fix:
+    "tnoremap <expr> <esc> &filetype == 'fzf' ? "\<esc>" : "\<c-\>\<c-n>"
+    "tnoremap <expr> <esc> match('fzf\|lspsaga', &filetype) ? "\<esc>" : "\<c-\>\<c-n>"
+    " But it does not help for other not fzf windows. Must then add every
+    " exeception
+    " And this did not work
+"    autocmd BufWinEnter,WinEnter term://*  tnoremap <buffer> <Esc> <C-\><C-n>
+" But it is bad idea? vim mode inside terminal as well. So EESC should work
+" inside there properly
+    " This one creates problems with j navigation
     "tnoremap jk <C-\><C-n>
 
-    " alt+{hjkl} window control for terminal aswell
-    tnoremap <A-h> <C-\><C-n><C-w>h
-    tnoremap <A-j> <C-\><C-n><C-w>j
-    tnoremap <A-k> <C-\><C-n><C-w>k
-    tnoremap <A-l> <C-\><C-n><C-w>l
 
     " Use a blinking upright bar cursor in Insert mode, a solid block in normal and a blinking underline in replace mode
     " TODO not working
