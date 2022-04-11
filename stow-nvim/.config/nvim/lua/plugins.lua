@@ -360,4 +360,5 @@ return require('packer').startup(function()
   use { 'vim-pandoc/vim-pandoc-syntax' , ft = { 'markdown', 'pandoc' } }
   use 'purescript-contrib/purescript-vim'
   use 'kmonad/kmonad-vim'
+  use 'b0o/schemastore.nvim'
 end)

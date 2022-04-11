@@ -300,6 +300,11 @@ lua << EOF
     on_attach = on_attach,
     capabilities = capabilities,
     flags = flags,
+    settings = {
+      json = {
+        schemas = require('schemastore').json.schemas(),
+      },
+    },
     commands = {
       Format = {
         function()
