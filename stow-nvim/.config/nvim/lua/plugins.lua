@@ -45,7 +45,7 @@ return require('packer').startup(function()
         -- hijack netrw window on startup
         hijack_netrw        = true,
         -- hijacks new directory buffers when they are opened. - Dirvish coop
-        update_to_buf_dir   = {
+        hijack_directories   = {
           enable = false,
         },
         hijack_cursor       = true,
@@ -55,6 +55,9 @@ return require('packer').startup(function()
         view = {
           -- Hide the root path of the current folder on top of the tree
           hide_root_folder = true,
+        },
+        renderer = {
+          group_empty = true
         }
       }
     end
@@ -98,7 +101,8 @@ return require('packer').startup(function()
   }
 
   -- Better search highlighting
-  use {'kevinhwang91/nvim-hlslens'}
+  -- use {'kevinhwang91/nvim-hlslens'}
+  -- TODO disabled because its crashing nvim https://github.com/kevinhwang91/nvim-hlslens/issues/33
 
   use {
     'lewis6991/gitsigns.nvim',
@@ -273,21 +277,65 @@ return require('packer').startup(function()
             behavior = cmp.ConfirmBehavior.Replace,
             select = true,
           }),
-          ['<Tab>'] = function(fallback)
+          ['<Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_next_item()
             else
               fallback()
             end
-          end
+          end, { 'i', 's' }),
+          ['<S-Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item()
+            else
+              fallback()
+            end
+          end, { 'i', 's' }),
+          ['<C-n>'] = cmp.mapping({
+            c = function()
+                if cmp.visible() then
+                    cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+                else
+                    vim.api.nvim_feedkeys(t('<Down>'), 'n', true)
+                end
+            end,
+            i = function(fallback)
+                if cmp.visible() then
+                    cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+                else
+                    fallback()
+                end
+            end
+        }),
+        ['<C-p>'] = cmp.mapping({
+            c = function()
+                if cmp.visible() then
+                    cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
+                else
+                    vim.api.nvim_feedkeys(t('<Up>'), 'n', true)
+                end
+            end,
+            i = function(fallback)
+                if cmp.visible() then
+                    cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
+                else
+                    fallback()
+                end
+            end
+        }),
+
+
+
         },
         formatting = {
           format = lspkind.cmp_format({with_text = false, maxwidth = 50})
         },
-        documentation = {
-          -- https://github.com/hrsh7th/nvim-cmp#documentationwinhighlight-type-string
-          -- maxwidth = 20
-        }
+        -- window = {
+          -- documentation = {
+            -- https://github.com/hrsh7th/nvim-cmp#documentationwinhighlight-type-string
+            -- maxwidth = 20
+          -- }
+        -- }
       }
 
       -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
@@ -298,14 +346,14 @@ return require('packer').startup(function()
       })
 
       -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-      cmp.setup.cmdline(':', {
-        sources = cmp.config.sources({
-          { name = 'path' }
-        }, {
-          -- https://github.com/hrsh7th/cmp-cmdline/issues/24
-          { name = 'cmdline', keyword_pattern=[=[[^[:blank:]\!]*]=] }
-        })
-      })
+      -- cmp.setup.cmdline(':', {
+      --   sources = cmp.config.sources({
+      --     { name = 'path' }
+      --   }, {
+      --     -- https://github.com/hrsh7th/cmp-cmdline/issues/24
+      --     { name = 'cmdline', keyword_pattern=[=[[^[:blank:]\!]*]=] }
+      --   })
+      -- })
 
       -- Set configuration for specific filetype.
       cmp.setup.filetype('gitcommit', {

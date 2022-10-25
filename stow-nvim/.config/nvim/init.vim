@@ -27,11 +27,6 @@ let g:maplocalleader=","
 " }}}
 
 " Plugins {{{
-" nvim-tree {{{
-" TODO move to plugins when setting is available in lua
-let g:nvim_tree_group_empty = 1
-" }}}
-"
 
 augroup Packer
   autocmd!
@@ -156,10 +151,9 @@ nmap <F8> :Vista nvim_lsp<CR>
 set completeopt-=longest
 " }}}
 
-" Extra plugin configuration {{{
 lua << EOF
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = {'scala', 'html', 'javascript', 'yaml', 'css', 'lua', 'http', 'json', 'elm', 'bash', 'python', 'ruby'},
+  ensure_installed = {'scala', 'html', 'javascript', 'yaml', 'css', 'lua', 'http', 'json', 'elm', 'bash', 'python', 'ruby', 'elixir'},
   highlight = {
     enable = true
   },
@@ -281,9 +275,8 @@ lua << EOF
   --  }
   --)
   local lspconfig = require('lspconfig')
-  local capabilities = vim.lsp.protocol.make_client_capabilities()
+  local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-  capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
   capabilities.textDocument.completion.completionItem.snippetSupport = true
 
   local servers = { 'vimls', 'elmls', 'dockerls', 'cssls', 'tsserver', 'yamlls', 'html', 'bashls', 'solargraph', 'terraformls', 'purescriptls', 'hls', 'sqlls' }
@@ -361,7 +354,7 @@ lua << EOF
     vim.cmd([[autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()]])
     vim.cmd([[autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]])
 
-    on_attach(client)
+    on_attach(client, bufnr)
 
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ws', '<cmd>lua require"metals".worksheet_hover()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'v', 'K', '<Esc><cmd>lua require("metals").type_of_range()<CR>', opts)
@@ -378,9 +371,7 @@ lua << EOF
   --vim.cmd([[autocmd BufWritePre *.scala,*.sbt,*.elm lua vim.lsp.buf.formatting_sync(nil, 1000)]])
   vim.cmd([[augroup END]])
 
-
 EOF
-" }}}
 " }}}
 
 " Colors {{{
