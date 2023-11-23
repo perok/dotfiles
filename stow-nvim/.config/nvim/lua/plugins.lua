@@ -102,6 +102,7 @@ require('lazy').setup({
    'kyazdani42/nvim-web-devicons',
   {
     'nvim-lualine/lualine.nvim',
+    event = 'VeryLazy',
     dependencies = {'kyazdani42/nvim-web-devicons', opt = true},
     config = function()
       -- local function get_short_cwd()
@@ -151,10 +152,41 @@ require('lazy').setup({
     end
   },
   {
-    "lukas-reineke/lsp-format.nvim",
-    config = function()
-      require("lsp-format").setup {}
-    end
+    "stevearc/conform.nvim",
+    event = { "BufWritePre" },
+    cmd = { "ConformInfo" },
+    keys = {
+      {
+        -- Customize or remove this keymap to your liking
+        "<leader>f",
+        function()
+          require("conform").format({ async = true, lsp_fallback = true })
+        end,
+        mode = "",
+        desc = "Format buffer",
+      },
+    },
+    -- Everything in opts will be passed to setup()
+    opts = {
+      -- Define your formatters
+      formatters_by_ft = {
+        lua = { "stylua" },
+        -- scala = { "scalafmt" },
+        javascript = { { "prettierd", "prettier" } },
+      },
+      -- Set up format-on-save
+      format_on_save = { timeout_ms = 500, lsp_fallback = true },
+      -- Customize formatters
+      formatters = {
+        shfmt = {
+          prepend_args = { "-i", "2" },
+        },
+      },
+    },
+    init = function()
+      -- If you want the formatexpr, here is the place to set it
+      vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+    end,
   },
 
   'RRethy/vim-illuminate', -- Hightlight similiar text,
@@ -234,6 +266,7 @@ require('lazy').setup({
 
   {
     'nvim-treesitter/nvim-treesitter',
+    event = { "VeryLazy" },
     -- We recommend updating the parsers on update
     build = ':TSUpdate',
     dependencies = {
@@ -322,6 +355,7 @@ require('lazy').setup({
 
   {
     "hrsh7th/nvim-cmp",
+    event = "InsertEnter",
     dependencies = {
       'hrsh7th/cmp-vsnip',
       "hrsh7th/vim-vsnip",

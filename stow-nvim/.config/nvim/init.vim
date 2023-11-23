@@ -201,11 +201,6 @@ lua << EOF
   }
 
   local on_attach = function(client, bufnr)
-    require "lsp-format".on_attach(client)
-
-    -- Force syncronous formatting when :wq (lukas-reineke/lsp-format.nvim is async)
-    vim.cmd [[cabbrev wq execute "lua vim.lsp.buf.formatting_sync()" <bar> wq]]
-
     --
     -- Keybindings
     --
