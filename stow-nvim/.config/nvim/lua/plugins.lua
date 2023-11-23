@@ -13,36 +13,36 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-return require('lazy').setup({
+require('lazy').setup({
   'antoinemadec/FixCursorHold.nvim',
 
-  --  'morhetz/gruvbox' ,
-  --  'chriskempson/base16-vim' ,
-  --  'dawikur/base16-vim-airline-themes' ,
-  --  'mhartington/oceanic-next' , --
+  --  'morhetz/gruvbox',
+  --  'chriskempson/base16-vim',
+  --  'dawikur/base16-vim-airline-themes',
+  --  'mhartington/oceanic-next', --
   -- 'folke/tokyonight.nvim',
   'EdenEast/nightfox.nvim',
   "rebelot/kanagawa.nvim",
   -- 'shaunsingh/nord.nvim',
-  --  'Soares/base16.nvim' , --
-  --  'jacoborus/tender' , --
-  --  'cocopon/iceberg.vim' , --
+  --  'Soares/base16.nvim', --
+  --  'jacoborus/tender', --
+  --  'cocopon/iceberg.vim', --
 
-  --  'liuchengxu/vim-which-key' ,
+  --  'liuchengxu/vim-which-key',
   {
     "folke/which-key.nvim",
     config = function()
       require("which-key").setup {}
     end
   },
-   'mhinz/vim-startify' ,
+   'mhinz/vim-startify',
 
-   'editorconfig/editorconfig-vim' ,
+   'editorconfig/editorconfig-vim',
 
-   'kevinhwang91/nvim-bqf', ft = 'qf' ,
+   'kevinhwang91/nvim-bqf', ft = 'qf',
 
   -- File explorer
-  --  'justinmk/vim-dirvish' ,
+  --  'justinmk/vim-dirvish',
   {
     'stevearc/oil.nvim',
     config = function()
@@ -82,24 +82,24 @@ return require('lazy').setup({
 
   'lambdalisue/suda.vim',
 
-  --  'justinmk/vim-sneak' ,
+  --  'justinmk/vim-sneak',
   {
    'ggandor/leap.nvim', -- Similar to vim-sneak
     config = function()
       require('leap').add_default_mappings()
     end
   },
-   'tpope/vim-eunuch' ,
-   'tpope/vim-surround' ,
-   'tpope/vim-unimpaired' , -- Bindings on [ and ]
-   'tpope/vim-repeat' ,  -- '.' supports non-native commands
-   'wellle/targets.vim' , --   -- More useful text object
+   'tpope/vim-eunuch',
+   'tpope/vim-surround',
+   'tpope/vim-unimpaired', -- Bindings on [ and ]
+   'tpope/vim-repeat',  -- '.' supports non-native commands
+   'wellle/targets.vim', --   -- More useful text object
   'christoomey/vim-tmux-navigator',
 
-   'tpope/vim-commentary' ,
-   'tpope/vim-fugitive' ,
+   'tpope/vim-commentary',
+   'tpope/vim-fugitive',
 
-   'kyazdani42/nvim-web-devicons' ,
+   'kyazdani42/nvim-web-devicons',
   {
     'nvim-lualine/lualine.nvim',
     dependencies = {'kyazdani42/nvim-web-devicons', opt = true},
@@ -163,7 +163,7 @@ return require('lazy').setup({
     'mbbill/undotree',
     cmd = 'UndotreeToggle'
   },
-  -- 'whiteinge/diffconflicts' ,
+  -- 'whiteinge/diffconflicts',
   'sindrets/diffview.nvim', -- Git diff viewer,
   -- {
   --   'voldikss/vim-floaterm',
@@ -225,17 +225,52 @@ return require('lazy').setup({
       telescope.load_extension('fzy_native')
     end,
     dependencies = {
-      { 'nvim-lua/popup.nvim' },
-      { 'nvim-lua/plenary.nvim' },
-      { 'nvim-telescope/telescope-symbols.nvim' },
-      { 'nvim-telescope/telescope-fzy-native.nvim' }
+      'nvim-lua/popup.nvim',
+      'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope-symbols.nvim',
+      'nvim-telescope/telescope-fzy-native.nvim'
     }
   },
 
   {
     'nvim-treesitter/nvim-treesitter',
     -- We recommend updating the parsers on update
-    build = ':TSUpdate'
+    build = ':TSUpdate',
+    dependencies = {
+      'p00f/nvim-ts-rainbow',
+      'JoosepAlviste/nvim-ts-context-commentstring',
+    },
+    config = function ()
+      require'nvim-treesitter.configs'.setup {
+        ensure_installed = {'scala', 'html', 'javascript', 'yaml', 'css', 'lua', 'http', 'json', 'elm', 'bash', 'python', 'ruby', 'elixir'},
+        -- Install parsers synchronously (only applied to `ensure_installed`)
+        sync_install = false,
+        highlight = {
+          enable = true,
+          -- disable = {'scala'},
+        },
+        rainbow = { -- For plugin 'p00f/nvim-ts-rainbow'
+          enable = true,
+          -- disable = { '' }, -- FT's
+          extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
+          max_file_lines = nil, -- Do not enable for files with more than n lines, int
+          -- colors = {}, -- table of hex strings
+          -- termcolors = {} -- table of colour name strings
+        },
+        incremental_selection = {
+          enable = true,
+          keymaps = {
+            init_selection = 'gnn',
+            node_incremental = 'grn',
+            scope_incremental = 'grc',
+            node_decremental = 'grm',
+          },
+        },
+        indent = {
+          enable = true
+        }
+      }
+    end
   },
   'p00f/nvim-ts-rainbow',
   {
@@ -245,7 +280,7 @@ return require('lazy').setup({
        vim.g.skip_ts_context_commentstring_module = true
     end
   },
-   'neovim/nvim-lspconfig' ,
+   'neovim/nvim-lspconfig',
   -- ({
   -- "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
   -- config = function()
@@ -253,7 +288,7 @@ return require('lazy').setup({
   -- end,
 -- }),
   {  -- LSP server for Scala
-    'scalameta/nvim-metals' ,
+    'scalameta/nvim-metals',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'mfussenegger/nvim-dap'
@@ -275,7 +310,7 @@ return require('lazy').setup({
     end
   },
 
-   'hashivim/vim-terraform' ,
+  'hashivim/vim-terraform',
 
   {
     "petertriho/cmp-git",
@@ -455,12 +490,12 @@ return require('lazy').setup({
         yank_dry_build = true,
     })
     vim.cmd("command! RestNvim lua require('rest-nvim').run()")
-		vim.cmd("command! RestNvimPreview lua require('rest-nvim').run(true)")
+    vim.cmd("command! RestNvimPreview lua require('rest-nvim').run(true)")
     end
   },
 
-  --  'vim-pandoc/vim-pandoc', ft = { 'markdown', 'pandoc' } ,
-  --  'vim-pandoc/vim-pandoc-syntax' , ft = { 'markdown', 'pandoc' } ,
+  --  'vim-pandoc/vim-pandoc', ft = { 'markdown', 'pandoc' },
+  --  'vim-pandoc/vim-pandoc-syntax', ft = { 'markdown', 'pandoc' },
   'purescript-contrib/purescript-vim',
   'kmonad/kmonad-vim',
   'b0o/schemastore.nvim',
