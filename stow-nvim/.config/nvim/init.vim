@@ -27,11 +27,6 @@ let g:maplocalleader=","
 " }}}
 
 " Plugins {{{
-
-augroup Packer
-  autocmd!
-  autocmd BufWritePost plugins.lua PackerCompile
-augroup end
 lua require('plugins')
 
 " vim-which-key {{{
