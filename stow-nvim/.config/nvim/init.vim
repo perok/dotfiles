@@ -225,7 +225,6 @@ lua << EOF
     buf_map(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>')
     buf_map(bufnr, 'n', '<leader>cl', '<cmd>lua vim.lsp.codelens.run()<CR>')
     buf_map(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>')
-    buf_map(bufnr, 'n', '<leader>f', '<cmd>lua vim.lsp.buf.formatting()<CR>')
     buf_map(bufnr, 'n', '<leader>aa', '<cmd>lua vim.diagnostic.setqflist()<CR>')
     buf_map(bufnr, 'n', '<leader>ae', '<cmd>lua vim.diagnostic.setqflist({severity = "E"})<CR>')
     buf_map(bufnr, 'n', '<leader>aw', '<cmd>lua vim.diagnostic.setqflist({severity = "W"})<CR>')
