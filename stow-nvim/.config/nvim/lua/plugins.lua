@@ -33,13 +33,26 @@ return require('packer').startup(function()
 
   use { 'editorconfig/editorconfig-vim' }
 
-  use { 'kevinhwang91/nvim-bqf' }
-  use { 'justinmk/vim-dirvish' }
+  use { 'kevinhwang91/nvim-bqf', ft = 'qf' }
+
+  -- File explorer
+  -- use { 'justinmk/vim-dirvish' }
+  use {
+    'stevearc/oil.nvim',
+    config = function()
+      require('oil').setup({
+        view_options = {
+          show_hidden = true,
+        }
+      })
+      vim.keymap.set("n", "-", require("oil").open, { desc = "Open parent directory" })
+    end
+  }
+
   use {
     'kyazdani42/nvim-tree.lua',
     config = function()
       require'nvim-tree'.setup {
-        open_on_setup       = false,
         -- disables netrw completely
         disable_netrw       = true,
         -- hijack netrw window on startup
@@ -52,12 +65,10 @@ return require('packer').startup(function()
         update_focused_file = {
           enable = true
         },
-        view = {
-          -- Hide the root path of the current folder on top of the tree
-          hide_root_folder = true,
-        },
         renderer = {
-          group_empty = true
+          group_empty = true,
+          -- Hide the root path of the current folder on top of the tree
+          root_folder_label = false
         }
       }
     end
@@ -66,7 +77,12 @@ return require('packer').startup(function()
   use 'lambdalisue/suda.vim'
 
   -- use { 'justinmk/vim-sneak' }
-  use 'ggandor/lightspeed.nvim' -- Similar to vim-sneak
+  use {
+   'ggandor/leap.nvim', -- Similar to vim-sneak
+    config = function()
+      require('leap').add_default_mappings()
+    end
+  }
   use { 'tpope/vim-eunuch' }
   use { 'tpope/vim-surround' }
   use { 'tpope/vim-unimpaired' } -- Bindings on [ and ]
@@ -117,12 +133,14 @@ return require('packer').startup(function()
   use {
     'lukas-reineke/indent-blankline.nvim',
     config = function()
-      require("indent_blankline").setup {
-        filetype_exclude = { 'NvimTree', "startify", "lspinfo", "packer", "checkhealth", "help", ""},
-        buftype_exclude = { "terminal" },
-        space_char_blankline = " ",
-        show_current_context = true,
-        -- show_current_context_start = true,
+      require("ibl").setup {
+        exclude = {
+          filetypes = { 'NvimTree', "startify", "lspinfo", "packer", "checkhealth", "help", ""},
+          buftypes = { 'terminal' }
+        },
+        scope = {
+          enabled = true
+        }
       }
     end
   }
@@ -213,6 +231,12 @@ return require('packer').startup(function()
   use 'p00f/nvim-ts-rainbow'
   use 'JoosepAlviste/nvim-ts-context-commentstring'
   use { 'neovim/nvim-lspconfig' }
+  -- use({
+  -- "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+  -- config = function()
+  --   require("lsp_lines").setup()
+  -- end,
+-- })
   use {  -- LSP server for Scala
     'scalameta/nvim-metals' ,
     requires = {
@@ -220,6 +244,22 @@ return require('packer').startup(function()
       'mfussenegger/nvim-dap'
     },
   }
+  use {
+    "rcarriga/nvim-dap-ui",
+    requires = {
+      "mfussenegger/nvim-dap"
+    }
+  }
+
+  use {
+    "folke/neodev.nvim",
+    config = function()
+      require("neodev").setup({
+        library = { plugins = { "nvim-dap-ui" }, types = true },
+      })
+    end
+  }
+
   use { 'hashivim/vim-terraform' }
 
   use {
@@ -268,7 +308,7 @@ return require('packer').startup(function()
           end,
         },
         mapping = {
-          ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-b>'] = cmp.mapping.scroll_docs(-4),
           ['<C-f>'] = cmp.mapping.scroll_docs(4),
           ['<C-Space>'] = cmp.mapping.complete(),
           ['<C-e>'] = cmp.mapping.close(),
@@ -339,7 +379,7 @@ return require('packer').startup(function()
       }
 
       -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
-      cmp.setup.cmdline('/', {
+      cmp.setup.cmdline({ '/', '?' }, {
         sources = {
           { name = 'buffer' }
         }
@@ -374,7 +414,7 @@ return require('packer').startup(function()
   -- }
 
   use {
-    'NTBBloodbath/rest.nvim',
+    'rest-nvim/rest.nvim',
     requires = { "nvim-lua/plenary.nvim" },
     config = function()
       require("rest-nvim").setup({
@@ -404,8 +444,8 @@ return require('packer').startup(function()
     end
   }
 
-  use { 'vim-pandoc/vim-pandoc', ft = { 'markdown', 'pandoc' } }
-  use { 'vim-pandoc/vim-pandoc-syntax' , ft = { 'markdown', 'pandoc' } }
+  -- use { 'vim-pandoc/vim-pandoc', ft = { 'markdown', 'pandoc' } }
+  -- use { 'vim-pandoc/vim-pandoc-syntax' , ft = { 'markdown', 'pandoc' } }
   use 'purescript-contrib/purescript-vim'
   use 'kmonad/kmonad-vim'
   use 'b0o/schemastore.nvim'

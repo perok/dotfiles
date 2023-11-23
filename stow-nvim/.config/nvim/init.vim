@@ -75,12 +75,12 @@ let g:startify_change_to_dir = 0
 " Trick from
 " https://github.com/justinmk/vim-dirvish/issues/70#issuecomment-626258095
 
-" Dirvish {{{
+" Dirvish / oil.nvim{{{
 " Replace netrw
 let g:loaded_netrw = 1
 let g:loaded_netrwPlugin = 1
-command! -nargs=? -complete=dir Explore Dirvish <args>
-command! -nargs=? -complete=dir Sexplore belowright split | silent Dirvish <args>
+" command! -nargs=? -complete=dir Explore Dirvish <args>
+" command! -nargs=? -complete=dir Sexplore belowright split | silent Dirvish <args>
 
 " Use t in dirvish to show subdirectories
 " Trick from https://github.com/justinmk/vim-dirvish/issues/70#issuecomment-626258095
@@ -114,7 +114,7 @@ endif
 " For markdown
 " https://github.com/iamcco/markdown-preview.nvim ?
 " Do not add extra keyboard mappings
-let g:pandoc#keyboard#use_default_mappings = 0
+" let g:pandoc#keyboard#use_default_mappings = 0
 
 " Telescope setup {{{
 
@@ -155,7 +155,8 @@ lua << EOF
 require'nvim-treesitter.configs'.setup {
   ensure_installed = {'scala', 'html', 'javascript', 'yaml', 'css', 'lua', 'http', 'json', 'elm', 'bash', 'python', 'ruby', 'elixir'},
   highlight = {
-    enable = true
+    enable = true,
+    -- disable = {'scala'},
   },
   -- To make use 'JoosepAlviste/nvim-ts-context-commentstring' work
   context_commentstring = {
@@ -199,6 +200,7 @@ let g:cursorhold_updatetime = 100 " https://github.com/antoinemadec/FixCursorHol
 lua << EOF
   -- Diagnostics configuration
   vim.cmd([[au CursorHold,CursorHoldI * lua vim.diagnostic.open_float(0,{scope = "cursor"})]])
+
   vim.diagnostic.config({
     virtual_text = false,
     sign = true,
@@ -207,12 +209,26 @@ lua << EOF
   })
 
   local opts = { noremap = true, silent = true }
+  local function map(mode, lhs, rhs, opts)
+    local options = { noremap = true, silent = true }
+    if opts then
+      options = vim.tbl_extend("force", options, opts)
+    end
+    vim.api.nvim_set_keymap(mode, lhs, rhs, options)
+  end
 
-  -- Diagnostic keymaps
-  vim.api.nvim_set_keymap('n', '<leader>d', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
-  vim.api.nvim_set_keymap('n', ']e', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
-  vim.api.nvim_set_keymap('n', '[e', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-  vim.api.nvim_set_keymap('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+  local function buf_map(bufnr, mode, lhs, rhs, opts)
+    local options = { noremap = true, silent = true }
+    if opts then
+      options = vim.tbl_extend("force", options, opts)
+    end
+    vim.api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, options)
+  end
+
+  map('n', '<leader>d', '<cmd>lua vim.diagnostic.setloclist()<CR>', { desc = "LSP diagnstic setloclist" })
+  map('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', { desc = "LSP diagnstic open float" })
+  map('n', ']e', '<cmd>lua vim.diagnostic.goto_next()<CR>', { desc = "LSP diagnstic goto next" })
+  map('n', '[e', '<cmd>lua vim.diagnostic.goto_prev()<CR>', { desc = "LSP diagnstic goto prev" })
  -- " Buffer diagnostic only
  -- nnoremap <silent> <leader>d   <cmd>lua vim.diagnostic.setloclist()<CR>
  -- nnoremap <silent> ]e          <cmd>lua vim.lsp.diagnostic.goto_next()<CR>
@@ -235,29 +251,28 @@ lua << EOF
     --
 
     --vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gds', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]], opts)
-    --vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>so', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]], opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gws', [[<cmd>lua vim.lsp.buf.workspace_symbol()<CR>]], opts)
+    buf_map(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.definition()<CR>')
+    buf_map(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>')
+    buf_map(bufnr, 'n', 'gds', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]])
+    --vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>so', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]])
+    buf_map(bufnr, 'n', 'gws', [[<cmd>lua vim.lsp.buf.workspace_symbol()<CR>]])
 
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+    buf_map(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>')
+    buf_map(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>')
  -- " TODO I want this?
  -- " nnoremap <silent> <leader>sh  <cmd>lua vim.lsp.buf.signature_help()<CR>
 
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
-
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>aa', '<cmd>lua vim.diagnostic.setqflist()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ae', '<cmd>lua vim.diagnostic.setqflist({severity = "E"})<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>aw', '<cmd>lua vim.diagnostic.setqflist({severity = "W"})<CR>', opts)
+    buf_map(bufnr, 'n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>')
+    buf_map(bufnr, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>')
+    buf_map(bufnr, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>')
+    buf_map(bufnr, 'n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>')
+    buf_map(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>')
+    buf_map(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>')
+    buf_map(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>')
+    buf_map(bufnr, 'n', '<leader>f', '<cmd>lua vim.lsp.buf.formatting()<CR>')
+    buf_map(bufnr, 'n', '<leader>aa', '<cmd>lua vim.diagnostic.setqflist()<CR>')
+    buf_map(bufnr, 'n', '<leader>ae', '<cmd>lua vim.diagnostic.setqflist({severity = "E"})<CR>')
+    buf_map(bufnr, 'n', '<leader>aw', '<cmd>lua vim.diagnostic.setqflist({severity = "W"})<CR>')
 
 
 
@@ -311,6 +326,7 @@ lua << EOF
   metals_config = require'metals'.bare_config()
   metals_config.capabilities = capabilities
   metals_config.flags = flags
+  metals_config.serverVersion = 'latest.snapshot'
 
   metals_config.settings = {
     showImplicitArguments = true
@@ -365,11 +381,12 @@ lua << EOF
 
   vim.cmd([[augroup lsp]])
   vim.cmd([[autocmd!]])
+  vim.cmd([[autocmd FileType sc,scala,sbt,java lua require("metals").initialize_or_attach(metals_config)]])
+  vim.cmd([[augroup END]])
+
   -- vim.cmd([[autocmd FileType scala setlocal omnifunc=v:lua.vim.lsp.omnifunc]])
   --vim.cmd([[autocmd FileType scala,java,elm,vim setlocal omnifunc=v:lua.vim.lsp.omnifunc]]) -- TODO disable? See https://github.com/neovim/nvim-lspconfig/wiki/Autocompletion#nvim-cmp
-  vim.cmd([[autocmd FileType scala,sbt,java lua require("metals").initialize_or_attach(metals_config)]])
   --vim.cmd([[autocmd BufWritePre *.scala,*.sbt,*.elm lua vim.lsp.buf.formatting_sync(nil, 1000)]])
-  vim.cmd([[augroup END]])
 
 EOF
 " }}}
