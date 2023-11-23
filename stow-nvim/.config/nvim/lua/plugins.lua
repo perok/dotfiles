@@ -229,7 +229,13 @@ return require('packer').startup(function()
     run = ':TSUpdate'
   }
   use 'p00f/nvim-ts-rainbow'
-  use 'JoosepAlviste/nvim-ts-context-commentstring'
+  use {
+    'JoosepAlviste/nvim-ts-context-commentstring',
+    config = function ()
+       require('ts_context_commentstring').setup {}
+       vim.g.skip_ts_context_commentstring_module = true
+    end
+  }
   use { 'neovim/nvim-lspconfig' }
   -- use({
   -- "https://git.sr.ht/~whynothugo/lsp_lines.nvim",

@@ -158,10 +158,6 @@ require'nvim-treesitter.configs'.setup {
     enable = true,
     -- disable = {'scala'},
   },
-  -- To make use 'JoosepAlviste/nvim-ts-context-commentstring' work
-  context_commentstring = {
-    enable = true
-  },
   rainbow = { -- For plugin 'p00f/nvim-ts-rainbow'
     enable = true,
     -- disable = { '' }, -- FT's
