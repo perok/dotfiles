@@ -214,7 +214,7 @@ lua << EOF
 
     buf_map(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>')
     buf_map(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>')
- -- " TODO I want this?
+ -- " TODO I want this? crashes with telescope
  -- " nnoremap <silent> <leader>sh  <cmd>lua vim.lsp.buf.signature_help()<CR>
 
     buf_map(bufnr, 'n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>')
@@ -223,6 +223,7 @@ lua << EOF
     buf_map(bufnr, 'n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>')
     buf_map(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>')
     buf_map(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>')
+    buf_map(bufnr, 'n', '<leader>cl', '<cmd>lua vim.lsp.codelens.run()<CR>')
     buf_map(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>')
     buf_map(bufnr, 'n', '<leader>f', '<cmd>lua vim.lsp.buf.formatting()<CR>')
     buf_map(bufnr, 'n', '<leader>aa', '<cmd>lua vim.diagnostic.setqflist()<CR>')
@@ -327,17 +328,55 @@ lua << EOF
 
     on_attach(client, bufnr)
 
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ws', '<cmd>lua require"metals".worksheet_hover()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'v', 'K', '<Esc><cmd>lua require("metals").type_of_range()<CR>', opts)
+    buf_map(bufnr, "n", "<leader>ws", function()
+      require("metals").hover_worksheet()
+    end, opts)
 
-    -- TODO configure dap keybindings
+    vim.api.nvim_buf_set_keymap_1(bufnr, 'v', 'K', '<Esc><cmd>lua require("metals").type_of_range()<CR>', opts)
+
     require("metals").setup_dap()
+
+    buf_map(bufnr, "n", "<leader>dc", function()
+      require("dap").continue()
+    end, opts)
+
+    buf_map(bufnr, "n", "<leader>dr", function()
+      require("dap").repl.toggle()
+    end, opts)
+
+    buf_map(bufnr, "n", "<leader>dK", function()
+      require("dap.ui.widgets").hover()
+    end, opts)
+
+    buf_map(bufnr, "n", "<leader>dt", function()
+      require("dap").toggle_breakpoint()
+    end, opts)
+
+    buf_map(bufnr, "n", "<leader>dso", function()
+      require("dap").step_over()
+    end, opts)
+
+    buf_map(bufnr, "n", "<leader>dsi", function()
+      require("dap").step_into()
+    end, opts)
+
+    buf_map(bufnr, "n", "<leader>dl", function()
+      require("dap").run_last()
+    end, opts)
   end
 
-  vim.cmd([[augroup lsp]])
-  vim.cmd([[autocmd!]])
-  vim.cmd([[autocmd FileType sc,scala,sbt,java lua require("metals").initialize_or_attach(metals_config)]])
-  vim.cmd([[augroup END]])
+  -- Autocmd that will actually be in charging of starting the whole thing
+  local nvim_metals_group = vim.api.nvim_create_augroup("nvim-metals", { clear = true })
+  vim.api.nvim_create_autocmd("FileType", {
+    -- NOTE: You may or may not want java included here. You will need it if you
+    -- want basic Java support but it may also conflict if you are using
+    -- something like nvim-jdtls which also works on a java filetype autocmd.
+    pattern = { "sc", "scala", "sbt", "java" },
+    callback = function()
+      require("metals").initialize_or_attach(metals_config)
+    end,
+    group = nvim_metals_group,
+  })
 
   -- vim.cmd([[autocmd FileType scala setlocal omnifunc=v:lua.vim.lsp.omnifunc]])
   --vim.cmd([[autocmd FileType scala,java,elm,vim setlocal omnifunc=v:lua.vim.lsp.omnifunc]]) -- TODO disable? See https://github.com/neovim/nvim-lspconfig/wiki/Autocompletion#nvim-cmp
