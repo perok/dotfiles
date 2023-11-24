@@ -274,7 +274,7 @@ require('lazy').setup({
     },
     config = function ()
       require'nvim-treesitter.configs'.setup {
-        ensure_installed = {'scala', 'html', 'javascript', 'yaml', 'css', 'lua', 'http', 'json', 'elm', 'bash', 'python', 'ruby', 'elixir'},
+        ensure_installed = 'all', --{'scala', 'html', 'javascript', 'yaml', 'css', 'lua', 'http', 'json', 'elm', 'bash', 'python', 'ruby', 'elixir'},
         -- Install parsers synchronously (only applied to `ensure_installed`)
         sync_install = false,
         highlight = {
