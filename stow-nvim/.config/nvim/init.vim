@@ -196,8 +196,6 @@ lua << EOF
 
 
   local flags = {
-    -- This will be the default in neovim 0.7+
-    debounce_text_changes = 150,
   }
 
   local on_attach = function(client, bufnr)
@@ -321,11 +319,11 @@ lua << EOF
   }
 
   metals_config.on_attach = function(client, bufnr)
+    on_attach(client, bufnr)
+
     vim.cmd([[autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()]])
     vim.cmd([[autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()]])
     vim.cmd([[autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]])
-
-    on_attach(client, bufnr)
 
     buf_map(bufnr, "n", "<leader>ws", function()
       require("metals").hover_worksheet()

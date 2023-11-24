@@ -40,10 +40,14 @@ require('lazy').setup({
    'editorconfig/editorconfig-vim',
 
    'kevinhwang91/nvim-bqf', ft = 'qf',
-
-  -- File explorer
-  --  'justinmk/vim-dirvish',
   {
+    'kevinhwang91/nvim-bqf',
+    ft = 'qf'
+  },
+
+
+  { -- File explorer
+    -- 'justinmk/vim-dirvish',
     'stevearc/oil.nvim',
     config = function()
       require('oil').setup({
@@ -56,7 +60,7 @@ require('lazy').setup({
   },
 
   {
-    'kyazdani42/nvim-tree.lua',
+    'nvim-tree/nvim-tree.lua', -- TODO https://github.com/nvim-neo-tree/neo-tree.nvim ?
     config = function()
       require'nvim-tree'.setup {
         -- disables netrw completely
@@ -94,16 +98,14 @@ require('lazy').setup({
    'tpope/vim-unimpaired', -- Bindings on [ and ]
    'tpope/vim-repeat',  -- '.' supports non-native commands
    'wellle/targets.vim', --   -- More useful text object
-  'christoomey/vim-tmux-navigator',
-
+   'christoomey/vim-tmux-navigator',
    'tpope/vim-commentary',
    'tpope/vim-fugitive',
-
-   'kyazdani42/nvim-web-devicons',
+   'nvim-tree/nvim-web-devicons',
   {
     'nvim-lualine/lualine.nvim',
     event = 'VeryLazy',
-    dependencies = {'kyazdani42/nvim-web-devicons', opt = true},
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
       -- local function get_short_cwd()
       --   return vim.fn.fnamemodify(vim.fn.getcwd(), ':t:h')
@@ -139,19 +141,18 @@ require('lazy').setup({
 
   {
     'lukas-reineke/indent-blankline.nvim',
-    config = function()
-      require("ibl").setup {
-        exclude = {
-          filetypes = { 'NvimTree', "startify", "lspinfo", "packer", "checkhealth", "help", ""},
-          buftypes = { 'terminal' }
-        },
-        scope = {
-          enabled = true
-        }
+     main = "ibl",
+    opts = {
+      exclude = {
+        filetypes = { 'NvimTree', "startify", "lspinfo", "packer", "checkhealth", "help", ""},
+        buftypes = { 'terminal' }
+      },
+      scope = {
+        enabled = true
       }
-    end
+    }
   },
-  {
+  { -- Formatter
     "stevearc/conform.nvim",
     event = { "BufWritePre" },
     cmd = { "ConformInfo" },
@@ -206,16 +207,15 @@ require('lazy').setup({
 
    'liuchengxu/vista.vim',
 
-  -- No bullshit tabline improvement
+  -- No bullshit tabline improvement TODO not maintained?
   {
     'alvarosevilla95/luatab.nvim',
-    dependencies = 'kyazdani42/nvim-web-devicons',
+    dependencies = 'nvim-tree/nvim-web-devicons',
     config = function ()
       require('luatab').setup{}
     end
   },
 
---  'junegunn/vim-peekaboo' -- replaced by WhichKey plugin,
 --  TODO remove fzf because of telescope. But how to install for shell?
   { 'junegunn/fzf',
     build = function() vim.fn['fzf#install']() end,
@@ -267,7 +267,6 @@ require('lazy').setup({
   {
     'nvim-treesitter/nvim-treesitter',
     event = { "VeryLazy" },
-    -- We recommend updating the parsers on update
     build = ':TSUpdate',
     dependencies = {
       'p00f/nvim-ts-rainbow',
