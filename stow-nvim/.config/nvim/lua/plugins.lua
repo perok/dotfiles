@@ -39,7 +39,6 @@ require('lazy').setup({
 
    'editorconfig/editorconfig-vim',
 
-   'kevinhwang91/nvim-bqf', ft = 'qf',
   {
     'kevinhwang91/nvim-bqf',
     ft = 'qf'
