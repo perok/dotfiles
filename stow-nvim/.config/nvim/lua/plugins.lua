@@ -268,7 +268,6 @@ require('lazy').setup({
     event = { "VeryLazy" },
     build = ':TSUpdate',
     dependencies = {
-      'p00f/nvim-ts-rainbow',
       'JoosepAlviste/nvim-ts-context-commentstring',
     },
     config = function ()
@@ -279,14 +278,6 @@ require('lazy').setup({
         highlight = {
           enable = true,
           -- disable = {'scala'},
-        },
-        rainbow = { -- For plugin 'p00f/nvim-ts-rainbow'
-          enable = true,
-          -- disable = { '' }, -- FT's
-          extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
-          max_file_lines = nil, -- Do not enable for files with more than n lines, int
-          -- colors = {}, -- table of hex strings
-          -- termcolors = {} -- table of colour name strings
         },
         incremental_selection = {
           enable = true,
@@ -303,7 +294,33 @@ require('lazy').setup({
       }
     end
   },
-  'p00f/nvim-ts-rainbow',
+  {
+    'HiPhish/rainbow-delimiters.nvim',
+    -- TODO scala support
+    config = function ()
+      local rainbow_delimiters = require 'rainbow-delimiters'
+
+      require('rainbow-delimiters.setup').setup {
+      strategy = {
+          [''] = rainbow_delimiters.strategy['global'],
+          vim = rainbow_delimiters.strategy['local'],
+      },
+      query = {
+          [''] = 'rainbow-delimiters',
+          lua = 'rainbow-blocks',
+      },
+      highlight = {
+          'RainbowDelimiterRed',
+          'RainbowDelimiterYellow',
+          'RainbowDelimiterBlue',
+          'RainbowDelimiterOrange',
+          'RainbowDelimiterGreen',
+          'RainbowDelimiterViolet',
+          'RainbowDelimiterCyan',
+      },
+    }
+  end
+  },
   {
     'JoosepAlviste/nvim-ts-context-commentstring',
     config = function ()
