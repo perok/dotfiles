@@ -144,6 +144,7 @@ nmap <F8> :Vista nvim_lsp<CR>
 
 " nvim-cmp {{{
 set completeopt-=longest
+" set completeopt=menu,menuone,noselect
 " }}}
 
 sign define DiagnosticSignError text=✘ texthl=DiagnosticSignError linehl=0 numhl=1
@@ -156,7 +157,6 @@ hi! link LspReferenceWrite CursorColumn
 
 hi! link LspSagaFinderSelection CursorColumn
 
-let g:cursorhold_updatetime = 100 " https://github.com/antoinemadec/FixCursorHold.nvim - for diagnostic_open
 lua << EOF
   -- Diagnostics configuration
   vim.cmd([[au CursorHold,CursorHoldI * lua vim.diagnostic.open_float(0,{scope = "cursor"})]])
@@ -168,21 +168,12 @@ lua << EOF
     float = { border = "single" }
   })
 
-  local opts = { noremap = true, silent = true }
   local function map(mode, lhs, rhs, opts)
     local options = { noremap = true, silent = true }
     if opts then
       options = vim.tbl_extend("force", options, opts)
     end
     vim.api.nvim_set_keymap(mode, lhs, rhs, options)
-  end
-
-  local function buf_map(bufnr, mode, lhs, rhs, opts)
-    local options = { noremap = true, silent = true }
-    if opts then
-      options = vim.tbl_extend("force", options, opts)
-    end
-    vim.api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, options)
   end
 
   map('n', '<leader>d', '<cmd>lua vim.diagnostic.setloclist()<CR>', { desc = "LSP diagnstic setloclist" })
@@ -195,189 +186,12 @@ lua << EOF
  -- nnoremap <silent> [e          <cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
 
 
-  local flags = {
-  }
-
-  local on_attach = function(client, bufnr)
-    --
-    -- Keybindings
-    --
-
-    --vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-    buf_map(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.definition()<CR>')
-    buf_map(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>')
-    buf_map(bufnr, 'n', 'gds', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]])
-    --vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>so', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]])
-    buf_map(bufnr, 'n', 'gws', [[<cmd>lua vim.lsp.buf.workspace_symbol()<CR>]])
-
-    buf_map(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>')
-    buf_map(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>')
- -- " TODO I want this? crashes with telescope
- -- " nnoremap <silent> <leader>sh  <cmd>lua vim.lsp.buf.signature_help()<CR>
-
-    buf_map(bufnr, 'n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>')
-    buf_map(bufnr, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>')
-    buf_map(bufnr, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>')
-    buf_map(bufnr, 'n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>')
-    buf_map(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>')
-    buf_map(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>')
-    buf_map(bufnr, 'n', '<leader>cl', '<cmd>lua vim.lsp.codelens.run()<CR>')
-    buf_map(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>')
-    buf_map(bufnr, 'n', '<leader>aa', '<cmd>lua vim.diagnostic.setqflist()<CR>')
-    buf_map(bufnr, 'n', '<leader>ae', '<cmd>lua vim.diagnostic.setqflist({severity = "E"})<CR>')
-    buf_map(bufnr, 'n', '<leader>aw', '<cmd>lua vim.diagnostic.setqflist({severity = "W"})<CR>')
-
-
-
--- " Metals specific
--- " map("n", "<leader>tt", [[<cmd>lua require("metals.tvp").toggle_tree_view()<CR>]])
--- " map("n", "<leader>tr", [[<cmd>lua require("metals.tvp").reveal_in_tree()<CR>]])
-
-
-  end
-
   --local shared_diagnostic_settings = vim.lsp.with(
   --  vim.lsp.diagnostic.on_publish_diagnostics,
   --  {
   --    virtual_text = false --{prefix = '', truncated = true}
   --  }
   --)
-  local lspconfig = require('lspconfig')
-  local capabilities = require('cmp_nvim_lsp').default_capabilities()
-
-  capabilities.textDocument.completion.completionItem.snippetSupport = true
-
-  local servers = { 'vimls', 'elmls', 'dockerls', 'cssls', 'tsserver', 'yamlls', 'html', 'bashls', 'solargraph', 'terraformls', 'purescriptls', 'hls', 'sqlls' }
-
-  for _, lsp in ipairs(servers) do
-    lspconfig[lsp].setup {
-      on_attach = on_attach,
-      capabilities = capabilities,
-      flags = flags,
-    }
-  end
-
-  lspconfig.jsonls.setup {
-    on_attach = on_attach,
-    capabilities = capabilities,
-    flags = flags,
-    settings = {
-      json = {
-        schemas = require('schemastore').json.schemas(),
-      },
-    },
-    commands = {
-      Format = {
-        function()
-          vim.lsp.buf.range_formatting({}, { 0, 0 }, { vim.fn.line("$"), 0 })
-        end,
-      },
-    },
-  }
-
-  -- Configure Scala LSP server
-  metals_config = require'metals'.bare_config()
-  metals_config.capabilities = capabilities
-  metals_config.flags = flags
-  metals_config.serverVersion = 'latest.snapshot'
-
-  metals_config.settings = {
-    showImplicitArguments = true
-  }
-
-  -- Enables `metals#status()`
-  metals_config.init_options.statusBarProvider = 'on'
-
-  -- Debug settings if you're using nvim-dap
-  local dap = require("dap")
-  dap.configurations.scala = {
-    {
-      type = "scala",
-      request = "launch",
-      name = "Run",
-      metals = {
-        runType = "run",
-        args = { "firstArg", "secondArg", "thirdArg" },
-      },
-    },
-    {
-      type = "scala",
-      request = "launch",
-      name = "Test File",
-      metals = {
-        runType = "testFile",
-      },
-    },
-    {
-      type = "scala",
-      request = "launch",
-      name = "Test Target",
-      metals = {
-        runType = "testTarget",
-      },
-    },
-  }
-
-  metals_config.on_attach = function(client, bufnr)
-    on_attach(client, bufnr)
-
-    vim.cmd([[autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()]])
-    vim.cmd([[autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()]])
-    vim.cmd([[autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]])
-
-    buf_map(bufnr, "n", "<leader>ws", function()
-      require("metals").hover_worksheet()
-    end, opts)
-
-    vim.api.nvim_buf_set_keymap_1(bufnr, 'v', 'K', '<Esc><cmd>lua require("metals").type_of_range()<CR>', opts)
-
-    require("metals").setup_dap()
-
-    buf_map(bufnr, "n", "<leader>dc", function()
-      require("dap").continue()
-    end, opts)
-
-    buf_map(bufnr, "n", "<leader>dr", function()
-      require("dap").repl.toggle()
-    end, opts)
-
-    buf_map(bufnr, "n", "<leader>dK", function()
-      require("dap.ui.widgets").hover()
-    end, opts)
-
-    buf_map(bufnr, "n", "<leader>dt", function()
-      require("dap").toggle_breakpoint()
-    end, opts)
-
-    buf_map(bufnr, "n", "<leader>dso", function()
-      require("dap").step_over()
-    end, opts)
-
-    buf_map(bufnr, "n", "<leader>dsi", function()
-      require("dap").step_into()
-    end, opts)
-
-    buf_map(bufnr, "n", "<leader>dl", function()
-      require("dap").run_last()
-    end, opts)
-  end
-
-  -- Autocmd that will actually be in charging of starting the whole thing
-  local nvim_metals_group = vim.api.nvim_create_augroup("nvim-metals", { clear = true })
-  vim.api.nvim_create_autocmd("FileType", {
-    -- NOTE: You may or may not want java included here. You will need it if you
-    -- want basic Java support but it may also conflict if you are using
-    -- something like nvim-jdtls which also works on a java filetype autocmd.
-    pattern = { "sc", "scala", "sbt", "java" },
-    callback = function()
-      require("metals").initialize_or_attach(metals_config)
-    end,
-    group = nvim_metals_group,
-  })
-
-  -- vim.cmd([[autocmd FileType scala setlocal omnifunc=v:lua.vim.lsp.omnifunc]])
-  --vim.cmd([[autocmd FileType scala,java,elm,vim setlocal omnifunc=v:lua.vim.lsp.omnifunc]]) -- TODO disable? See https://github.com/neovim/nvim-lspconfig/wiki/Autocompletion#nvim-cmp
-  --vim.cmd([[autocmd BufWritePre *.scala,*.sbt,*.elm lua vim.lsp.buf.formatting_sync(nil, 1000)]])
 
 EOF
 " }}}

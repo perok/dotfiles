@@ -13,9 +13,53 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require('lazy').setup({
-  'antoinemadec/FixCursorHold.nvim',
+local function map(mode, lhs, rhs, opts)
+  local options = { noremap = true, silent = true }
+  if opts then
+    options = vim.tbl_extend("force", options, opts)
+  end
+  vim.api.nvim_set_keymap(mode, lhs, rhs, options)
+end
 
+local function buf_map(bufnr, mode, lhs, rhs, opts)
+  local options = { noremap = true, silent = true }
+  if opts then
+    options = vim.tbl_extend("force", options, opts)
+  end
+  vim.api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, options)
+end
+
+local on_attach = function(client, bufnr)
+  --
+  -- Keybindings
+  --
+
+  --vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  buf_map(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.definition()<CR>')
+  buf_map(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>')
+  buf_map(bufnr, 'n', 'gds', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]])
+  --vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>so', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]])
+  buf_map(bufnr, 'n', 'gws', [[<cmd>lua vim.lsp.buf.workspace_symbol()<CR>]])
+
+  buf_map(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>')
+  buf_map(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>')
+  -- " TODO I want this? crashes with telescope
+  -- " nnoremap <silent> <leader>sh  <cmd>lua vim.lsp.buf.signature_help()<CR>
+
+  buf_map(bufnr, 'n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>')
+  buf_map(bufnr, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>')
+  buf_map(bufnr, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>')
+  buf_map(bufnr, 'n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>')
+  buf_map(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>')
+  buf_map(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>')
+  buf_map(bufnr, 'n', '<leader>cl', '<cmd>lua vim.lsp.codelens.run()<CR>')
+  buf_map(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>')
+  buf_map(bufnr, 'n', '<leader>aa', '<cmd>lua vim.diagnostic.setqflist()<CR>')
+  buf_map(bufnr, 'n', '<leader>ae', '<cmd>lua vim.diagnostic.setqflist({severity = "E"})<CR>')
+  buf_map(bufnr, 'n', '<leader>aw', '<cmd>lua vim.diagnostic.setqflist({severity = "W"})<CR>')
+end
+
+require('lazy').setup({
   --  'morhetz/gruvbox',
   --  'chriskempson/base16-vim',
   --  'dawikur/base16-vim-airline-themes',
@@ -328,45 +372,7 @@ require('lazy').setup({
        vim.g.skip_ts_context_commentstring_module = true
     end
   },
-   'neovim/nvim-lspconfig',
-  -- ({
-  -- "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
-  -- config = function()
-  --   require("lsp_lines").setup()
-  -- end,
--- }),
-  {  -- LSP server for Scala
-    'scalameta/nvim-metals',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'mfussenegger/nvim-dap'
-    },
-  },
-  {
-    "rcarriga/nvim-dap-ui",
-    dependencies = {
-      "mfussenegger/nvim-dap"
-    }
-  },
 
-  {
-    "folke/neodev.nvim",
-    config = function()
-      require("neodev").setup({
-        library = { plugins = { "nvim-dap-ui" }, types = true },
-      })
-    end
-  },
-
-  'hashivim/vim-terraform',
-
-  {
-    "petertriho/cmp-git",
-    dependencies = "nvim-lua/plenary.nvim",
-    config = function()
-      require("cmp_git").setup()
-    end
-  },
 
   {
     "hrsh7th/nvim-cmp",
@@ -384,6 +390,13 @@ require('lazy').setup({
       "hrsh7th/cmp-nvim-lsp-signature-help",
       -- Fanyc vscode like icons for lsp
       'onsails/lspkind-nvim',
+      {
+        "petertriho/cmp-git",
+        dependencies = "nvim-lua/plenary.nvim",
+        config = function()
+          require("cmp_git").setup()
+        end
+      },
     },
     config = function()
       local lspkind = require('lspkind')
@@ -509,13 +522,184 @@ require('lazy').setup({
       })
     end
   },
-  -- anoying..
-  -- use {
-  --   'kosayoda/nvim-lightbulb',
-  --   config = function()
-  --     vim.cmd [[autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()]]
-  --   end
-  -- }
+  {
+    'neovim/nvim-lspconfig',
+    config = function(self, opts)
+      local lspconfig = require('lspconfig')
+      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+      capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+      local servers = {
+        'vimls', 'elmls', 'dockerls', 'cssls', 'tsserver',
+        'yamlls', 'html', 'bashls', 'solargraph', 'terraformls',
+        'purescriptls', 'hls', 'sqlls'
+      }
+
+      local flags = {
+      }
+
+      for _, lsp in ipairs(servers) do
+        lspconfig[lsp].setup {
+          on_attach = on_attach,
+          capabilities = capabilities,
+          flags = flags,
+        }
+      end
+
+      lspconfig.jsonls.setup {
+        on_attach = on_attach,
+        capabilities = capabilities,
+        flags = flags,
+        settings = {
+          json = {
+            schemas = require('schemastore').json.schemas(),
+          },
+        },
+        commands = {
+          Format = {
+            function()
+              vim.lsp.buf.range_formatting({}, { 0, 0 }, { vim.fn.line("$"), 0 })
+            end,
+          },
+        },
+      }
+    end
+  },
+  -- ({
+  -- "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+  -- config = function()
+  --   require("lsp_lines").setup()
+  -- end,
+-- }),
+  {  -- LSP server for Scala
+    'scalameta/nvim-metals',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      {
+        'mfussenegger/nvim-dap',
+        config = function(self, opts)
+          local dap = require("dap")
+          dap.configurations.scala = {
+            {
+              type = "scala",
+              request = "launch",
+              name = "Run",
+              metals = {
+                runType = "run",
+                args = { "firstArg", "secondArg", "thirdArg" },
+              },
+            },
+            {
+              type = "scala",
+              request = "launch",
+              name = "Test File",
+              metals = {
+                runType = "testFile",
+              },
+            },
+            {
+              type = "scala",
+              request = "launch",
+              name = "Test Target",
+              metals = {
+                runType = "testTarget",
+              },
+            },
+          }
+        end
+      }
+    },
+    ft = { "sc", "scala", "sbt", "java" },
+    opts = function()
+      local function buf_map(bufnr, mode, lhs, rhs, opts)
+        local options = { noremap = true, silent = true }
+        if opts then
+          options = vim.tbl_extend("force", options, opts)
+        end
+        vim.api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, options)
+      end
+
+      local metals_config = require'metals'.bare_config()
+      metals_config.capabilities = require("cmp_nvim_lsp").default_capabilities()
+      metals_config.flags = flags
+      metals_config.serverVersion = 'latest.snapshot'
+
+      metals_config.settings = {
+        showImplicitArguments = true
+      }
+
+      -- Enables `metals#status()`
+      metals_config.init_options.statusBarProvider = 'on'
+
+      metals_config.on_attach = function(client, bufnr)
+        on_attach(client, bufnr)
+        require("metals").setup_dap()
+
+        vim.cmd([[autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()]])
+        vim.cmd([[autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()]])
+        vim.cmd([[autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]])
+
+        buf_map(bufnr, "n", "<leader>ws", function()
+          require("metals").hover_worksheet()
+        end, opts)
+
+        vim.api.nvim_buf_set_keymap(bufnr, 'v', 'K', '<Esc><cmd>lua require("metals").type_of_range()<CR>', opts)
+
+        buf_map(bufnr, "n", "<leader>dc", function()
+          require("dap").continue()
+        end, opts)
+
+        buf_map(bufnr, "n", "<leader>dr", function()
+          require("dap").repl.toggle()
+        end, opts)
+
+        buf_map(bufnr, "n", "<leader>dK", function()
+          require("dap.ui.widgets").hover()
+        end, opts)
+
+        buf_map(bufnr, "n", "<leader>dt", function()
+          require("dap").toggle_breakpoint()
+        end, opts)
+
+        buf_map(bufnr, "n", "<leader>dso", function()
+          require("dap").step_over()
+        end, opts)
+
+        buf_map(bufnr, "n", "<leader>dsi", function()
+          require("dap").step_into()
+        end, opts)
+
+        buf_map(bufnr, "n", "<leader>dl", function()
+          require("dap").run_last()
+        end, opts)
+      end
+
+      return metals_config
+    end,
+    config = function(self, metals_config)
+      require("metals").initialize_or_attach(metals_config)
+    end
+  },
+
+  {
+    "rcarriga/nvim-dap-ui",
+    dependencies = {
+      "mfussenegger/nvim-dap"
+    }
+  },
+
+  {
+    "folke/neodev.nvim",
+    config = function()
+      require("neodev").setup({
+        library = { plugins = { "nvim-dap-ui" }, types = true },
+      })
+    end
+  },
+
+  'hashivim/vim-terraform',
+
 
   {
     'rest-nvim/rest.nvim',
@@ -550,7 +734,7 @@ require('lazy').setup({
 
   --  'vim-pandoc/vim-pandoc', ft = { 'markdown', 'pandoc' },
   --  'vim-pandoc/vim-pandoc-syntax', ft = { 'markdown', 'pandoc' },
-  'purescript-contrib/purescript-vim',
+  -- 'purescript-contrib/purescript-vim',
   'kmonad/kmonad-vim',
   'b0o/schemastore.nvim',
 })
