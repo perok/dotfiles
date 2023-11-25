@@ -75,11 +75,27 @@ require('lazy').setup({
   --  'liuchengxu/vim-which-key',
   {
     "folke/which-key.nvim",
+    init = function()
+      vim.o.timeout = true
+      vim.o.timeoutlen = 500 -- Default timeout is 1000ms
+    end,
     config = function()
       require("which-key").setup {}
+
+      --" Hide status line when WhichKey is active
+      -- autocmd! FileType which_key
+      -- autocmd  FileType which_key set laststatus=0 noshowmode noruler
+      --   \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
     end
   },
-   'mhinz/vim-startify',
+  {
+    'mhinz/vim-startify',
+    init = function ()
+      vim.g.startify_custom_header = {}
+      vim.g.startify_change_to_dir = 0
+      --let g:startify_change_to_vcs_root = 1
+    end
+  },
 
    'editorconfig/editorconfig-vim',
 
@@ -237,7 +253,10 @@ require('lazy').setup({
 
   {
     'mbbill/undotree',
-    cmd = 'UndotreeToggle'
+    cmd = 'UndotreeToggle',
+    keys = {
+      {'<F6>', [[<cmd>UndotreeToggle<CR>]], silent = true },
+    }
   },
   -- 'whiteinge/diffconflicts',
   'sindrets/diffview.nvim', -- Git diff viewer,
@@ -248,7 +267,16 @@ require('lazy').setup({
   -- -- migrate ctrlp to command! FZF FloatermNew fzf ??
   -- },
 
-   'liuchengxu/vista.vim',
+  {
+    -- TODO Vista finder nvim_lsp -> nvim-telescope
+    'liuchengxu/vista.vim',
+    init = function ()
+      vim.g.vista_default_executive = 'nvim_lsp'
+    end,
+    keys = {
+      {'<F8>', [[<cmd>Vista nvim_lsp<CR>]], silent = true },
+    }
+  },
 
   -- No bullshit tabline improvement TODO not maintained?
   {
@@ -304,7 +332,23 @@ require('lazy').setup({
       'nvim-lua/plenary.nvim',
       'nvim-telescope/telescope-symbols.nvim',
       'nvim-telescope/telescope-fzy-native.nvim'
-    }
+    },
+    keys = {
+      {'<C-p>', [[<cmd>Telescope find_files hidden=true<CR>]], silent = true },
+      {'<C-a>', [[<cmd>Telescope commands<CR>]], silent = true },
+      {'<leader>b', [[<cmd>lua require('telescope.builtin').buffers()<CR>]], silent = true },
+      {'<leader><space>', [[<cmd>lua require('telescope.builtin').buffers()<CR>]], silent = true },
+      {'<leader>sf', [[<cmd>lua require('telescope.builtin').find_files({previewer = false}<CR>]], silent = true },
+      {'<leader>sb', [[<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<CR>]],  silent = true },
+      {'<leader>sh', [[<cmd>lua require('telescope.builtin').help_tags()<CR>]],  silent = true },
+      {'<leader>st', [[<cmd>lua require('telescope.builtin').tags()<CR>]],  silent = true },
+      {'<leader>sd', [[<cmd>lua require('telescope.builtin').grep_string()<CR>]],  silent = true },
+      {'<leader>sp', [[<cmd>lua require('telescope.builtin').live_grep()<CR>]],  silent = true , desc = "Live grep" },
+      {'<leader>so', [[<cmd>lua require('telescope.builtin').tags { only_current_buffer = true }<CR>]], silent = true },
+      {'<leader>?', [[<cmd>lua require('telescope.builtin').oldfiles()<CR>]],  silent = true },
+      -- {'<leader>fg', "<cmd>Telescope live_grep<cr>", desc = "Live grep"},
+      -- {'<leader>ff', "<cmd>Telescope find_files<cr>" desc = "Find file"},
+    },
   },
 
   {

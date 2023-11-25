@@ -29,62 +29,25 @@ let g:maplocalleader=","
 " Plugins {{{
 lua require('plugins')
 
-" vim-which-key {{{
-set timeoutlen=500 " Default timeout is 1000ms
-" nnoremap <silent> <leader>      :<c-u>WhichKey '<Space>'<CR>
-" nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
-" call which_key#register('<Space>', 'g:which_key_map')
-" let g:which_key_map =  {}
-
-" Hide status line when WhichKey is active
-autocmd! FileType which_key
-autocmd  FileType which_key set laststatus=0 noshowmode noruler
-  \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
-" TODO this is just an example
-"let g:which_key_map['w'] = {
-"      \ 'name' : '+windows' ,
-"      \ 'w' : ['<C-W>w'     , 'other-window']          ,
-"      \ 'd' : ['<C-W>c'     , 'delete-window']         ,
-"      \ '-' : ['<C-W>s'     , 'split-window-below']    ,
-"      \ '|' : ['<C-W>v'     , 'split-window-right']    ,
-"      \ '2' : ['<C-W>v'     , 'layout-double-columns'] ,
-"      \ 'h' : ['<C-W>h'     , 'window-left']           ,
-"      \ 'j' : ['<C-W>j'     , 'window-below']          ,
-"      \ 'l' : ['<C-W>l'     , 'window-right']          ,
-"      \ 'k' : ['<C-W>k'     , 'window-up']             ,
-"      \ 'H' : ['<C-W>5<'    , 'expand-window-left']    ,
-"      \ 'J' : [':resize +5'  , 'expand-window-below']   ,
-"      \ 'L' : ['<C-W>5>'    , 'expand-window-right']   ,
-"      \ 'K' : [':resize -5'  , 'expand-window-up']      ,
-"      \ '=' : ['<C-W>='     , 'balance-window']        ,
-"      \ 's' : ['<C-W>s'     , 'split-window-below']    ,
-"      \ 'v' : ['<C-W>v'     , 'split-window-below']    ,
-"      \ '?' : ['Windows'    , 'fzf-window']            ,
-"      \ }
-" }}}
-
-let g:startify_custom_header = []
-let g:startify_change_to_dir = 0
-" let g:startify_change_to_vcs_root = 1
 
 " Trick from
 " https://github.com/justinmk/vim-dirvish/issues/70#issuecomment-626258095
 
-" Dirvish / oil.nvim{{{
+" Dirvish {{{
 " Replace netrw
-let g:loaded_netrw = 1
-let g:loaded_netrwPlugin = 1
+" let g:loaded_netrw = 1
+" let g:loaded_netrwPlugin = 1
 " command! -nargs=? -complete=dir Explore Dirvish <args>
 " command! -nargs=? -complete=dir Sexplore belowright split | silent Dirvish <args>
 
 " Use t in dirvish to show subdirectories
 " Trick from https://github.com/justinmk/vim-dirvish/issues/70#issuecomment-626258095
-augroup dirvish_config
-    autocmd!
-    autocmd FileType dirvish
-            \ nnoremap <silent><buffer> t ddO<Esc>:let @"=substitute(@", '\n', '', 'g')<CR>:r ! find "<C-R>"" -maxdepth 1 -print0 \| xargs -0 ls -Fd<CR>:silent! keeppatterns %s/\/\//\//g<CR>:silent! keeppatterns %s/[^a-zA-Z0-9\/]$//g<CR>:silent! keeppatterns g/^$/d<CR>:noh<CR>
+" augroup dirvish_config
+"     autocmd!
+"     autocmd FileType dirvish
+"             \ nnoremap <silent><buffer> t ddO<Esc>:let @"=substitute(@", '\n', '', 'g')<CR>:r ! find "<C-R>"" -maxdepth 1 -print0 \| xargs -0 ls -Fd<CR>:silent! keeppatterns %s/\/\//\//g<CR>:silent! keeppatterns %s/[^a-zA-Z0-9\/]$//g<CR>:silent! keeppatterns g/^$/d<CR>:noh<CR>
 
-augroup END
+" augroup END
 " }}}
 " vim-sneak {{{
 " Move around with s{char}{char}
@@ -98,7 +61,6 @@ augroup END
 " map T <Plug>Sneak_T
 " }}}
 " Undotree {{{
-nnoremap <F6> :UndotreeToggle<cr>
 if has("persistent_undo")
     set undofile
     set undodir=~/.undodir/
@@ -111,32 +73,9 @@ endif
 " Do not add extra keyboard mappings
 " let g:pandoc#keyboard#use_default_mappings = 0
 
-" Telescope setup {{{
-
-nnoremap <C-p> <cmd>Telescope find_files hidden=true<cr>
-nnoremap <C-a> <cmd>Telescope commands<cr>
-
-nnoremap <silent> <leader>b  <cmd>lua require('telescope.builtin').buffers()<CR>
-lua << EOF
-vim.api.nvim_set_keymap('n', '<leader><space>', [[<cmd>lua require('telescope.builtin').buffers()<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>sf', [[<cmd>lua require('telescope.builtin').find_files({previewer = false})<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>sb', [[<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>sh', [[<cmd>lua require('telescope.builtin').help_tags()<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>st', [[<cmd>lua require('telescope.builtin').tags()<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>sd', [[<cmd>lua require('telescope.builtin').grep_string()<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>sp', [[<cmd>lua require('telescope.builtin').live_grep()<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>so', [[<cmd>lua require('telescope.builtin').tags{ only_current_buffer = true }<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>?', [[<cmd>lua require('telescope.builtin').oldfiles()<CR>]], { noremap = true, silent = true })
-EOF
-" }}}
-
 command! Ranger FloatermNew ranger
 
-" Omnicompletion
 
-let g:vista_default_executive = 'nvim_lsp'
-nmap <F8> :Vista nvim_lsp<CR>
-"TODO Vista finder nvim_lsp -> nvim-telescope
 
 " }}}
 
@@ -616,14 +555,14 @@ endfunction " }}}
 
 " Terminal {{{
 " FloatTerm
-nnoremap   <silent>   <F7>    :FloatermNew<CR>
-tnoremap   <silent>   <F7>    <C-\><C-n>:FloatermNew<CR>
-nnoremap   <silent>   <F8>    :FloatermPrev<CR>
-tnoremap   <silent>   <F8>    <C-\><C-n>:FloatermPrev<CR>
-nnoremap   <silent>   <F9>    :FloatermNext<CR>
-tnoremap   <silent>   <F9>    <C-\><C-n>:FloatermNext<CR>
-nnoremap   <silent>   <F12>   :FloatermToggle<CR>
-tnoremap   <silent>   <F12>   <C-\><C-n>:FloatermToggle<CR>
+" nnoremap   <silent>   <F7>    :FloatermNew<CR>
+" tnoremap   <silent>   <F7>    <C-\><C-n>:FloatermNew<CR>
+" nnoremap   <silent>   <F8>    :FloatermPrev<CR>
+" tnoremap   <silent>   <F8>    <C-\><C-n>:FloatermPrev<CR>
+" nnoremap   <silent>   <F9>    :FloatermNext<CR>
+" tnoremap   <silent>   <F9>    <C-\><C-n>:FloatermNext<CR>
+" nnoremap   <silent>   <F12>   :FloatermToggle<CR>
+" tnoremap   <silent>   <F12>   <C-\><C-n>:FloatermToggle<CR>
 " TODO I want F12? disabled yakuake
 
 if has('nvim')
