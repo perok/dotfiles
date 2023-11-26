@@ -165,23 +165,17 @@ require('lazy').setup({
     'nvim-lualine/lualine.nvim',
     event = 'VeryLazy',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
-    config = function()
-      -- local function get_short_cwd()
-      --   return vim.fn.fnamemodify(vim.fn.getcwd(), ':t:h')
-      -- end
-
-      require('lualine').setup {
-        sections = {
-          -- lualine_a = {'mode', 'g:metals_status'}
-          lualine_c = {
-            -- get_short_cwd,
-            'filename',
-            'g:metals_status'
-            -- {'g:metals_status', separator = { left = '', right = ''}}
-          }
+    opts = {
+      sections = {
+        -- lualine_a = {'mode', 'g:metals_status'}
+        lualine_c = {
+          -- get_short_cwd,
+          'filename',
+          'g:metals_status'
+          -- {'g:metals_status', separator = { left = '', right = ''}}
         }
       }
-    end
+    }
   },
 
   -- Better search highlighting
@@ -200,7 +194,7 @@ require('lazy').setup({
 
   {
     'lukas-reineke/indent-blankline.nvim',
-     main = "ibl",
+    main = "ibl",
     opts = {
       exclude = {
         filetypes = { 'NvimTree', "startify", "lspinfo", "packer", "checkhealth", "help", ""},
@@ -407,25 +401,25 @@ require('lazy').setup({
       local rainbow_delimiters = require 'rainbow-delimiters'
 
       require('rainbow-delimiters.setup').setup {
-      strategy = {
-          [''] = rainbow_delimiters.strategy['global'],
-          vim = rainbow_delimiters.strategy['local'],
-      },
-      query = {
-          [''] = 'rainbow-delimiters',
-          lua = 'rainbow-blocks',
-      },
-      highlight = {
-          'RainbowDelimiterRed',
-          'RainbowDelimiterYellow',
-          'RainbowDelimiterBlue',
-          'RainbowDelimiterOrange',
-          'RainbowDelimiterGreen',
-          'RainbowDelimiterViolet',
-          'RainbowDelimiterCyan',
-      },
-    }
-  end
+        strategy = {
+            [''] = rainbow_delimiters.strategy['global'],
+            vim = rainbow_delimiters.strategy['local'],
+        },
+        query = {
+            [''] = 'rainbow-delimiters',
+            lua = 'rainbow-blocks',
+        },
+        highlight = {
+            'RainbowDelimiterRed',
+            'RainbowDelimiterYellow',
+            'RainbowDelimiterBlue',
+            'RainbowDelimiterOrange',
+            'RainbowDelimiterGreen',
+            'RainbowDelimiterViolet',
+            'RainbowDelimiterCyan',
+        },
+      }
+    end
   },
   {
     'JoosepAlviste/nvim-ts-context-commentstring',
@@ -586,6 +580,9 @@ require('lazy').setup({
   },
   {
     'neovim/nvim-lspconfig',
+    dependencies = {
+     'b0o/schemastore.nvim',
+    },
     config = function(self, opts)
       local lspconfig = require('lspconfig')
       local capabilities = require('cmp_nvim_lsp').default_capabilities()
@@ -594,7 +591,7 @@ require('lazy').setup({
 
       local servers = {
         'vimls', 'elmls', 'dockerls', 'cssls', 'tsserver',
-        'yamlls', 'html', 'bashls', 'solargraph', 'terraformls',
+        'html', 'bashls', 'solargraph', 'terraformls',
         'purescriptls', 'hls', 'sqlls'
       }
 
@@ -609,6 +606,24 @@ require('lazy').setup({
         }
       end
 
+      lspconfig.yamlls.setup {
+        on_attach = on_attach,
+        capabilities = capabilities,
+        flags = flags,
+        settings = {
+          yaml = {
+            schemaStore = {
+              -- You must disable built-in schemaStore support if you want to use
+              -- this plugin and its advanced options like `ignore`.
+              enable = false,
+              -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
+              url = "",
+            },
+            schemas = require('schemastore').yaml.schemas(),
+          },
+        },
+      }
+
       lspconfig.jsonls.setup {
         on_attach = on_attach,
         capabilities = capabilities,
@@ -616,6 +631,7 @@ require('lazy').setup({
         settings = {
           json = {
             schemas = require('schemastore').json.schemas(),
+            validate = { enable = true },
           },
         },
         commands = {
@@ -798,5 +814,4 @@ require('lazy').setup({
   --  'vim-pandoc/vim-pandoc-syntax', ft = { 'markdown', 'pandoc' },
   -- 'purescript-contrib/purescript-vim',
   'kmonad/kmonad-vim',
-  'b0o/schemastore.nvim',
 })
