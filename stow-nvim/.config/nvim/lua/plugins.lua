@@ -90,14 +90,14 @@ require('lazy').setup({
   },
   {
     'mhinz/vim-startify',
-    init = function ()
+    init = function()
       vim.g.startify_custom_header = {}
       vim.g.startify_change_to_dir = 0
       --let g:startify_change_to_vcs_root = 1
     end
   },
 
-   'editorconfig/editorconfig-vim',
+  'editorconfig/editorconfig-vim',
 
   {
     'kevinhwang91/nvim-bqf',
@@ -121,20 +121,20 @@ require('lazy').setup({
   {
     'nvim-tree/nvim-tree.lua', -- TODO https://github.com/nvim-neo-tree/neo-tree.nvim ?
     config = function()
-      require'nvim-tree'.setup {
+      require 'nvim-tree'.setup {
         -- disables netrw completely
         disable_netrw       = true,
         -- hijack netrw window on startup
         hijack_netrw        = true,
         -- hijacks new directory buffers when they are opened. - Dirvish coop
-        hijack_directories   = {
+        hijack_directories  = {
           enable = false,
         },
         hijack_cursor       = true,
         update_focused_file = {
           enable = true
         },
-        renderer = {
+        renderer            = {
           group_empty = true,
           -- Hide the root path of the current folder on top of the tree
           root_folder_label = false
@@ -147,20 +147,20 @@ require('lazy').setup({
 
   --  'justinmk/vim-sneak',
   {
-   'ggandor/leap.nvim', -- Similar to vim-sneak
+    'ggandor/leap.nvim', -- Similar to vim-sneak
     config = function()
       require('leap').add_default_mappings()
     end
   },
-   'tpope/vim-eunuch',
-   'tpope/vim-surround',
-   'tpope/vim-unimpaired', -- Bindings on [ and ]
-   'tpope/vim-repeat',  -- '.' supports non-native commands
-   'wellle/targets.vim', --   -- More useful text object
-   'christoomey/vim-tmux-navigator',
-   'tpope/vim-commentary',
-   'tpope/vim-fugitive',
-   'nvim-tree/nvim-web-devicons',
+  'tpope/vim-eunuch',
+  'tpope/vim-surround',
+  'tpope/vim-unimpaired', -- Bindings on [ and ]
+  'tpope/vim-repeat',     -- '.' supports non-native commands
+  'wellle/targets.vim',   --   -- More useful text object
+  'christoomey/vim-tmux-navigator',
+  'tpope/vim-commentary',
+  'tpope/vim-fugitive',
+  'nvim-tree/nvim-web-devicons',
   {
     'nvim-lualine/lualine.nvim',
     event = 'VeryLazy',
@@ -197,7 +197,7 @@ require('lazy').setup({
     main = "ibl",
     opts = {
       exclude = {
-        filetypes = { 'NvimTree', "startify", "lspinfo", "packer", "checkhealth", "help", ""},
+        filetypes = { 'NvimTree', "startify", "lspinfo", "packer", "checkhealth", "help", "" },
         buftypes = { 'terminal' }
       },
       scope = {
@@ -249,7 +249,7 @@ require('lazy').setup({
     'mbbill/undotree',
     cmd = 'UndotreeToggle',
     keys = {
-      {'<F6>', [[<cmd>UndotreeToggle<cr>]], silent = true },
+      { '<F6>', [[<cmd>UndotreeToggle<cr>]], silent = true },
     }
   },
   -- 'whiteinge/diffconflicts',
@@ -264,11 +264,11 @@ require('lazy').setup({
   {
     -- TODO Vista finder nvim_lsp -> nvim-telescope
     'liuchengxu/vista.vim',
-    init = function ()
+    init = function()
       vim.g.vista_default_executive = 'nvim_lsp'
     end,
     keys = {
-      {'<F8>', [[<cmd>Vista nvim_lsp<cr>]], silent = true },
+      { '<F8>', [[<cmd>Vista nvim_lsp<cr>]], silent = true },
     }
   },
 
@@ -276,13 +276,14 @@ require('lazy').setup({
   {
     'alvarosevilla95/luatab.nvim',
     dependencies = 'nvim-tree/nvim-web-devicons',
-    config = function ()
-      require('luatab').setup{}
+    config = function()
+      require('luatab').setup {}
     end
   },
 
---  TODO remove fzf because of telescope. But how to install for shell?
-  { 'junegunn/fzf',
+  --  TODO remove fzf because of telescope. But how to install for shell?
+  {
+    'junegunn/fzf',
     build = function() vim.fn['fzf#install']() end,
     dependencies = {
       { 'junegunn/fzf.vim' }
@@ -292,7 +293,7 @@ require('lazy').setup({
     'nvim-telescope/telescope.nvim',
     config = function()
       local telescope = require('telescope')
-      telescope.setup{
+      telescope.setup {
         defaults = {
           vimgrep_arguments = {
             'rg',
@@ -328,18 +329,18 @@ require('lazy').setup({
       'nvim-telescope/telescope-fzy-native.nvim'
     },
     keys = {
-      {'<C-p>', [[<cmd>Telescope find_files hidden=true<cr>]], silent = true },
-      {'<C-a>', [[<cmd>Telescope commands<cr>]], silent = true },
-      {'<leader>b', [[<cmd>lua require('telescope.builtin').buffers()<cr>]], silent = true },
-      {'<leader><space>', [[<cmd>lua require('telescope.builtin').buffers()<cr>]], silent = true },
-      {'<leader>sf', [[<cmd>lua require('telescope.builtin').find_files({previewer = false}<cr>]], silent = true },
-      {'<leader>sb', [[<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<cr>]],  silent = true },
-      {'<leader>sh', [[<cmd>lua require('telescope.builtin').help_tags()<cr>]],  silent = true },
-      {'<leader>st', [[<cmd>lua require('telescope.builtin').tags()<cr>]],  silent = true },
-      {'<leader>sd', [[<cmd>lua require('telescope.builtin').grep_string()<cr>]],  silent = true },
-      {'<leader>sp', [[<cmd>lua require('telescope.builtin').live_grep()<cr>]],  silent = true , desc = "Live grep" },
-      {'<leader>so', [[<cmd>lua require('telescope.builtin').tags { only_current_buffer = true }<cr>]], silent = true },
-      {'<leader>?', [[<cmd>lua require('telescope.builtin').oldfiles()<cr>]],  silent = true },
+      { '<C-p>',           [[<cmd>Telescope find_files hidden=true<cr>]],                                     silent = true },
+      { '<C-a>',           [[<cmd>Telescope commands<cr>]],                                                   silent = true },
+      { '<leader>b',       [[<cmd>lua require('telescope.builtin').buffers()<cr>]],                           silent = true },
+      { '<leader><space>', [[<cmd>lua require('telescope.builtin').buffers()<cr>]],                           silent = true },
+      { '<leader>sf',      [[<cmd>lua require('telescope.builtin').find_files({previewer = false}<cr>]],      silent = true },
+      { '<leader>sb',      [[<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<cr>]],         silent = true },
+      { '<leader>sh',      [[<cmd>lua require('telescope.builtin').help_tags()<cr>]],                         silent = true },
+      { '<leader>st',      [[<cmd>lua require('telescope.builtin').tags()<cr>]],                              silent = true },
+      { '<leader>sd',      [[<cmd>lua require('telescope.builtin').grep_string()<cr>]],                       silent = true },
+      { '<leader>sp',      [[<cmd>lua require('telescope.builtin').live_grep()<cr>]],                         silent = true, desc = "Live grep" },
+      { '<leader>so',      [[<cmd>lua require('telescope.builtin').tags { only_current_buffer = true }<cr>]], silent = true },
+      { '<leader>?',       [[<cmd>lua require('telescope.builtin').oldfiles()<cr>]],                          silent = true },
       -- {'<leader>fg', "<cmd>Telescope live_grep<cr>", desc = "Live grep"},
       -- {'<leader>ff', "<cmd>Telescope find_files<cr>" desc = "Find file"},
     },
@@ -352,8 +353,8 @@ require('lazy').setup({
     dependencies = {
       'JoosepAlviste/nvim-ts-context-commentstring',
     },
-    config = function ()
-      require'nvim-treesitter.configs'.setup {
+    config = function()
+      require 'nvim-treesitter.configs'.setup {
         ensure_installed = {
           'scala',
           'html',
@@ -397,35 +398,35 @@ require('lazy').setup({
   {
     'HiPhish/rainbow-delimiters.nvim',
     -- TODO scala support
-    config = function ()
+    config = function()
       local rainbow_delimiters = require 'rainbow-delimiters'
 
       require('rainbow-delimiters.setup').setup {
         strategy = {
-            [''] = rainbow_delimiters.strategy['global'],
-            vim = rainbow_delimiters.strategy['local'],
+          [''] = rainbow_delimiters.strategy['global'],
+          vim = rainbow_delimiters.strategy['local'],
         },
         query = {
-            [''] = 'rainbow-delimiters',
-            lua = 'rainbow-blocks',
+          [''] = 'rainbow-delimiters',
+          lua = 'rainbow-blocks',
         },
         highlight = {
-            'RainbowDelimiterRed',
-            'RainbowDelimiterYellow',
-            'RainbowDelimiterBlue',
-            'RainbowDelimiterOrange',
-            'RainbowDelimiterGreen',
-            'RainbowDelimiterViolet',
-            'RainbowDelimiterCyan',
+          'RainbowDelimiterRed',
+          'RainbowDelimiterYellow',
+          'RainbowDelimiterBlue',
+          'RainbowDelimiterOrange',
+          'RainbowDelimiterGreen',
+          'RainbowDelimiterViolet',
+          'RainbowDelimiterCyan',
         },
       }
     end
   },
   {
     'JoosepAlviste/nvim-ts-context-commentstring',
-    config = function ()
-       require('ts_context_commentstring').setup {}
-       vim.g.skip_ts_context_commentstring_module = true
+    config = function()
+      require('ts_context_commentstring').setup {}
+      vim.g.skip_ts_context_commentstring_module = true
     end
   },
 
@@ -456,7 +457,7 @@ require('lazy').setup({
     },
     config = function()
       local lspkind = require('lspkind')
-      local cmp = require'cmp'
+      local cmp = require 'cmp'
 
       cmp.setup {
         sources = cmp.config.sources({
@@ -501,48 +502,48 @@ require('lazy').setup({
           end, { 'i', 's' }),
           ['<C-n>'] = cmp.mapping({
             c = function()
-                if cmp.visible() then
-                    cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
-                else
-                    vim.api.nvim_feedkeys(t('<Down>'), 'n', true)
-                end
+              if cmp.visible() then
+                cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+              else
+                vim.api.nvim_feedkeys(t('<Down>'), 'n', true)
+              end
             end,
             i = function(fallback)
-                if cmp.visible() then
-                    cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
-                else
-                    fallback()
-                end
+              if cmp.visible() then
+                cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+              else
+                fallback()
+              end
             end
-        }),
-        ['<C-p>'] = cmp.mapping({
+          }),
+          ['<C-p>'] = cmp.mapping({
             c = function()
-                if cmp.visible() then
-                    cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
-                else
-                    vim.api.nvim_feedkeys(t('<Up>'), 'n', true)
-                end
+              if cmp.visible() then
+                cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
+              else
+                vim.api.nvim_feedkeys(t('<Up>'), 'n', true)
+              end
             end,
             i = function(fallback)
-                if cmp.visible() then
-                    cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
-                else
-                    fallback()
-                end
+              if cmp.visible() then
+                cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
+              else
+                fallback()
+              end
             end
-        }),
+          }),
 
 
 
         },
         formatting = {
-          format = lspkind.cmp_format({with_text = false, maxwidth = 50})
+          format = lspkind.cmp_format({ with_text = false, maxwidth = 50 })
         },
         -- window = {
-          -- documentation = {
-            -- https://github.com/hrsh7th/nvim-cmp#documentationwinhighlight-type-string
-            -- maxwidth = 20
-          -- }
+        -- documentation = {
+        -- https://github.com/hrsh7th/nvim-cmp#documentationwinhighlight-type-string
+        -- maxwidth = 20
+        -- }
         -- }
       }
 
@@ -578,6 +579,7 @@ require('lazy').setup({
       })
     end
   },
+
   {
     'neovim/nvim-lspconfig',
     dependencies = {
@@ -676,8 +678,8 @@ require('lazy').setup({
   -- config = function()
   --   require("lsp_lines").setup()
   -- end,
--- }),
-  {  -- LSP server for Scala
+  -- }),
+  { -- LSP server for Scala
     'scalameta/nvim-metals',
     dependencies = {
       'nvim-lua/plenary.nvim',
@@ -830,9 +832,9 @@ require('lazy').setup({
         env_file = '.env',
         custom_dynamic_variables = {},
         yank_dry_build = true,
-    })
-    vim.cmd("command! RestNvim lua require('rest-nvim').run()")
-    vim.cmd("command! RestNvimPreview lua require('rest-nvim').run(true)")
+      })
+      vim.cmd("command! RestNvim lua require('rest-nvim').run()")
+      vim.cmd("command! RestNvimPreview lua require('rest-nvim').run(true)")
     end
   },
 
