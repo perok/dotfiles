@@ -360,9 +360,27 @@ require('lazy').setup({
     },
     config = function ()
       require'nvim-treesitter.configs'.setup {
-        ensure_installed = 'all', --{'scala', 'html', 'javascript', 'yaml', 'css', 'lua', 'http', 'json', 'elm', 'bash', 'python', 'ruby', 'elixir'},
-        -- Install parsers synchronously (only applied to `ensure_installed`)
-        sync_install = false,
+        ensure_installed = {
+          'scala',
+          'html',
+          'javascript',
+          'yaml',
+          'css',
+          'scss',
+          -- "comment", -- comments are slowing down TS bigtime, so disable for now
+          "graphql",
+          "gitcommit",
+          "gitignore",
+          "sql",
+          'lua',
+          'http',
+          'json',
+          'elm',
+          'bash',
+          'python',
+          'ruby',
+          'elixir'
+        },
         highlight = {
           enable = true,
           -- disable = {'scala'},
