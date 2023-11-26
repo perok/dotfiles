@@ -725,9 +725,8 @@ require('lazy').setup({
         vim.api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, options)
       end
 
-      local metals_config = require'metals'.bare_config()
+      local metals_config = require 'metals'.bare_config()
       metals_config.capabilities = require("cmp_nvim_lsp").default_capabilities()
-      metals_config.flags = flags
       metals_config.serverVersion = 'latest.snapshot'
 
       metals_config.settings = {
