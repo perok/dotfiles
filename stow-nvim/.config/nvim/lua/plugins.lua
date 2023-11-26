@@ -581,65 +581,92 @@ require('lazy').setup({
   {
     'neovim/nvim-lspconfig',
     dependencies = {
-     'b0o/schemastore.nvim',
+      'williamboman/mason.nvim',
+      'williamboman/mason-lspconfig.nvim',
+      'b0o/schemastore.nvim',
     },
     config = function(self, opts)
-      local lspconfig = require('lspconfig')
       local capabilities = require('cmp_nvim_lsp').default_capabilities()
-
       capabilities.textDocument.completion.completionItem.snippetSupport = true
-
-      local servers = {
-        'vimls', 'elmls', 'dockerls', 'cssls', 'tsserver',
-        'html', 'bashls', 'solargraph', 'terraformls',
-        'purescriptls', 'hls', 'sqlls'
-      }
 
       local flags = {
       }
 
-      for _, lsp in ipairs(servers) do
-        lspconfig[lsp].setup {
-          on_attach = on_attach,
-          capabilities = capabilities,
-          flags = flags,
-        }
-      end
-
-      lspconfig.yamlls.setup {
-        on_attach = on_attach,
-        capabilities = capabilities,
-        flags = flags,
-        settings = {
-          yaml = {
-            schemaStore = {
-              -- You must disable built-in schemaStore support if you want to use
-              -- this plugin and its advanced options like `ignore`.
-              enable = false,
-              -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
-              url = "",
+      local handlers = {
+        -- Will be called for each installed server that doesn't have
+        -- a dedicated handler.
+        function(server_name)
+          require("lspconfig")[server_name].setup {
+            on_attach = on_attach,
+            capabilities = capabilities,
+            flags = flags,
+          }
+        end,
+        ["jsonls"] = function()
+          require('lspconfig').jsonls.setup {
+            on_attach = on_attach,
+            capabilities = capabilities,
+            flags = flags,
+            settings = {
+              json = {
+                schemas = require('schemastore').json.schemas(),
+                validate = { enable = true },
+              },
             },
-            schemas = require('schemastore').yaml.schemas(),
-          },
-        },
+            commands = {
+              Format = {
+                function()
+                  vim.lsp.buf.range_formatting({}, { 0, 0 }, { vim.fn.line("$"), 0 })
+                end,
+              },
+            },
+          }
+        end,
+        ["yamlls"] = function()
+          require('lspconfig').yamlls.setup {
+            on_attach = on_attach,
+            capabilities = capabilities,
+            flags = flags,
+            settings = {
+              yaml = {
+                schemaStore = {
+                  -- You must disable built-in schemaStore support if you want to use
+                  -- this plugin and its advanced options like `ignore`.
+                  enable = false,
+                  -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
+                  url = "",
+                },
+                schemas = require('schemastore').yaml.schemas(),
+              },
+            },
+          }
+        end,
       }
 
-      lspconfig.jsonls.setup {
-        on_attach = on_attach,
-        capabilities = capabilities,
-        flags = flags,
-        settings = {
-          json = {
-            schemas = require('schemastore').json.schemas(),
-            validate = { enable = true },
-          },
-        },
-        commands = {
-          Format = {
-            function()
-              vim.lsp.buf.range_formatting({}, { 0, 0 }, { vim.fn.line("$"), 0 })
-            end,
-          },
+      -- First mason, then lspconfig.
+      require("mason").setup()
+      require("mason-lspconfig").setup {
+        -- See https://github.com/williamboman/mason-lspconfig.nvim?tab=readme-ov-file#available-lsp-servers
+        handlers = handlers,
+        ensure_installed = {
+          'lua_ls',
+          'dockerls',
+          'docker_compose_language_service',
+          'eslint',
+          'elmls',
+          'marksman', -- markdown
+          -- 'solargraph', -- ruby TODO install error
+          'terraformls',
+          'gradle_ls',
+          'vimls',
+          'lemminx', -- xml
+          'yamlls',
+          'jsonls',
+          'cssls',
+          'sqlls',
+          'html',
+          'tsserver', -- JS
+          "bashls"
         },
       }
     end
