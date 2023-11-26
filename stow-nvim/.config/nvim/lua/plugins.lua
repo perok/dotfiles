@@ -34,29 +34,29 @@ local on_attach = function(client, bufnr)
   -- Keybindings
   --
 
-  --vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  buf_map(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.definition()<CR>')
-  buf_map(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>')
-  buf_map(bufnr, 'n', 'gds', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]])
-  --vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>so', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]])
-  buf_map(bufnr, 'n', 'gws', [[<cmd>lua vim.lsp.buf.workspace_symbol()<CR>]])
+  --vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
+  buf_map(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.definition()<cr>')
+  buf_map(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>')
+  buf_map(bufnr, 'n', 'gds', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>]])
+  --vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>so', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>]])
+  buf_map(bufnr, 'n', 'gws', [[<cmd>lua vim.lsp.buf.workspace_symbol()<cr>]])
 
-  buf_map(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>')
-  buf_map(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>')
+  buf_map(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>')
+  buf_map(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
   -- " TODO I want this? crashes with telescope
-  -- " nnoremap <silent> <leader>sh  <cmd>lua vim.lsp.buf.signature_help()<CR>
+  -- " nnoremap <silent> <leader>sh  <cmd>lua vim.lsp.buf.signature_help()<cr>
 
-  buf_map(bufnr, 'n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>')
-  buf_map(bufnr, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>')
-  buf_map(bufnr, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>')
-  buf_map(bufnr, 'n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>')
-  buf_map(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>')
-  buf_map(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>')
-  buf_map(bufnr, 'n', '<leader>cl', '<cmd>lua vim.lsp.codelens.run()<CR>')
-  buf_map(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>')
-  buf_map(bufnr, 'n', '<leader>aa', '<cmd>lua vim.diagnostic.setqflist()<CR>')
-  buf_map(bufnr, 'n', '<leader>ae', '<cmd>lua vim.diagnostic.setqflist({severity = "E"})<CR>')
-  buf_map(bufnr, 'n', '<leader>aw', '<cmd>lua vim.diagnostic.setqflist({severity = "W"})<CR>')
+  buf_map(bufnr, 'n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<cr>')
+  buf_map(bufnr, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<cr>')
+  buf_map(bufnr, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<cr>')
+  buf_map(bufnr, 'n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<cr>')
+  buf_map(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<cr>')
+  buf_map(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>')
+  buf_map(bufnr, 'n', '<leader>cl', '<cmd>lua vim.lsp.codelens.run()<cr>')
+  buf_map(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<cr>')
+  buf_map(bufnr, 'n', '<leader>aa', '<cmd>lua vim.diagnostic.setqflist()<cr>')
+  buf_map(bufnr, 'n', '<leader>ae', '<cmd>lua vim.diagnostic.setqflist({severity = "E"})<cr>')
+  buf_map(bufnr, 'n', '<leader>aw', '<cmd>lua vim.diagnostic.setqflist({severity = "W"})<cr>')
 end
 
 require('lazy').setup({
@@ -255,7 +255,7 @@ require('lazy').setup({
     'mbbill/undotree',
     cmd = 'UndotreeToggle',
     keys = {
-      {'<F6>', [[<cmd>UndotreeToggle<CR>]], silent = true },
+      {'<F6>', [[<cmd>UndotreeToggle<cr>]], silent = true },
     }
   },
   -- 'whiteinge/diffconflicts',
@@ -274,7 +274,7 @@ require('lazy').setup({
       vim.g.vista_default_executive = 'nvim_lsp'
     end,
     keys = {
-      {'<F8>', [[<cmd>Vista nvim_lsp<CR>]], silent = true },
+      {'<F8>', [[<cmd>Vista nvim_lsp<cr>]], silent = true },
     }
   },
 
@@ -334,18 +334,18 @@ require('lazy').setup({
       'nvim-telescope/telescope-fzy-native.nvim'
     },
     keys = {
-      {'<C-p>', [[<cmd>Telescope find_files hidden=true<CR>]], silent = true },
-      {'<C-a>', [[<cmd>Telescope commands<CR>]], silent = true },
-      {'<leader>b', [[<cmd>lua require('telescope.builtin').buffers()<CR>]], silent = true },
-      {'<leader><space>', [[<cmd>lua require('telescope.builtin').buffers()<CR>]], silent = true },
-      {'<leader>sf', [[<cmd>lua require('telescope.builtin').find_files({previewer = false}<CR>]], silent = true },
-      {'<leader>sb', [[<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<CR>]],  silent = true },
-      {'<leader>sh', [[<cmd>lua require('telescope.builtin').help_tags()<CR>]],  silent = true },
-      {'<leader>st', [[<cmd>lua require('telescope.builtin').tags()<CR>]],  silent = true },
-      {'<leader>sd', [[<cmd>lua require('telescope.builtin').grep_string()<CR>]],  silent = true },
-      {'<leader>sp', [[<cmd>lua require('telescope.builtin').live_grep()<CR>]],  silent = true , desc = "Live grep" },
-      {'<leader>so', [[<cmd>lua require('telescope.builtin').tags { only_current_buffer = true }<CR>]], silent = true },
-      {'<leader>?', [[<cmd>lua require('telescope.builtin').oldfiles()<CR>]],  silent = true },
+      {'<C-p>', [[<cmd>Telescope find_files hidden=true<cr>]], silent = true },
+      {'<C-a>', [[<cmd>Telescope commands<cr>]], silent = true },
+      {'<leader>b', [[<cmd>lua require('telescope.builtin').buffers()<cr>]], silent = true },
+      {'<leader><space>', [[<cmd>lua require('telescope.builtin').buffers()<cr>]], silent = true },
+      {'<leader>sf', [[<cmd>lua require('telescope.builtin').find_files({previewer = false}<cr>]], silent = true },
+      {'<leader>sb', [[<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<cr>]],  silent = true },
+      {'<leader>sh', [[<cmd>lua require('telescope.builtin').help_tags()<cr>]],  silent = true },
+      {'<leader>st', [[<cmd>lua require('telescope.builtin').tags()<cr>]],  silent = true },
+      {'<leader>sd', [[<cmd>lua require('telescope.builtin').grep_string()<cr>]],  silent = true },
+      {'<leader>sp', [[<cmd>lua require('telescope.builtin').live_grep()<cr>]],  silent = true , desc = "Live grep" },
+      {'<leader>so', [[<cmd>lua require('telescope.builtin').tags { only_current_buffer = true }<cr>]], silent = true },
+      {'<leader>?', [[<cmd>lua require('telescope.builtin').oldfiles()<cr>]],  silent = true },
       -- {'<leader>fg', "<cmd>Telescope live_grep<cr>", desc = "Live grep"},
       -- {'<leader>ff', "<cmd>Telescope find_files<cr>" desc = "Find file"},
     },
@@ -487,7 +487,7 @@ require('lazy').setup({
           ['<C-Space>'] = cmp.mapping.complete(),
           ['<C-e>'] = cmp.mapping.close(),
           -- ['<C-y>'] = cmp.mapping.confirm({ select = true }),
-          ['<CR>'] = cmp.mapping.confirm({
+          ['<cr>'] = cmp.mapping.confirm({
             behavior = cmp.ConfirmBehavior.Replace,
             select = true,
           }),
@@ -706,7 +706,7 @@ require('lazy').setup({
           require("metals").hover_worksheet()
         end, opts)
 
-        vim.api.nvim_buf_set_keymap(bufnr, 'v', 'K', '<Esc><cmd>lua require("metals").type_of_range()<CR>', opts)
+        vim.api.nvim_buf_set_keymap(bufnr, 'v', 'K', '<Esc><cmd>lua require("metals").type_of_range()<cr>', opts)
 
         buf_map(bufnr, "n", "<leader>dc", function()
           require("dap").continue()
