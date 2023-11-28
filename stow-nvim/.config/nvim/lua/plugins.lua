@@ -813,43 +813,50 @@ require('lazy').setup({
 
         buf_map(bufnr, "n", "<leader>ws", function()
           require("metals").hover_worksheet()
-        end, opts)
+        end)
 
-        vim.api.nvim_buf_set_keymap(bufnr, 'v', 'K', '<Esc><cmd>lua require("metals").type_of_range()<cr>', opts)
+        vim.api.nvim_buf_set_keymap(bufnr, 'v', 'K', '<Esc><cmd>lua require("metals").type_of_range()<cr>')
 
         buf_map(bufnr, "n", "<leader>dc", function()
           require("dap").continue()
-        end, opts)
+        end)
 
         buf_map(bufnr, "n", "<leader>dr", function()
           require("dap").repl.toggle()
-        end, opts)
+        end)
 
         buf_map(bufnr, "n", "<leader>dK", function()
           require("dap.ui.widgets").hover()
-        end, opts)
+        end)
 
         buf_map(bufnr, "n", "<leader>dt", function()
           require("dap").toggle_breakpoint()
-        end, opts)
+        end)
 
         buf_map(bufnr, "n", "<leader>dso", function()
           require("dap").step_over()
-        end, opts)
+        end)
 
         buf_map(bufnr, "n", "<leader>dsi", function()
           require("dap").step_into()
-        end, opts)
+        end)
 
         buf_map(bufnr, "n", "<leader>dl", function()
           require("dap").run_last()
-        end, opts)
+        end)
       end
 
       return metals_config
     end,
     config = function(self, metals_config)
-      require("metals").initialize_or_attach(metals_config)
+      local nvim_metals_group = vim.api.nvim_create_augroup("nvim-metals", { clear = true })
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = self.ft,
+        callback = function()
+          require("metals").initialize_or_attach(metals_config)
+        end,
+        group = nvim_metals_group,
+      })
     end
   },
 
