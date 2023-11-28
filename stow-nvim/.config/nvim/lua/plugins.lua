@@ -66,7 +66,7 @@ require('lazy').setup({
   --  'mhartington/oceanic-next', --
   -- 'folke/tokyonight.nvim',
   'EdenEast/nightfox.nvim',
-  "rebelot/kanagawa.nvim",
+  'rebelot/kanagawa.nvim',
   -- 'shaunsingh/nord.nvim',
   --  'Soares/base16.nvim', --
   --  'jacoborus/tender', --
@@ -111,14 +111,20 @@ require('lazy').setup({
   { -- File explorer
     -- 'justinmk/vim-dirvish',
     'stevearc/oil.nvim',
-    config = function()
-      require('oil').setup({
-        view_options = {
-          show_hidden = true,
-        }
-      })
-      vim.keymap.set("n", "-", require("oil").open, { desc = "Open parent directory" })
-    end
+    opts = {
+      view_options = {
+        show_hidden = true,
+      }
+    },
+    keys = {
+      {
+        "-",
+        function()
+          require("oil").open()
+        end,
+        desc = "Open parent directory",
+      },
+    },
   },
 
   {
@@ -191,6 +197,7 @@ require('lazy').setup({
       'nvim-lua/plenary.nvim'
     },
     config = function()
+      -- Do like this? https://github.com/LazyVim/LazyVim/blob/68ff818a5bb7549f90b05e412b76fe448f605ffb/lua/lazyvim/plugins/editor.lua#L334
       require('gitsigns').setup()
     end
   },
@@ -341,18 +348,18 @@ require('lazy').setup({
       },
     },
     keys = {
-      { '<C-p>',           [[<cmd>Telescope find_files hidden=true<cr>]],                                     silent = true },
-      { '<C-a>',           [[<cmd>Telescope commands<cr>]],                                                   silent = true },
-      { '<leader>b',       [[<cmd>lua require('telescope.builtin').buffers()<cr>]],                           silent = true },
-      { '<leader><space>', [[<cmd>lua require('telescope.builtin').buffers()<cr>]],                           silent = true },
-      { '<leader>sf',      [[<cmd>lua require('telescope.builtin').find_files({previewer = false}<cr>]],      silent = true },
-      { '<leader>sb',      [[<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<cr>]],         silent = true },
-      { '<leader>sh',      [[<cmd>lua require('telescope.builtin').help_tags()<cr>]],                         silent = true },
-      { '<leader>st',      [[<cmd>lua require('telescope.builtin').tags()<cr>]],                              silent = true },
-      { '<leader>sd',      [[<cmd>lua require('telescope.builtin').grep_string()<cr>]],                       silent = true },
+      { '<C-p>',           [[<cmd>Telescope find_files hidden=true<cr>]],                                     silent = true, desc = 'Find files' },
+      { '<C-a>',           [[<cmd>Telescope commands<cr>]],                                                   silent = true, desc = 'Commands' },
+      { '<leader>b',       [[<cmd>lua require('telescope.builtin').buffers()<cr>]],                           silent = true, desc = 'Buffers' },
+      { '<leader><space>', [[<cmd>lua require('telescope.builtin').buffers()<cr>]],                           silent = true, desc = 'Buffers' },
+      { '<leader>sf',      [[<cmd>lua require('telescope.builtin').find_files({previewer = false}<cr>]],      silent = true, desc = 'Find files' },
+      { '<leader>sb',      [[<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<cr>]],         silent = true, desc = 'Fuzzy find current buffer' },
+      { '<leader>sh',      [[<cmd>lua require('telescope.builtin').help_tags()<cr>]],                         silent = true, desc = 'Help tags' },
+      { '<leader>st',      [[<cmd>lua require('telescope.builtin').tags()<cr>]],                              silent = true, desc = 'Tags' },
+      { '<leader>sd',      [[<cmd>lua require('telescope.builtin').grep_string()<cr>]],                       silent = true, desc = 'Grep string' },
       { '<leader>sp',      [[<cmd>lua require('telescope.builtin').live_grep()<cr>]],                         silent = true, desc = "Live grep" },
-      { '<leader>so',      [[<cmd>lua require('telescope.builtin').tags { only_current_buffer = true }<cr>]], silent = true },
-      { '<leader>?',       [[<cmd>lua require('telescope.builtin').oldfiles()<cr>]],                          silent = true },
+      { '<leader>so',      [[<cmd>lua require('telescope.builtin').tags { only_current_buffer = true }<cr>]], silent = true, desc = 'Tags in buffer' },
+      { '<leader>?',       [[<cmd>lua require('telescope.builtin').oldfiles()<cr>]],                          silent = true, desc = 'Old files' },
       -- {'<leader>fg', "<cmd>Telescope live_grep<cr>", desc = "Live grep"},
       -- {'<leader>ff', "<cmd>Telescope find_files<cr>" desc = "Find file"},
     },
