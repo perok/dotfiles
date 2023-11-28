@@ -291,13 +291,13 @@ require('lazy').setup({
     end
   },
 
-  --  TODO remove fzf because of telescope. But how to install for shell?
   {
+    --  TODO remove fzf because of telescope. But how to install for shell?
     'junegunn/fzf',
     build = function() vim.fn['fzf#install']() end,
-    dependencies = {
-      { 'junegunn/fzf.vim' }
-    }
+    -- dependencies = {
+    --   { 'junegunn/fzf.vim' }
+    -- }
   },
   {
     'nvim-telescope/telescope.nvim',
@@ -330,13 +330,14 @@ require('lazy').setup({
         },
       }
 
-      telescope.load_extension('fzy_native')
+      telescope.load_extension('fzf')
     end,
     dependencies = {
       'nvim-lua/popup.nvim',
       'nvim-lua/plenary.nvim',
       'nvim-telescope/telescope-symbols.nvim',
-      'nvim-telescope/telescope-fzy-native.nvim',
+      -- 'nvim-telescope/telescope-fzy-native.nvim',
+      { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
       {
         "folke/which-key.nvim",
         optional = true,
