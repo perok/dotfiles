@@ -75,18 +75,21 @@ require('lazy').setup({
   --  'liuchengxu/vim-which-key',
   {
     "folke/which-key.nvim",
+    event = 'VeryLazy',
     init = function()
       vim.o.timeout = true
       vim.o.timeoutlen = 500 -- Default timeout is 1000ms
     end,
-    config = function()
-      require("which-key").setup {}
-
-      --" Hide status line when WhichKey is active
-      -- autocmd! FileType which_key
-      -- autocmd  FileType which_key set laststatus=0 noshowmode noruler
-      --   \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
-    end
+    -- opts = {
+    --   defaults = {
+    --     ["<leader>s"] = { name = "+group name" },
+    --   },
+    -- },
+    config = function(_, opts)
+      local wk = require("which-key")
+      wk.setup(opts)
+      wk.register(opts.defaults)
+    end,
   },
   {
     'mhinz/vim-startify',
@@ -326,7 +329,16 @@ require('lazy').setup({
       'nvim-lua/popup.nvim',
       'nvim-lua/plenary.nvim',
       'nvim-telescope/telescope-symbols.nvim',
-      'nvim-telescope/telescope-fzy-native.nvim'
+      'nvim-telescope/telescope-fzy-native.nvim',
+      {
+        "folke/which-key.nvim",
+        optional = true,
+        opts = {
+          defaults = {
+            ["<leader>s"] = { name = "+search" },
+          },
+        },
+      },
     },
     keys = {
       { '<C-p>',           [[<cmd>Telescope find_files hidden=true<cr>]],                                     silent = true },
