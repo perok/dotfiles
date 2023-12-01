@@ -379,6 +379,15 @@ require('lazy').setup({
     },
   },
 
+  {
+    -- Better increment/decrement C-a, C-x
+    'monaqa/dial.nvim',
+    keys = {
+      { "<C-a>", function() return require("dial.map").inc_normal() end, expr = true, desc = "Increment" },
+      { "<C-x>", function() return require("dial.map").dec_normal() end, expr = true, desc = "Decrement" },
+    },
+  },
+
   -- search/replace in multiple files
   {
     "nvim-pack/nvim-spectre",
