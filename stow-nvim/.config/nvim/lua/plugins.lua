@@ -262,6 +262,7 @@ require('lazy').setup({
   'RRethy/vim-illuminate', -- Hightlight similiar text,
 
   {
+    -- leader U Tescope, delete this?
     'mbbill/undotree',
     cmd = 'UndotreeToggle',
     keys = {
@@ -344,6 +345,15 @@ require('lazy').setup({
       'nvim-telescope/telescope-symbols.nvim',
       -- 'nvim-telescope/telescope-fzy-native.nvim',
       { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
+      {
+        "debugloop/telescope-undo.nvim",
+        keys = {
+          { "<leader>U", "<cmd>Telescope undo<cr>", silent = true, desc = "Undo visualize" }
+        },
+        config = function()
+          require("telescope").load_extension("undo")
+        end,
+      },
       {
         "folke/which-key.nvim",
         optional = true,
