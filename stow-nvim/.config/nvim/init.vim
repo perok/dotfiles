@@ -29,7 +29,6 @@ let g:maplocalleader=","
 " Plugins {{{
 lua require('plugins')
 
-
 " Trick from
 " https://github.com/justinmk/vim-dirvish/issues/70#issuecomment-626258095
 
@@ -86,25 +85,27 @@ set completeopt-=longest
 " set completeopt=menu,menuone,noselect
 " }}}
 
-sign define DiagnosticSignError text=✘ texthl=DiagnosticSignError linehl=0 numhl=1
-sign define DiagnosticSignWarn text= texthl=DiagnosticsSignWarn linehl=0 numhl=1
-
 " Needed for symbol highlights to work correctly (source: nvim_metals)
+" (:lua vim.lsp.buf.document_highlight())
 hi! link LspReferenceText CursorColumn
 hi! link LspReferenceRead CursorColumn
 hi! link LspReferenceWrite CursorColumn
 
-hi! link LspSagaFinderSelection CursorColumn
-
 lua << EOF
   -- Diagnostics configuration
-  vim.cmd([[au CursorHold,CursorHoldI * lua vim.diagnostic.open_float(0,{scope = "cursor"})]])
+  vim.fn.sign_define("DiagnosticSignError", { text = "✘ ", texthl = "DiagnosticError" })
+  vim.fn.sign_define("DiagnosticSignWarn", { text = "", texthl = "DiagnosticWarn" })
+
+  vim.o.updatetime = 250 -- Needed for diagnostics popups with CursorHold
+  -- TODO disabled becuase messes up together with cmp
+  -- vim.cmd([[au CursorHold,CursorHoldI * lua vim.diagnostic.open_float({scope = "cursor"})]])
 
   vim.diagnostic.config({
     virtual_text = false,
-    sign = true,
+    signs = true,
+    severity_sort = true,
     -- update_in_insert = true,
-    float = { border = "single" }
+    -- float = { border = "single" }
   })
 
   local function map(mode, lhs, rhs, opts)
@@ -119,19 +120,6 @@ lua << EOF
   map('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', { desc = "LSP diagnstic open float" })
   map('n', ']e', '<cmd>lua vim.diagnostic.goto_next()<CR>', { desc = "LSP diagnstic goto next" })
   map('n', '[e', '<cmd>lua vim.diagnostic.goto_prev()<CR>', { desc = "LSP diagnstic goto prev" })
- -- " Buffer diagnostic only
- -- nnoremap <silent> <leader>d   <cmd>lua vim.diagnostic.setloclist()<CR>
- -- nnoremap <silent> ]e          <cmd>lua vim.lsp.diagnostic.goto_next()<CR>
- -- nnoremap <silent> [e          <cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
-
-
-  --local shared_diagnostic_settings = vim.lsp.with(
-  --  vim.lsp.diagnostic.on_publish_diagnostics,
-  --  {
-  --    virtual_text = false --{prefix = '', truncated = true}
-  --  }
-  --)
-
 EOF
 " }}}
 
