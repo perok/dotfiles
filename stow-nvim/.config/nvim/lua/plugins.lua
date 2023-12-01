@@ -54,9 +54,15 @@ local on_attach = function(client, bufnr)
   buf_map(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>')
   buf_map(bufnr, 'n', '<leader>cl', '<cmd>lua vim.lsp.codelens.run()<cr>')
   buf_map(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<cr>')
-  buf_map(bufnr, 'n', '<leader>aa', '<cmd>lua vim.diagnostic.setqflist()<cr>')
-  buf_map(bufnr, 'n', '<leader>ae', '<cmd>lua vim.diagnostic.setqflist({severity = "E"})<cr>')
-  buf_map(bufnr, 'n', '<leader>aw', '<cmd>lua vim.diagnostic.setqflist({severity = "W"})<cr>')
+
+  -- Diagnostics
+  buf_map(bufnr, 'n', '<leader>aa', '<cmd>lua vim.diagnostic.setqflist()<cr>', { desc = "LSP diagnostic set all" })
+  buf_map(bufnr, 'n', '<leader>ae', '<cmd>lua vim.diagnostic.setqflist({severity = "E"})<cr>',
+    { desc = "LSP diagnostic set all error" })
+  buf_map(bufnr, 'n', '<leader>aw', '<cmd>lua vim.diagnostic.setqflist({severity = "W"})<cr>',
+    { desc = "LSP diagnostic set all warn" })
+
+  vim.api.nvim_set_option_value("omnifunc", "v:lua.vim.lsp.omnifunc", { buf = bufnr })
 end
 
 require('lazy').setup({
@@ -349,18 +355,25 @@ require('lazy').setup({
       },
     },
     keys = {
-      { '<C-p>',           [[<cmd>Telescope find_files hidden=true<cr>]],                                     silent = true, desc = 'Find files' },
-      { '<C-a>',           [[<cmd>Telescope commands<cr>]],                                                   silent = true, desc = 'Commands' },
-      { '<leader>b',       [[<cmd>lua require('telescope.builtin').buffers()<cr>]],                           silent = true, desc = 'Buffers' },
-      { '<leader><space>', [[<cmd>lua require('telescope.builtin').buffers()<cr>]],                           silent = true, desc = 'Buffers' },
-      { '<leader>sf',      [[<cmd>lua require('telescope.builtin').find_files({previewer = false}<cr>]],      silent = true, desc = 'Find files' },
-      { '<leader>sb',      [[<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<cr>]],         silent = true, desc = 'Fuzzy find current buffer' },
-      { '<leader>sh',      [[<cmd>lua require('telescope.builtin').help_tags()<cr>]],                         silent = true, desc = 'Help tags' },
-      { '<leader>st',      [[<cmd>lua require('telescope.builtin').tags()<cr>]],                              silent = true, desc = 'Tags' },
-      { '<leader>sd',      [[<cmd>lua require('telescope.builtin').grep_string()<cr>]],                       silent = true, desc = 'Grep string' },
-      { '<leader>sp',      [[<cmd>lua require('telescope.builtin').live_grep()<cr>]],                         silent = true, desc = "Live grep" },
-      { '<leader>so',      [[<cmd>lua require('telescope.builtin').tags { only_current_buffer = true }<cr>]], silent = true, desc = 'Tags in buffer' },
-      { '<leader>?',       [[<cmd>lua require('telescope.builtin').oldfiles()<cr>]],                          silent = true, desc = 'Old files' },
+      { '<C-p>',           [[<cmd>Telescope find_files hidden=true<cr>]],                                      silent = true, desc = 'Find files' },
+      { '<leader><space>', "<cmd>Telescope buffers sort_mru=true sort_lastused=true<cr>",                      silent = true, desc = 'Buffers' },
+      -- Inspiration to go through: https://github.com/LazyVim/LazyVim/blob/68ff818a5bb7549f90b05e412b76fe448f605ffb/lua/lazyvim/plugins/editor.lua#L136
+      -- overrides C-a increment
+      -- { '<C-a>',           [[<cmd>Telescope commands<cr>]],                                                   silent = true, desc = 'Commands' },
+      -- search
+      { '<leader>s"',      "<cmd>Telescope registers<cr>",                                                     silent = true, desc = "Registers" },
+      { "<leader>sc",      "<cmd>Telescope command_history<cr>",                                               silent = true, desc = "Command History" },
+      { "<leader>sC",      "<cmd>Telescope commands<cr>",                                                      silent = true, desc = "Commands" },
+      { "<leader>sm",      "<cmd>Telescope marks<cr>",                                                         silent = true, desc = "Jump to Mark" },
+      { '<leader>b',       "<cmd>Telescope buffers sort_mru=true sort_lastused=true<cr>",                      silent = true, desc = 'Buffers' },
+      { '<leader>sf',      [[<cmd>lua require('telescope.builtin').find_files({previewer = false})<cr>]],      silent = true, desc = 'Find files' },
+      { '<leader>sb',      [[<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<cr>]],          silent = true, desc = 'Fuzzy find current buffer' },
+      { '<leader>sh',      [[<cmd>lua require('telescope.builtin').help_tags()<cr>]],                          silent = true, desc = 'Help tags' },
+      { '<leader>st',      [[<cmd>lua require('telescope.builtin').tags()<cr>]],                               silent = true, desc = 'Tags' },
+      { '<leader>sd',      [[<cmd>lua require('telescope.builtin').grep_string()<cr>]],                        silent = true, desc = 'Grep string' },
+      { '<leader>sp',      [[<cmd>lua require('telescope.builtin').live_grep()<cr>]],                          silent = true, desc = "Live grep" },
+      { '<leader>so',      [[<cmd>lua require('telescope.builtin').tags({ only_current_buffer = true })<cr>]], silent = true, desc = 'Tags in buffer' },
+      { '<leader>?',       [[<cmd>lua require('telescope.builtin').oldfiles()<cr>]],                           silent = true, desc = 'Old files' },
       -- {'<leader>fg', "<cmd>Telescope live_grep<cr>", desc = "Live grep"},
       -- {'<leader>ff', "<cmd>Telescope find_files<cr>" desc = "Find file"},
     },
@@ -431,7 +444,7 @@ require('lazy').setup({
     'HiPhish/rainbow-delimiters.nvim',
     -- TODO scala support
     config = function()
-      local rainbow_delimiters = require 'rainbow-delimiters'
+      local rainbow_delimiters = require('rainbow-delimiters')
 
       require('rainbow-delimiters.setup').setup {
         strategy = {
@@ -488,6 +501,10 @@ require('lazy').setup({
       },
     },
     config = function()
+      local t = function(str)
+        return vim.api.nvim_replace_termcodes(str, true, true, true)
+      end
+
       local lspkind = require('lspkind')
       local cmp = require 'cmp'
 
@@ -785,15 +802,7 @@ require('lazy').setup({
     },
     ft = { "sc", "scala", "sbt", "java" },
     opts = function()
-      local function buf_map(bufnr, mode, lhs, rhs, opts)
-        local options = { noremap = true, silent = true }
-        if opts then
-          options = vim.tbl_extend("force", options, opts)
-        end
-        vim.api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, options)
-      end
-
-      local metals_config = require 'metals'.bare_config()
+      local metals_config = require('metals').bare_config()
       metals_config.capabilities = require("cmp_nvim_lsp").default_capabilities()
       metals_config.serverVersion = 'latest.snapshot'
 
@@ -816,7 +825,7 @@ require('lazy').setup({
           require("metals").hover_worksheet()
         end)
 
-        vim.api.nvim_buf_set_keymap(bufnr, 'v', 'K', '<Esc><cmd>lua require("metals").type_of_range()<cr>')
+        buf_map(bufnr, 'v', 'K', '<Esc><cmd>lua require("metals").type_of_range()<cr>')
 
         buf_map(bufnr, "n", "<leader>dc", function()
           require("dap").continue()
