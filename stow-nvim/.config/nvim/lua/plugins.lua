@@ -86,11 +86,12 @@ require('lazy').setup({
       vim.o.timeout = true
       vim.o.timeoutlen = 500 -- Default timeout is 1000ms
     end,
-    -- opts = {
-    --   defaults = {
-    --     ["<leader>s"] = { name = "+group name" },
-    --   },
-    -- },
+    opts = {
+      defaults = {
+        -- TODO why not working?
+        ["<leader>a"] = { name = "+Diagnostics to QF" },
+      },
+    },
     config = function(_, opts)
       local wk = require("which-key")
       wk.setup(opts)
@@ -655,124 +656,121 @@ require('lazy').setup({
       'williamboman/mason-lspconfig.nvim',
       'b0o/schemastore.nvim',
     },
+    opts = {
+      ensure_installed = {
+        'lua_ls',
+        'dockerls',
+        'docker_compose_language_service',
+        'eslint',
+        'elmls',
+        'marksman', -- markdown
+        -- 'solargraph', -- ruby TODO install error
+        'terraformls',
+        'gradle_ls',
+        'vimls',
+        'lemminx', -- xml
+        'yamlls',
+        'jsonls',
+        'cssls',
+        'sqlls',
+        'html',
+        'tsserver', -- JS
+        "bashls"
+      }
+    },
     config = function(self, opts)
+      -- First mason, then lspconfig.
+      require("mason").setup()
+      require("mason-lspconfig").setup(vim.tbl_deep_extend("force", opts, {
+        -- See https://github.com/williamboman/mason-lspconfig.nvim?tab=readme-ov-file#available-lsp-servers
+        handlers = {
+          -- Will be called for each installed server that doesn't have
+          -- a dedicated handler.
+          function(server_name)
+            require("lspconfig")[server_name].setup {
+              on_attach = on_attach,
+            }
+          end,
+          ["lua_ls"] = function()
+            require('lspconfig').lua_ls.setup {
+              on_attach = on_attach,
+              -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#lua_ls
+              on_init = function(client)
+                local path = client.workspace_folders[1].name
+                if not vim.loop.fs_stat(path .. '/.luarc.json') and not vim.loop.fs_stat(path .. '/.luarc.jsonc') then
+                  client.config.settings = vim.tbl_deep_extend('force', client.config.settings, {
+                    Lua = {
+                      runtime = {
+                        version = 'LuaJIT' -- LuaJIT for neovim
+                      },
+                      -- Make the server aware of Neovim runtime files
+                      workspace = {
+                        checkThirdParty = false,
+                        library = {
+                          vim.env.VIMRUNTIME
+                          -- "${3rd}/luv/library"
+                          -- "${3rd}/busted/library",
+                        }
+                        -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
+                        -- library = vim.api.nvim_get_runtime_file("", true)
+                      }
+                    }
+                  })
+
+                  client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
+                end
+                return true
+              end
+            }
+          end,
+          ["jsonls"] = function()
+            require('lspconfig').jsonls.setup {
+              on_attach = on_attach,
+              settings = {
+                json = {
+                  schemas = require('schemastore').json.schemas(),
+                  validate = { enable = true },
+                },
+              },
+              commands = {
+                Format = {
+                  function()
+                    vim.lsp.buf.range_formatting({}, { 0, 0 }, { vim.fn.line("$"), 0 })
+                  end,
+                },
+              },
+            }
+          end,
+          ["yamlls"] = function()
+            require('lspconfig').yamlls.setup {
+              on_attach = on_attach,
+              settings = {
+                yaml = {
+                  schemaStore = {
+                    -- You must disable built-in schemaStore support if you want to use
+                    -- this plugin and its advanced options like `ignore`.
+                    enable = false,
+                    -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
+                    url = "",
+                  },
+                  schemas = require('schemastore').yaml.schemas(),
+                },
+              },
+            }
+          end,
+        },
+      }))
+
+      -- Defaults for lspconfig (after mason)
+      local lspconfig = require("lspconfig")
+
       local capabilities = require('cmp_nvim_lsp').default_capabilities()
       capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-      local flags = {
-      }
-
-      local handlers = {
-        -- Will be called for each installed server that doesn't have
-        -- a dedicated handler.
-        function(server_name)
-          require("lspconfig")[server_name].setup {
-            on_attach = on_attach,
-            capabilities = capabilities,
-            flags = flags,
-          }
-        end,
-        ["lua_ls"] = function()
-          require('lspconfig').lua_ls.setup {
-            on_attach = on_attach,
-            capabilities = capabilities,
-            flags = flags,
-            -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#lua_ls
-            on_init = function(client)
-              local path = client.workspace_folders[1].name
-              if not vim.loop.fs_stat(path .. '/.luarc.json') and not vim.loop.fs_stat(path .. '/.luarc.jsonc') then
-                client.config.settings = vim.tbl_deep_extend('force', client.config.settings, {
-                  Lua = {
-                    runtime = {
-                      version = 'LuaJIT' -- LuaJIT for neovim
-                    },
-                    -- Make the server aware of Neovim runtime files
-                    workspace = {
-                      checkThirdParty = false,
-                      library = {
-                        vim.env.VIMRUNTIME
-                        -- "${3rd}/luv/library"
-                        -- "${3rd}/busted/library",
-                      }
-                      -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
-                      -- library = vim.api.nvim_get_runtime_file("", true)
-                    }
-                  }
-                })
-
-                client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
-              end
-              return true
-            end
-          }
-        end,
-        ["jsonls"] = function()
-          require('lspconfig').jsonls.setup {
-            on_attach = on_attach,
-            capabilities = capabilities,
-            flags = flags,
-            settings = {
-              json = {
-                schemas = require('schemastore').json.schemas(),
-                validate = { enable = true },
-              },
-            },
-            commands = {
-              Format = {
-                function()
-                  vim.lsp.buf.range_formatting({}, { 0, 0 }, { vim.fn.line("$"), 0 })
-                end,
-              },
-            },
-          }
-        end,
-        ["yamlls"] = function()
-          require('lspconfig').yamlls.setup {
-            on_attach = on_attach,
-            capabilities = capabilities,
-            flags = flags,
-            settings = {
-              yaml = {
-                schemaStore = {
-                  -- You must disable built-in schemaStore support if you want to use
-                  -- this plugin and its advanced options like `ignore`.
-                  enable = false,
-                  -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
-                  url = "",
-                },
-                schemas = require('schemastore').yaml.schemas(),
-              },
-            },
-          }
-        end,
-      }
-
-      -- First mason, then lspconfig.
-      require("mason").setup()
-      require("mason-lspconfig").setup {
-        -- See https://github.com/williamboman/mason-lspconfig.nvim?tab=readme-ov-file#available-lsp-servers
-        handlers = handlers,
-        ensure_installed = {
-          'lua_ls',
-          'dockerls',
-          'docker_compose_language_service',
-          'eslint',
-          'elmls',
-          'marksman', -- markdown
-          -- 'solargraph', -- ruby TODO install error
-          'terraformls',
-          'gradle_ls',
-          'vimls',
-          'lemminx', -- xml
-          'yamlls',
-          'jsonls',
-          'cssls',
-          'sqlls',
-          'html',
-          'tsserver', -- JS
-          "bashls"
-        },
-      }
+      lspconfig.util.default_config = vim.tbl_extend("force", lspconfig.util.default_config, {
+        -- on_attach = on_attach, -- TODO why not working here?
+        capabilities = require('cmp_nvim_lsp').default_capabilities(),
+      })
     end
   },
   -- ({
@@ -845,6 +843,10 @@ require('lazy').setup({
         end)
 
         buf_map(bufnr, 'v', 'K', '<Esc><cmd>lua require("metals").type_of_range()<cr>')
+
+        buf_map(bufnr, "n", "<leader>mts", function()
+          require("metals").toggle_setting("showImplicitArguments")
+        end)
 
         buf_map(bufnr, "n", "<leader>dc", function()
           require("dap").continue()
