@@ -101,7 +101,8 @@ lua << EOF
   -- vim.cmd([[au CursorHold,CursorHoldI * lua vim.diagnostic.open_float({scope = "cursor"})]])
 
   vim.diagnostic.config({
-    virtual_text = false,
+    virtual_text = true,  -- false: Since we're using lsp_lines
+    -- virtual_lines = true,
     signs = true,
     severity_sort = true,
     -- update_in_insert = true,

@@ -161,9 +161,9 @@ require('lazy').setup({
 
   'lambdalisue/suda.vim',
 
-  --  'justinmk/vim-sneak',
   {
-    'ggandor/leap.nvim', -- Similar to vim-sneak
+    --  'justinmk/vim-sneak',
+    'ggandor/leap.nvim',
     config = function()
       require('leap').add_default_mappings()
     end
@@ -554,6 +554,18 @@ require('lazy').setup({
       local cmp = require 'cmp'
 
       cmp.setup {
+        formatting = {
+          format = lspkind.cmp_format({
+            mode = 'symbol_text',
+            maxwidth = 50
+          })
+        },
+        -- window = {
+        -- documentation = {
+        -- https://github.com/hrsh7th/nvim-cmp#documentationwinhighlight-type-string
+        -- maxwidth = 20
+        -- }
+        -- }
         sources = cmp.config.sources({
           { name = 'nvim_lsp' },
           { name = "nvim_lsp_signature_help" },
@@ -626,19 +638,7 @@ require('lazy').setup({
               end
             end
           }),
-
-
-
         },
-        formatting = {
-          format = lspkind.cmp_format({ with_text = false, maxwidth = 50 })
-        },
-        -- window = {
-        -- documentation = {
-        -- https://github.com/hrsh7th/nvim-cmp#documentationwinhighlight-type-string
-        -- maxwidth = 20
-        -- }
-        -- }
       }
 
       -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
@@ -714,6 +714,12 @@ require('lazy').setup({
           function(server_name)
             require("lspconfig")[server_name].setup {
               on_attach = on_attach,
+            }
+          end,
+          ["sqlls"] = function()
+            require('lspconfig').sqlls.setup {
+              -- ? https://github.com/LunarVim/LunarVim/discussions/4210#discussioncomment-6083169
+              root_dir = function() return vim.loop.cwd() end,
             }
           end,
           ["lua_ls"] = function()
@@ -810,6 +816,7 @@ require('lazy').setup({
       'nvim-lua/plenary.nvim',
       {
         'mfussenegger/nvim-dap',
+        -- TODO opts?
         config = function(self, opts)
           local dap = require("dap")
           dap.configurations.scala = {
@@ -922,6 +929,17 @@ require('lazy').setup({
       "mfussenegger/nvim-dap"
     }
   },
+
+  -- Show diagnostics
+  -- {
+  --   'dgagn/diagflow.nvim',
+  --   event = 'LspAttach',
+  --   opts = {}
+  -- },
+  -- { -- Seems to not be compatible with indent blanklines
+  --   -- https://github.com/lukas-reineke/indent-blankline.nvim/issues/596
+  --   'https://git.sr.ht/~whynothugo/lsp_lines.nvim'
+  -- },
 
   {
     "folke/neodev.nvim",

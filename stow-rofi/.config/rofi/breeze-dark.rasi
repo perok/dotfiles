@@ -49,9 +49,9 @@
     background-color: @alternative-background;
 }
 
-#textbox {
-    background-color: @entry-background;
-}
+/* #textbox { */
+/*     background-color: @entry-background; */
+/* } */
 
 #listview {
     fixed-height: 0;

@@ -6,6 +6,6 @@ set smoothscroll true
 " Filter the hints
 set hintfiltermode vimperator
 
-fixamo_quiet
+" fixamo_quiet
 
 " vim: set filetype=vim:

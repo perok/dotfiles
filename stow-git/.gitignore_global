@@ -1,3 +1,11 @@
+tags
+tags.temp
+
+.bsp
+.scala-build
+
+.git
+
 # Compiled source #
 ###################
 *.com

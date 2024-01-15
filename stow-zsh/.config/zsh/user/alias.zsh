@@ -1,7 +1,7 @@
 eval "$(thefuck --alias)"
 
 # `exa` utility {{{
-alias l='exa -bghl --group-directories-first --sort name --git'
+alias l='eza -bghl --group-directories-first --sort name --git'
 alias ll='l --tree --level=3'
 # }}}
 

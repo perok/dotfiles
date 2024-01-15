@@ -41,6 +41,8 @@ declare -a useronly=(
   firefox
   idea
   ctags
+  mopidy
+  kmonad
 )
 
 stowit() {

@@ -1,0 +1,41 @@
+(defcfg
+  ;; For Linux
+  input  (device-file "/dev/input/by-id/usb-Topre_Corporation_Realforce_87-event-kbd")
+  ;; input  (device-file "/dev/input/by-id/usb-Topre_Corporation_Realforce_87-event-kbd")
+  ;; input  (device-file "pci-0000:00:14.0-usb-0:6:1.0-event-kbd")
+  output (uinput-sink "My KMonad output")
+
+  ;; This option tells KMonad to let non-configured keys act normal
+  fallthrough true
+  ;;tap-repeat 100
+)
+
+
+
+(defsrc
+    ;;caps a    s    d    f    g    h    j    k    l    ;
+      a    s    d    f    g    h    j    k    l    ;
+)
+
+(defalias
+    ;; tap and hold repeat issue?
+    ;; https://github.com/david-janssen/kmonad/issues/163
+    ;; or multi-tap https://github.com/kmonad/kmonad/issues/133#issuecomment-788832914
+  ;;  caps_is_escape caps esc
+    home_a (tap-hold-next-release 200 a lmet)
+    home_s (tap-hold-next-release 200 s lalt)
+    home_d (tap-hold-next-release 200 d lsft)
+    home_f (tap-hold-next-release 200 f lctl)
+
+    home_j (tap-hold-next-release 200 j rctl)
+    home_k (tap-hold-next-release 200 k rsft)
+    home_l (tap-hold-next-release 200 l lalt)
+    home_; (tap-hold-next-release 200 ; rmet)
+)
+
+(deflayer homerowmods
+  @home_a   @home_s   @home_d   @home_f   g   h   @home_j   @home_k   @home_l   @home_;
+  ;; @caps_is_escape @home_a   @home_s   @home_d   @home_f   g   h   @home_j   @home_k   @home_l   @home_;
+  )
+
+

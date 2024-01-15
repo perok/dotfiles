@@ -55,7 +55,7 @@ configuration {
 /*	window-format: "{w}    {c}   {t}";*/
 /*	click-to-exit: true;*/
 /*	show-match: true;*/
-  theme: "breeze-dark";
+  /* theme: "breeze-dark"; */
 /*	color-normal: ;*/
 /*	color-urgent: ;*/
 /*	color-active: ;*/
@@ -97,7 +97,7 @@ configuration {
 /*	kb-mode-previous: "Shift+Left,Control+ISO_Left_Tab";*/
 /*	kb-row-left: "Control+Page_Up";*/
 /*	kb-row-right: "Control+Page_Down";*/
-  kb-row-up: "Up,Control+p,ISO_Left_Tab,Control+k";
+  /* kb-row-up: "Up,Control+p,ISO_Left_Tab,Control+k"; */
 /*           "Up,Control+p,ISO_Left_Tab"; */
   kb-row-down: "Down,Control+n,Control+j";
 /*             "Down,Control+n"; */
@@ -149,5 +149,6 @@ configuration {
 /*	me-accept-entry: "MouseDPrimary";*/
 /*	me-accept-custom: "Control+MouseDPrimary";*/
 }
+@theme "breeze-dark"
 
 /* vim:ft=css

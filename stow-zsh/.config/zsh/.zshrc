@@ -123,6 +123,9 @@ bindkey -M vicmd 'j' history-substring-search-down
 # Other settings
 # ------------------------------
 
+# To read the history file everytime history is called upon as well as the functionality from inc_append_history:
+setopt share_history
+
 # Fix locale warning from terminal in Intellij
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
@@ -153,14 +156,14 @@ fi
 export SDKMAN_DIR="$HOME/.sdkman"
 source_file $SDKMAN_DIR/bin/sdkman-init.sh
 
-export NVM_SYMLINK_CURRENT=true
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-export NVM_DIR="$HOME/.nvm"
+#export NVM_SYMLINK_CURRENT=true
+#export NVM_DIR="$HOME/.nvm"
+#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+#[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+#export NVM_DIR="$HOME/.nvm"
 # Note: Due to the use of nodejs instead of node name in some distros, yarn might complain about node not being installed.
 # A workaround for this is to add an alias in your .bashrc file
-alias node=nodejs
+# alias node=nodejs
 
 export GRADLE_OPTS=-Dorg.gradle.daemon=true
 
@@ -188,7 +191,7 @@ path=(
   $path
   "$HOME/.local/bin"
   "$HOME/.cargo/bin"
-  `yarn global bin`
+#  `yarn global bin` - Use npm instead
   "$HOME/.local/share/coursier/bin"
 )
 
@@ -200,4 +203,19 @@ source "$ZDOTDIR/user/tweaks.zsh"
 source "$ZDOTDIR/user/alias.zsh"
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
+#export PATH="$PATH:$HOME/.rvm/bin"
+
+# >>> .scala-cli.aux completions >>>
+fpath=("/home/perok/.local/share/scalacli/completions/zsh" $fpath)
+compinit
+# <<< .scala-cli.aux completions <<<
+
+# >>> scala-cli completions >>>
+fpath=("/home/perok/.local/share/scalacli/completions/zsh" $fpath)
+compinit
+# <<< scala-cli completions <<<
+
+# zsh-users/zsh-completions adds an alias overriding gh
+unalias gh
+export VOLTA_HOME="$HOME/.volta"
+export PATH="$VOLTA_HOME/bin:$PATH"

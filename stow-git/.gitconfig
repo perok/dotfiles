@@ -1,10 +1,11 @@
 [user]
-	email = perokane@gmail.com
-	name = Per Øyvind Kanestrøm
+	email = per.kanestrom@bekk.no
+	name = Per Øyvind Løvik Kanestrøm
+	signingkey = 1A4DB4D4987EE532E3E78327982921075C5C2CEA
 [core]
-	editor = nvr --remote-wait-silent
-    pager = less -r
-	excludesfile = /Users/perkanestrom/.gitignore_global
+	editor = nvr -cc split --remote-wait +'set bufhidden=wipe'
+  pager = less -r
+	excludesfile = /home/perok/.gitignore_global
 	autocrlf = input
 	commitGraph = true
 [push]
@@ -77,3 +78,5 @@
 	minRacyThreshold = 7883 microseconds
 [diff]
 	external = difft
+[commit]
+	gpgsign = true

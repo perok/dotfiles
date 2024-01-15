@@ -1,16 +1,21 @@
 # Set default exports
-# If inside neovim terminal then use neovim-remote
+
+# If inside neovim terminal then use neovim --remote
 if [ -n "${NVIM_LISTEN_ADDRESS+x}" ]; then
-  export EDITOR='nvr'
-  alias hh='nvr -o'
-  alias vv='nvr -O'
-  alias tt='nvr --remote-tab'
+  export EDITOR='vim --remote'
+  # TODO move to
+  # https://github.com/mhinz/neovim-remote/issues/169#issuecomment-1094874951
+  # when wait is implemented
+  export VISUAL="nvr -cc split --remote-wait +'set bufhidden=wipe'"
+  alias hh='nvim --remote -o'
+  alias vv='nvim --remote -O'
+  alias tt='nvim --remote-tab'
 else
   export EDITOR='nvim'
+  export VISUAL='nvim'
 fi
 
 export GIT_EDITOR="$EDITOR"
-export VISUAL="$EDITOR"
 
 # Set alias's
 alias vim="$EDITOR"

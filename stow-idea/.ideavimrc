@@ -1,4 +1,6 @@
 " source ~/.config/nvim/init.vim
+o
+" Don't think this works with jetbrains toolbox?
 
 " Leader is space
 nmap <space> <leader>
@@ -26,6 +28,7 @@ set clipboard=unnamedplus,unnamed
 " ============================================================================
 " IDE actions
 " ============================================================================
+"
 
 nnoremap / :action Find<CR>
 nnoremap n :action FindNext<CR>
@@ -38,4 +41,8 @@ nnoremap <Space>d :action CloseContent<CR>
 nnoremap <Space>j :action RecentFiles<CR>
 nnoremap <Space>k :action FileStructurePopup<CR>
 nnoremap <Space>h :action QuickJavaDoc<CR>
+
+" TODO does this work? https://youtrack.jetbrains.com/issue/VIM-44
+nmap <C-o> :action Back<CR>
+
 set clipboard+=ideaput

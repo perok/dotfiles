@@ -1,4 +1,6 @@
 
+.git
+
 # Do not want to keep Zsh history
 .zhistory
 
