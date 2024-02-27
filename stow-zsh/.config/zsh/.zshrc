@@ -181,9 +181,6 @@ fi
 # Broot launcher
 source ~/.config/broot/launcher/bash/br
 
-# Utility tools
-source ~/.fzf.zsh # Load after personal settings
-
 # GHCUp
 [ -f "/home/perok/.ghcup/env" ] && source "/home/perok/.ghcup/env" # ghcup-env
 

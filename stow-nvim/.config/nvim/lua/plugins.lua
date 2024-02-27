@@ -323,15 +323,6 @@ require('lazy').setup({
       require('luatab').setup {}
     end
   },
-
-  {
-    --  TODO remove fzf because of telescope. But how to install for shell?
-    'junegunn/fzf',
-    build = function() vim.fn['fzf#install']() end,
-    -- dependencies = {
-    --   { 'junegunn/fzf.vim' }
-    -- }
-  },
   {
     'nvim-telescope/telescope.nvim',
     config = function()
