@@ -43,6 +43,7 @@ declare -a useronly=(
   ctags
   mopidy
   kmonad
+  neovide
 )
 
 stowit() {
