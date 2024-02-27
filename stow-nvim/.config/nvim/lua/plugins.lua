@@ -707,6 +707,9 @@ require('lazy').setup({
               on_attach = on_attach,
             }
           end,
+          ["nil_ls"] = function()
+            require('lspconfig').nil_ls.setup {}
+          end,
           ["sqlls"] = function()
             require('lspconfig').sqlls.setup {
               -- ? https://github.com/LunarVim/LunarVim/discussions/4210#discussioncomment-6083169
@@ -793,6 +796,10 @@ require('lazy').setup({
         -- on_attach = on_attach, -- TODO why not working here?
         capabilities = require('cmp_nvim_lsp').default_capabilities(),
       })
+
+      require('lspconfig').nil_ls.setup {
+        on_attach = on_attach,
+      }
     end
   },
   -- ({
