@@ -1,9 +1,7 @@
 eval "$(thefuck --alias)"
 
-# `exa` utility {{{
-alias l='eza -bghl --group-directories-first --sort name --git'
-alias ll='l --tree --level=3'
-# }}}
+# zsh-users/zsh-completions adds an alias overriding gh
+unalias gh
 
 # {{{
 # Update Git commit graph. Will be done by default in Git 2.19 on `git gc`
@@ -24,6 +22,3 @@ alias dockercleani='printf "\n>>> Deleting untagged images\n\n" && docker rmi $(
 alias dockerclean='dockercleanc || true && dockercleani'
 # }}}
 
-# Scala {{{
-alias amm="amm --no-remote-logging"
-# }}}

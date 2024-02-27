@@ -44,6 +44,7 @@ zmodule archive
 zmodule ssh
 zmodule b4b4r07/enhancd --source init.sh
 zmodule fzf # better caching, use rg or similar, etc
+zmodule exa # aliases for exa
 
 # TODO issues with git branche tagging? :: autosuggestions
 # history-substring-search => use fzf instead. If activate add after
