@@ -130,6 +130,18 @@
     nvidiaBusId = "PCI:1:0:0";
   };
 
+  programs.auto-cpufreq.enable = true;
+  #programs.auto-cpufreq.settings = {
+  #  charger = {
+  #    governor = "performance";
+  #    turbo = "auto";
+  #  };
+
+  #  battery = {
+  #    governor = "powersave";
+  #    turbo = "auto";
+  #};
+
   fonts.packages = with pkgs; [
     hack-font
     ubuntu_font_family

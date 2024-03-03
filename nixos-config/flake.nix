@@ -16,13 +16,18 @@
       # to avoid problems caused by different versions of nixpkgs.
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    auto-cpufreq = {
+      url = "github:AdnanHodzic/auto-cpufreq";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs: let
+  outputs = { self, nixpkgs, home-manager, auto-cpufreq, ... }@inputs: let
       inherit (self) outputs;
   in {
     formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
-    
+
     # Your custom packages and modifications, exported as overlays
     overlays = import ./overlays {inherit inputs;};
 
@@ -32,6 +37,8 @@
       specialArgs = {inherit inputs outputs;};
       modules = [
         ./nixos/configuration.nix
+
+        auto-cpufreq.nixosModules.default
 
         # make home-manager as a module of nixos
         # so that home-manager configuration will be deployed automatically when executing `nixos-rebuild switch`
