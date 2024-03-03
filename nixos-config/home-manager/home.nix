@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, outputs, ... }:
 {
   home.username = "perok";
   home.homeDirectory = "/home/perok";
@@ -32,6 +32,18 @@
   #};
 
 
+  # TODO how to make this unnecessary? share between nixos and home
+  nixpkgs = {
+    # You can add overlays here
+    overlays = [
+      # Add overlays your own flake exports (from overlays and pkgs dir):
+      outputs.overlays.additions
+      outputs.overlays.modifications
+      outputs.overlays.modificationsStableUnstable
+      outputs.overlays.unstable-packages
+      ];
+  };
+
   # Packages that should be installed to the user profile.
   home.packages = with pkgs;
     [
@@ -48,7 +60,6 @@
       nodejs_21
       volta
       pipx
-      jdk17
       gcc9
       cargo
 
@@ -62,7 +73,8 @@
       unstable.metals
       unstable.bloop
       unstable.scala-cli
-      unstable.sbt-with-scala-native
+      #(unstable.sbt.override { jre = my-jdk; })
+      unstable.sbt
       unstable.scalafmt
       unstable.scalafix
 
@@ -81,6 +93,7 @@
       yq-go # yaml processer https://github.com/mikefarah/yq
       eza # A modern replacement for ‘ls’
       fzf # A command-line fuzzy finder
+      bfs #fd # fast find
       difftastic
       htop
 
@@ -134,6 +147,10 @@
     ];
 
   # https://github.com/nix-community/home-manager/tree/master/modules/programs
+
+  programs.java = {
+    enable = true;
+  };
 
   #programs.zsh = {
   #};
