@@ -3,7 +3,6 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, pkgs, outputs, ... }:
-
 {
   imports =
     [
@@ -80,6 +79,13 @@
     enable = true;
     driSupport = true;
     driSupport32Bit = true;
+    extraPackages = with pkgs; [
+      intel-media-driver
+      vaapiIntel
+      nvidia-vaapi-driver
+      vaapiVdpau
+      libvdpau-va-gl
+   ];
   };
 
   # https://nixos.wiki/wiki/Nvidia
@@ -112,11 +118,13 @@
     package = config.boot.kernelPackages.nvidiaPackages.beta;
   };
   hardware.nvidia.prime = {
-    sync.enable = true;
-    #offload = {
-    #  enable = true;
-    #  enableOffloadCmd = true;
-    #};
+    # Note: sync and offload can't be enabled at the same time.
+    #sync.enable = true;
+    # TODO test reverse sync
+    offload = {
+      enable = true;
+      enableOffloadCmd = true; # Add convenience script nvidia-offload
+    };
     # Make sure to use the correct Bus ID values for your system!
     intelBusId = "PCI:0:2:0";
     nvidiaBusId = "PCI:1:0:0";
