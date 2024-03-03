@@ -16,6 +16,24 @@ debug:
 up:
   nix flake update
 
+
+diff-closure since='1':
+ #!/usr/bin/env bash
+ set -euo pipefail
+
+ function num2file() {
+   find /nix/var/nix/profiles -type l -name "*$1*"
+     # TODO propagate error when not found
+     #| awk '{print} END {if (NR == 0) {exit(1)}}'
+ }
+
+ current=$(readlink /nix/var/nix/profiles/system | cut -d- -f2)
+ last=$(($current-{{since}}))
+
+ echo "💻 $last -> $current"
+
+ nix store diff-closures $(num2file $last) $(num2file $current)
+
 # Update specific input
 # usage: make upp i=home-manager
 upp:
