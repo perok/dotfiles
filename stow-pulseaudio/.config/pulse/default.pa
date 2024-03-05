@@ -1,4 +1,0 @@
-.include /etc/pulse/default.pa
-
-# https://askubuntu.com/questions/354383/headphones-microphone-is-not-working
-# load-module module-bluetooth-policy auto_switch=2
