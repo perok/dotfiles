@@ -41,7 +41,7 @@
       outputs.overlays.modifications
       outputs.overlays.modificationsStableUnstable
       outputs.overlays.unstable-packages
-      ];
+    ];
   };
 
   # Packages that should be installed to the user profile.

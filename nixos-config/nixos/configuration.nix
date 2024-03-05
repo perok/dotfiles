@@ -95,7 +95,7 @@
       nvidia-vaapi-driver
       vaapiVdpau
       libvdpau-va-gl
-   ];
+    ];
   };
 
   # https://nixos.wiki/wiki/Nvidia
@@ -188,7 +188,7 @@
   # Allow unfree packages
   nixpkgs = {
     overlays = [
-        # Add overlays your own flake exports (from overlays and pkgs dir):
+      # Add overlays your own flake exports (from overlays and pkgs dir):
       outputs.overlays.additions
       outputs.overlays.modifications
       outputs.overlays.modificationsStableUnstable
@@ -202,10 +202,9 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   nix.settings = {
-    substituters = ["https://hyprland.cachix.org"];
-    trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
+    substituters = [ "https://hyprland.cachix.org" ];
+    trusted-public-keys = [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" ];
   };
-
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -215,22 +214,25 @@
     gnumake # nvim something
     wget
     curl
+    ranger
+    stow
+    just
+    lshw
+
+    git
 
     # TODO move to home
-    jetbrains.idea-ultimate
     #pkgs.jetbrains-toolbox https://github.com/NixOS/nixpkgs/issues/240444
     vscode # vscode-fhs?
-    git
-    zimfw
-    lshw
     spotify
     libsForQt5.bismuth
-    alacritty
     slack
-    stow
-    ranger
-    just
   ];
+
+  programs.steam = {
+    enable = true;
+    #remotePlay.openFirewall = true;
+  };
 
   services.kmonad = {
     enable = true;
@@ -242,16 +244,16 @@
 
   #  Feb 27 09:52:12 nixos wpa_supplicant[99520]: OpenSSL: openssl_handshake - SSL_connect error:0A000152:SSL routines::unsafe legacy renegotiation disabled
   systemd.services.wpa_supplicant.environment.OPENSSL_CONF = pkgs.writeText "openssl.cnf" ''
-  openssl_conf = openssl_init
-  [openssl_init]
-  ssl_conf = ssl_sect
-  [ssl_sect]
-  system_default = system_default_sect
-  [system_default_sect]
-  Options = UnsafeLegacyRenegotiation
-  [system_default_sect]
-  CipherString = Default:@SECLEVEL=0
-'';
+    openssl_conf = openssl_init
+    [openssl_init]
+    ssl_conf = ssl_sect
+    [ssl_sect]
+    system_default = system_default_sect
+    [system_default_sect]
+    Options = UnsafeLegacyRenegotiation
+    [system_default_sect]
+    CipherString = Default:@SECLEVEL=0
+  '';
   #systemd.services.wpa_supplicant.environment.OPENSSL_CONF = pkgs.writeText "openssl.cnf" ''
   #  openssl_conf = openssl_init
   #  [openssl_init]

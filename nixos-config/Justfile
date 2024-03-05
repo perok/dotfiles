@@ -16,6 +16,8 @@ debug:
 up:
   nix flake update
 
+fmt:
+  nix fmt
 
 diff-closure since='1':
  #!/usr/bin/env bash
