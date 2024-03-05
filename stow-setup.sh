@@ -40,7 +40,6 @@ declare -a useronly=(
   idea
   ctags
   mopidy
-  kmonad
   neovide
 )
 
