@@ -4,8 +4,14 @@
 #
 ############################################################################
 
+build:
+  nixos-rebuild build --flake . && nvd diff /run/current-system result
+
 deploy:
-  nixos-rebuild switch --flake . --use-remote-sudo
+  #--use-remote-sudo
+  sudo nixos-rebuild switch --flake . |& nom
+  # https://github.com/NixOS/nixpkgs/pull/286522#issuecomment-1973797174
+  rm ~/.cache/ksycoca*
 
 deploy-trace:
   nixos-rebuild switch --flake . --use-remote-sudo --show-trace
@@ -19,6 +25,11 @@ up:
 fmt:
   nix fmt
 
+# See https://discourse.nixos.org/t/tips-tricks-for-nixos-desktop/28488/2
+make-current-default-boot:
+  /run/current-system/bin/switch-to-configuration boot
+
+# TODO nvd diff /nix/var/nix/profiles/system-{103,110}-link
 diff-closure since='1':
  #!/usr/bin/env bash
  set -euo pipefail

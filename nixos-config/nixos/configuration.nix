@@ -125,7 +125,7 @@
     nvidiaSettings = true;
 
     # Optionally, you may need to select the appropriate driver version for your specific GPU.
-    package = config.boot.kernelPackages.nvidiaPackages.beta;
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
   hardware.nvidia.prime = {
     # Note: sync and offload can't be enabled at the same time.
@@ -218,6 +218,7 @@
     stow
     just
     lshw
+    killall
 
     git
 
@@ -228,6 +229,9 @@
     libsForQt5.bismuth
     slack
   ];
+
+  # TODO move to home-manaager when it controls zsh
+  programs.direnv.enable = true;
 
   programs.steam = {
     enable = true;

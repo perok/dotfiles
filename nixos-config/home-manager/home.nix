@@ -52,6 +52,7 @@
 
       unstable.neovide
       sublime-merge
+      tig
 
       # nil # nix ls. Currently installed with nix profile
 
@@ -63,11 +64,18 @@
       gcc9
       cargo
 
+
+      mkcert
+      unstable.dive # docker image inspect
+
       chromium
       remmina
 
-      steam
       mpv
+      libreoffice-qt
+
+      unstable.jetbrains.idea-ultimate
+      unstable.alacritty
 
       #coursier
       unstable.metals
@@ -125,6 +133,7 @@
       # it provides the command `nom` works just like `nix`
       # with more details log output
       nix-output-monitor
+      nvd
 
       # productivity
       glow # markdown previewer in terminal
@@ -184,7 +193,7 @@
 
   programs.rofi = {
     enable = true;
-    package = pkgs.rofi-wayland;
+    package = pkgs.unstable.rofi-wayland;
   };
 
   #programs.git = {
@@ -193,11 +202,11 @@
   #  userEmail = "per.kanestrom@bekk.no";
   #};
 
-  nix.gc = {
-    automatic = true;
-    frequency = "weekly";
-    options = "--delete-older-than 30d";
-  };
+  #nix.gc = {
+  #  automatic = true;
+  #  frequency = "weekly";
+  #  options = "--delete-older-than 30d";
+  #};
 
   # This value determines the home Manager release that your
   # configuration is compatible with. This helps avoid breakage
