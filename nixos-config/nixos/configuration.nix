@@ -39,13 +39,16 @@
 
   # Enable the KDE Plasma Desktop Environment.
   services.xserver.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
+  #services.xserver.desktopManager.plasma5.enable = true;
+  services.xserver.desktopManager.plasma6.enable = true;
 
   # Configure keymap in X11
   services.xserver = {
     layout = "us";
     xkbVariant = "";
   };
+ #trace: warning: The option `services.xserver.xkbVariant' defined in `/nix/store/y6q45si2al650mrzbrqpnvnpdc6l0p5n-source/nixos-config/nixos/configuration.nix' has been renamed to `services.xserver.xkb.variant'.
+ #trace: warning: The option `services.xserver.layout' defined in `/nix/store/y6q45si2al650mrzbrqpnvnpdc6l0p5n-source/nixos-config/nixos/configuration.nix' has been renamed to `services.xserver.xkb.layout'.
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -66,16 +69,26 @@
     # no need to redefine it in your config for now)
     #media-session.enable = true;
   };
-  environment.etc = {
-    "wireplumber/bluetooth.lua.d/51-bluez-config.lua".text = ''
-          bluez_monitor.properties = {
-            ["bluez5.enable-sbc-xq"] = true,
-            ["bluez5.enable-msbc"] = true,
-            ["bluez5.enable-hw-volume"] = true,
-            ["bluez5.headset-roles"] = "[ hsp_hs hsp_ag hfp_hf hfp_ag ]"
-          }
-        '';
-  };
+  #environment.etc = {
+  #  "wireplumber/bluetooth.lua.d/51-bluez-config.lua".text = ''
+  #    bluez_monitor.properties = {
+  #      ["bluez5.enable-sbc-xq"] = true,
+  #      ["bluez5.enable-msbc"] = true,
+  #      ["bluez5.enable-hw-volume"] = true,
+  #      ["bluez5.headset-roles"] = "[ hsp_hs hsp_ag hfp_hf hfp_ag ]"
+  #    }
+  #  '';
+  #};
+  services.pipewire.wireplumber.configPackages = [
+	(pkgs.writeTextDir "share/wireplumber/bluetooth.lua.d/51-bluez-config.lua" ''
+		bluez_monitor.properties = {
+			["bluez5.enable-sbc-xq"] = true,
+			["bluez5.enable-msbc"] = true,
+			["bluez5.enable-hw-volume"] = true,
+			["bluez5.headset-roles"] = "[ hsp_hs hsp_ag hfp_hf hfp_ag ]"
+		}
+	'')
+];
 
   hardware.bluetooth.enable = true; # enables support for Bluetooth
   hardware.bluetooth.powerOnBoot = true; # powers up the default Bluetooth controller on boot
@@ -226,7 +239,7 @@
     #pkgs.jetbrains-toolbox https://github.com/NixOS/nixpkgs/issues/240444
     vscode # vscode-fhs?
     spotify
-    libsForQt5.bismuth
+    #libsForQt5.bismuth
     slack
   ];
 
