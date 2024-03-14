@@ -29,8 +29,8 @@ in
       wdisplays # monitor management
 
       #pkgs-unstable.hyprshot # screen shot
-      #grim # taking screenshots
-      #slurp # selecting a region to screenshot
+      grim # taking screenshots
+      slurp # selecting a region to screenshot
       #wf-recorder # creen recording
 
       xfce.thunar
@@ -242,7 +242,7 @@ in
           "ALT,SPACE,exec, rofi -show combi"
           "CTRLALT,T,exec,$term"
           "$mod, F, exec, firefox,"
-          ",Print, exec, grimblast copy area"
+          ", Print, exec, grim -g \"$(slurp -d)\" - | wl-copy"
 
           # fn
           ",XF86AudioMute,         exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
