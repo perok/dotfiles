@@ -1,4 +1,4 @@
- { config, pkgs, outputs, ... }:
+{ config, pkgs, outputs, ... }:
 let
   hyprlandRotateLayout = pkgs.writeShellScriptBin "hyprland-rotate-layout" ''
     current_layout=$(hyprctl getoption general:layout | grep -oP 'str: \K\w+')
@@ -68,7 +68,6 @@ in
       layer = "top";
       position = "top";
       #spacing = 4;
-      tray = { spacing = 10; };
       modules-left = [
         "custom/exit"
         "hyprland/workspaces"
@@ -91,10 +90,11 @@ in
         "tray"
         "clock"
       ];
+
       battery = {
-        format = "{capacity}% {icon}";
+        format = "{capacity}% {icon} ";
         format-alt = "{time} {icon}";
-        format-charging = "{capacity}% ";
+        format-charging = "{capacity}% 🗲";
         format-icons = [ "" "" "" "" "" ];
         format-plugged = "{capacity}% ";
         states = {
@@ -102,16 +102,23 @@ in
           warning = 30;
         };
       };
+
+      tray = {
+        spacing = 10;
+      };
+
       clock = {
         format-alt = "{:%Y-%m-%d}";
         tooltip-format = "{:%Y-%m-%d | %H:%M}";
       };
+
       cpu = {
         format = "{usage}% ";
         tooltip = false;
       };
 
       memory = { format = "{}% "; };
+
       "custom/exit" = {
         format = "Exit";
         # TODO not working
@@ -121,6 +128,7 @@ in
       "hyprland/language" = {
         format-en = "EN";
         format-no = "NO";
+        separate-outputs = true;
         # TODO https://github.com/Alexays/Waybar/issues/2425
         on-click = "${pkgs.hyprland}/bin/hyprctl switchxkblayout my-kmonad-output next";
         # hyperctl devices
@@ -129,37 +137,34 @@ in
 
       network = {
         interval = 1;
-        format-alt = "{ifname}: {ipaddr}/{cidr}";
-        format-disconnected = "Disconnected ⚠";
+        format-wifi = "{essid} ({signalStrength}%)  ";
         format-ethernet = "{ifname}: {ipaddr}/{cidr}   up: {bandwidthUpBits} down: {bandwidthDownBits}";
+        tooltip-format = "{ifname} via {gwaddr} ";
         format-linked = "{ifname} (No IP) ";
-        format-wifi = "{essid} ({signalStrength}%) ";
+        format-disconnected = "Disconnected ⚠";
+        format-alt = "{ifname}: {ipaddr}/{cidr}";
         # TODO not working
-        on-click = "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator";
+        # on-click = "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator";
       };
-      #pulseaudio = {
-      #  format = "{volume}% {icon} {format_source}";
-      #  format-bluetooth = "{volume}% {icon} {format_source}";
-      #  format-bluetooth-muted = " {icon} {format_source}";
-      #  format-icons = {
-      #    car = "";
-      #    default = [ "" "" "" ];
-      #    handsfree = "";
-      #    headphones = "";
-      #    headset = "";
-      #    phone = "";
-      #    portable = "";
-      #  };
-      #  format-muted = " {format_source}";
-      #  format-source = "{volume}% ";
-      #  format-source-muted = "";
-      #  on-click = "pavucontrol";
-      #};
-      #temperature = {
-      #  critical-threshold = 80;
-      #  format = "{temperatureC}°C {icon}";
-      #  format-icons = [ "" "" "" ];
-      #};
+
+      wireplumber = {
+        format = "{volume}% {icon}";
+        format-muted = "";
+
+        format-icons = [ "" "" "" ];
+        #  on-click = "helvum";
+      };
+
+      backlight = {
+        format = "{percent}% {icon}";
+        format-icons = [ "" "" "" "" "" "" "" "" "" ];
+      };
+
+      temperature = {
+        critical-threshold = 80;
+        format = "{temperatureC}°C {icon}";
+        format-icons = [ "" "" "" ];
+      };
     }];
   };
 
@@ -178,6 +183,20 @@ in
         touchpad {
           clickfinger_behavior = 1
         }
+      }
+      master {
+        # See https://wiki.hyprland.org/Configuring/Master-Layout/ for more
+        new_is_master = true
+      }
+
+      animations {
+        #enabled = no
+      }
+
+      misc {
+        # disable_hyprland_logo = true
+        # disable_splash_rendering = true
+        disable_autoreload = true
       }
 
       # Wayland fix vscode
