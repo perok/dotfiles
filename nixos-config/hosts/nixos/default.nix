@@ -6,9 +6,10 @@
 {
   imports =
     [
+      ../../modules/system.nix
+      ../../modules/kmonad.nix
       # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ./kmonad.nix
     ];
 
   # Bootloader.
@@ -28,12 +29,6 @@
   # Enable networking
   networking.networkmanager.enable = true;
 
-  # Set your time zone.
-  time.timeZone = "Europe/Oslo";
-
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
-
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
@@ -43,12 +38,10 @@
   services.xserver.desktopManager.plasma6.enable = true;
 
   # Configure keymap in X11
-  services.xserver = {
+  services.xserver.xkb = {
     layout = "us";
-    xkbVariant = "";
+    variant = "altgr-intl";
   };
- #trace: warning: The option `services.xserver.xkbVariant' defined in `/nix/store/y6q45si2al650mrzbrqpnvnpdc6l0p5n-source/nixos-config/nixos/configuration.nix' has been renamed to `services.xserver.xkb.variant'.
- #trace: warning: The option `services.xserver.layout' defined in `/nix/store/y6q45si2al650mrzbrqpnvnpdc6l0p5n-source/nixos-config/nixos/configuration.nix' has been renamed to `services.xserver.xkb.layout'.
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -80,15 +73,15 @@
   #  '';
   #};
   services.pipewire.wireplumber.configPackages = [
-	(pkgs.writeTextDir "share/wireplumber/bluetooth.lua.d/51-bluez-config.lua" ''
-		bluez_monitor.properties = {
-			["bluez5.enable-sbc-xq"] = true,
-			["bluez5.enable-msbc"] = true,
-			["bluez5.enable-hw-volume"] = true,
-			["bluez5.headset-roles"] = "[ hsp_hs hsp_ag hfp_hf hfp_ag ]"
-		}
-	'')
-];
+    (pkgs.writeTextDir "share/wireplumber/bluetooth.lua.d/51-bluez-config.lua" ''
+      		bluez_monitor.properties = {
+      			["bluez5.enable-sbc-xq"] = true,
+      			["bluez5.enable-msbc"] = true,
+      			["bluez5.enable-hw-volume"] = true,
+      			["bluez5.headset-roles"] = "[ hsp_hs hsp_ag hfp_hf hfp_ag ]"
+      		}
+      	'')
+  ];
 
   hardware.bluetooth.enable = true; # enables support for Bluetooth
   hardware.bluetooth.powerOnBoot = true; # powers up the default Bluetooth controller on boot
@@ -113,7 +106,10 @@
 
   # https://nixos.wiki/wiki/Nvidia
   # Load nvidia driver for Xorg and Wayland
-  services.xserver.videoDrivers = [ "nvidia" ];
+  services.xserver.videoDrivers = [
+    # "displaylink" # TODO is it needed? why does plasma montitor work?
+    "nvidia"
+  ];
   hardware.nvidia = {
     # Modesetting is required.
     modesetting.enable = true;
@@ -165,38 +161,37 @@
   #    turbo = "auto";
   #};
 
-  fonts.packages = with pkgs; [
-    hack-font
-    ubuntu_font_family
-    noto-fonts
-    noto-fonts-cjk
-    noto-fonts-emoji
-    (nerdfonts.override { fonts = [ "Hasklig" "DroidSansMono" ]; })
-  ];
-
-  programs.zsh = {
-    enable = true;
-    #completionInit = "";
-    enableGlobalCompInit = false;
-    #promptInit = "";
+  # fc-list
+  fonts = {
+    packages = with pkgs; [
+      hack-font
+      ubuntu_font_family
+      noto-fonts
+      noto-fonts-cjk
+      noto-fonts-emoji
+      (nerdfonts.override { fonts = [ "Hasklig" "DroidSansMono" "SourceCodePro" ]; })
+    ];
+    # TODO useful?
+    # Where are the emojis? ☘️
+    # This? https://github.com/ryan4yin/nix-config/blob/82b65f775369818a9586a44b172833b51e9e47f0/modules/system.nix#L96
+    fontconfig = {
+      antialias = true;
+      cache32Bit = true;
+      hinting.enable = true;
+      hinting.autohint = true;
+      defaultFonts = {
+        monospace = [ "Souce Code Pro" ];
+        sansSerif = [ "Source Sans Pro" ];
+        serif = [ "Source Serif Pro" ];
+      };
+    };
   };
+
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.perok = {
-    isNormalUser = true;
-    description = "Peri";
-    extraGroups = [ "networkmanager" "docker" "wheel" "input" "uinput" ];
-    shell = pkgs.zsh;
-    packages = with pkgs; [
-      firefox
-      kate
-      #  thunderbird
-    ];
-  };
 
   # Allow unfree packages
   nixpkgs = {
@@ -214,50 +209,20 @@
   # Enable the Flakes feature and the accompanying new nix command-line tool
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  nix.settings = {
-    substituters = [ "https://hyprland.cachix.org" ];
-    trusted-public-keys = [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" ];
-  };
+  # nix.settings = {
+  #   substituters = [ "https://hyprland.cachix.org" ];
+  #   trusted-public-keys = [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" ];
+  # };
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    neovim
-    gnumake # nvim something
-    wget
-    curl
-    ranger
-    stow
-    just
-    lshw
-    killall
+  programs.hyprland.enable = true;
+  services.blueman.enable = true; # Bluetooth control
 
-    git
 
-    # TODO move to home
-    #pkgs.jetbrains-toolbox https://github.com/NixOS/nixpkgs/issues/240444
-    vscode # vscode-fhs?
-    spotify
-    #libsForQt5.bismuth
-    slack
-  ];
-
-  # TODO move to home-manaager when it controls zsh
-  programs.direnv.enable = true;
-
-  programs.steam = {
-    enable = true;
-    #remotePlay.openFirewall = true;
-  };
 
   services.kmonad = {
     enable = true;
-    configfile = /home/perok/.config/kmonad/config.kbd;
+    configfile = ./kmonad/config.kbd;
   };
-
-  # Set the default editor to vim
-  environment.variables.EDITOR = "vim";
 
   #  Feb 27 09:52:12 nixos wpa_supplicant[99520]: OpenSSL: openssl_handshake - SSL_connect error:0A000152:SSL routines::unsafe legacy renegotiation disabled
   systemd.services.wpa_supplicant.environment.OPENSSL_CONF = pkgs.writeText "openssl.cnf" ''

@@ -1,5 +1,11 @@
 { config, pkgs, outputs, ... }:
 {
+  imports = [
+    ./hyprland
+  ];
+
+  # TODO https://github.com/ryan4yin/nix-config/blob/i3-kickstarter/home/programs/xdg.nix
+
   home.username = "perok";
   home.homeDirectory = "/home/perok";
   home = {
@@ -153,9 +159,11 @@
       ethtool
       pciutils # lspci
       usbutils # lsusb
+
     ];
 
   # https://github.com/nix-community/home-manager/tree/master/modules/programs
+
 
   programs.java = {
     enable = true;
@@ -188,13 +196,9 @@
     enable = true;
     # Needed to configure this. Why was this override needed?
     # Error was: gpg: signing failed: No pinentry
-    pinentryFlavor = "qt";
+    pinentryPackage = pkgs.pinentry-qt;
   };
 
-  programs.rofi = {
-    enable = true;
-    package = pkgs.unstable.rofi-wayland;
-  };
 
   #programs.git = {
   #  enable = true;
