@@ -83,6 +83,8 @@
       unstable.jetbrains.idea-ultimate
       unstable.alacritty
 
+      diffoscopeMinimal # diff everything!
+
       #coursier
       unstable.metals
       unstable.bloop
@@ -196,7 +198,7 @@
     enable = true;
     # Needed to configure this. Why was this override needed?
     # Error was: gpg: signing failed: No pinentry
-    pinentryPackage = pkgs.pinentry-qt;
+    pinentryPackage = pkgs.pinentry-gnome3;
   };
 
 

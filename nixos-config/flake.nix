@@ -36,28 +36,34 @@
       overlays = import ./overlays { inherit inputs; };
 
       # Please replace my-nixos with your hostname
-      nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = { inherit inputs outputs; };
-        modules = [
-          ./hosts/nixos
+      nixosConfigurations = {
+        nixos = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = {
+            username = "perok";
+            hostname = "nixos";
+            inherit inputs outputs;
+          };
+          modules = [
+            ./hosts/nixos
 
-          auto-cpufreq.nixosModules.default
+            auto-cpufreq.nixosModules.default
 
-          # make home-manager as a module of nixos
-          # so that home-manager configuration will be deployed automatically when executing `nixos-rebuild switch`
-          home-manager.nixosModules.home-manager
-          {
-            #home-manager.pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
+            # make home-manager as a module of nixos
+            # so that home-manager configuration will be deployed automatically when executing `nixos-rebuild switch`
+            home-manager.nixosModules.home-manager
+            {
+              #home-manager.pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
 
-            home-manager.users.perok = import ./home-manager;
+              home-manager.users.perok = import ./home-manager;
 
-            # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
-            home-manager.extraSpecialArgs = { inherit inputs outputs; };
-          }
-        ];
+              # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
+              home-manager.extraSpecialArgs = { inherit inputs outputs; };
+            }
+          ];
+        };
       };
     };
 }

@@ -7,6 +7,10 @@ let
     };
     jre = prev.jdk17;
     jdk = prev.jdk17;
+
+    metals = prev.metals.overrideAttrs {
+      version = "1.2.2";
+    };
   };
 in
 {

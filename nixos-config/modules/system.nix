@@ -1,4 +1,4 @@
-{ pkgs, config, lib, ... }:
+{ pkgs, config, lib, username, ... }:
 {
 
   # Set your time zone.
@@ -11,7 +11,7 @@
   environment.variables.EDITOR = "vim";
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.perok = {
+  users.users.${username} = {
     isNormalUser = true;
     description = "Peri";
     extraGroups = [ "networkmanager" "docker" "wheel" "input" "uinput" ];
@@ -62,6 +62,33 @@
     enable = true;
     #remotePlay.openFirewall = true;
   };
+
+  # fc-list
+  fonts = {
+    packages = with pkgs; [
+      hack-font
+      ubuntu_font_family
+      noto-fonts
+      noto-fonts-cjk
+      noto-fonts-emoji
+      (nerdfonts.override { fonts = [ "Hasklig" "DroidSansMono" "SourceCodePro" ]; })
+    ];
+    # TODO useful?
+    # Where are the emojis? ☘️
+    # This? https://github.com/ryan4yin/nix-config/blob/82b65f775369818a9586a44b172833b51e9e47f0/modules/system.nix#L96
+    fontconfig = {
+      antialias = true;
+      cache32Bit = true;
+      hinting.enable = true;
+      hinting.autohint = true;
+      defaultFonts = {
+        monospace = [ "Souce Code Pro" ];
+        sansSerif = [ "Source Sans Pro" ];
+        serif = [ "Source Serif Pro" ];
+      };
+    };
+  };
+
 
 
 }

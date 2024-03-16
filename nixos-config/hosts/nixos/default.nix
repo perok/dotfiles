@@ -2,12 +2,15 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, outputs, ... }:
+# TODO https://github.com/erictossell/nixflakes/blob/0dc2a48bc4a72131e34e1b09d0b19b4f84ea2afb/hosts/default.nix#L2
+
+{ config, pkgs, outputs, hostname, username, ... }:
 {
   imports =
     [
       ../../modules/system.nix
       ../../modules/kmonad.nix
+      ../../modules/hyprland.nix
       # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
@@ -19,7 +22,7 @@
   # Run latest linux kernel
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = hostname; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -35,7 +38,7 @@
   # Enable the KDE Plasma Desktop Environment.
   services.xserver.displayManager.sddm.enable = true;
   #services.xserver.desktopManager.plasma5.enable = true;
-  services.xserver.desktopManager.plasma6.enable = true;
+  #services.xserver.desktopManager.plasma6.enable = true;
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -161,32 +164,6 @@
   #    turbo = "auto";
   #};
 
-  # fc-list
-  fonts = {
-    packages = with pkgs; [
-      hack-font
-      ubuntu_font_family
-      noto-fonts
-      noto-fonts-cjk
-      noto-fonts-emoji
-      (nerdfonts.override { fonts = [ "Hasklig" "DroidSansMono" "SourceCodePro" ]; })
-    ];
-    # TODO useful?
-    # Where are the emojis? ☘️
-    # This? https://github.com/ryan4yin/nix-config/blob/82b65f775369818a9586a44b172833b51e9e47f0/modules/system.nix#L96
-    fontconfig = {
-      antialias = true;
-      cache32Bit = true;
-      hinting.enable = true;
-      hinting.autohint = true;
-      defaultFonts = {
-        monospace = [ "Souce Code Pro" ];
-        sansSerif = [ "Source Sans Pro" ];
-        serif = [ "Source Serif Pro" ];
-      };
-    };
-  };
-
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
@@ -214,7 +191,6 @@
   #   trusted-public-keys = [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" ];
   # };
 
-  programs.hyprland.enable = true;
   services.blueman.enable = true; # Bluetooth control
 
 

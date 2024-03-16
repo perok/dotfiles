@@ -23,6 +23,7 @@ in
       #swaybg # the wallpaper
       hypridle # the idle timeout
       hyprlock # locking the screen
+      hyprpaper
       wlogout # logout menu TODO add to meny
       wl-clipboard # copying and pasting
       #hyprpicker # color picker
@@ -51,7 +52,7 @@ in
     enable = true;
     font = "Souce Code Pro 10";
     defaultTimeout = 5000;
-    extraConfig = builtins.readFile ./mako-config-dark;
+    extraConfig = builtins.readFile ./config/mako/mako-config-dark;
   };
   # TODO https://github.com/NixOS/nixpkgs/issues/280041#issuecomment-1951437276
   # services.swayosd.enable = true;
@@ -62,7 +63,7 @@ in
     # TODO change font to nerd font supported
     #${builtins.readFile "${pkgs.waybar}/etc/xdg/waybar/style.css"}
 
-    style = ./waybar.css;
+    style = ./config/waybar/waybar.css;
     settings = [{
       height = 30;
       layer = "top";
@@ -168,9 +169,9 @@ in
     }];
   };
 
-  # TODO pkgs referenes?
-  home.file.".config/hypr/hypridle.conf".source = ./hypridle.conf;
-  home.file.".config/hypr/hyprlock.conf".source = ./hyprlock.conf;
+  home.file.".config/hypr/hypridle.conf".source = ./config/hypr/hypridle.conf;
+  home.file.".config/hypr/hyprlock.conf".source = ./config/hypr/hyprlock.conf;
+  home.file.".config/hypr/hyprpaper.conf".source = ./config/hypr/hyprpaper.conf;
 
   wayland.windowManager.hyprland = {
     enable = true;
@@ -210,10 +211,12 @@ in
       # nvidia multi monitor
       env = WLR_NO_HARDWARE_CURSORS,1
 
-      exec-once=${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1 &
+      #exec-once=${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1 &
+      exec-once=${pkgs.lxqt.lxqt-policykit}/bin/lxqt-policykit-agent
       exec-once=hypridle
       # Notificatio engine
       exec-once=mako &
+      exec-once=hyprpaper
       exec-once=blueman-applet
       exec-once=nm-applet --indicator &
     '';
@@ -242,6 +245,7 @@ in
           "ALT,SPACE,exec, rofi -show combi"
           "CTRLALT,T,exec,$term"
           "$mod, F, exec, firefox,"
+          #",Print, exec, grimblast copy area"
           ", Print, exec, grim -g \"$(slurp -d)\" - | wl-copy"
 
           # fn
