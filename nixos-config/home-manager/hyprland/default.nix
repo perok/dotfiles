@@ -94,9 +94,9 @@ in
       battery = {
         format = "{capacity}% {icon} ";
         format-alt = "{time} {icon}";
-        format-charging = "{capacity}% 🗲";
+        format-charging = "{capacity}% 🗲 ";
+        format-plugged = "{capacity}%  ";
         format-icons = [ "" "" "" "" "" ];
-        format-plugged = "{capacity}% ";
         states = {
           critical = 15;
           warning = 30;
@@ -113,11 +113,11 @@ in
       };
 
       cpu = {
-        format = "{usage}% ";
+        format = "{usage}%  ";
         tooltip = false;
       };
 
-      memory = { format = "{}% "; };
+      memory = { format = "{}%  "; };
 
       "custom/exit" = {
         format = "Exit";
@@ -148,7 +148,7 @@ in
       };
 
       wireplumber = {
-        format = "{volume}% {icon}";
+        format = "{volume}% {icon} ";
         format-muted = "";
 
         format-icons = [ "" "" "" ];
@@ -156,7 +156,7 @@ in
       };
 
       backlight = {
-        format = "{percent}% {icon}";
+        format = "{percent}% {icon} ";
         format-icons = [ "" "" "" "" "" "" "" "" "" ];
       };
 
