@@ -63,14 +63,19 @@
     #remotePlay.openFirewall = true;
   };
 
+  # Location for things like gammestep (redshift)
+  services.geoclue2.enable = true;
+
   # fc-list
   fonts = {
+    enableDefaultPackages = true;
+
     packages = with pkgs; [
-      hack-font
       ubuntu_font_family
       noto-fonts
       noto-fonts-cjk
       noto-fonts-emoji
+      noto-fonts-color-emoji
       (nerdfonts.override { fonts = [ "Hasklig" "DroidSansMono" "SourceCodePro" ]; })
     ];
     # TODO useful?
@@ -85,6 +90,9 @@
         monospace = [ "Souce Code Pro" ];
         sansSerif = [ "Source Sans Pro" ];
         serif = [ "Source Serif Pro" ];
+
+        # TODO JoyPixels
+        emoji = [ "Noto Color Emoji" ];
       };
     };
   };

@@ -53,6 +53,8 @@
   # Packages that should be installed to the user profile.
   home.packages = with pkgs;
     [
+      neovim-remote
+
       # libsForQt5.applet-window-buttons https://github.com/psifidotos/applet-window-buttons/issues/193
       filelight
 
@@ -77,13 +79,11 @@
       chromium
       remmina
 
-      mpv
       libreoffice-qt
+      qimgv # image viewer
 
       unstable.jetbrains.idea-ultimate
       unstable.alacritty
-
-      diffoscopeMinimal # diff everything!
 
       #coursier
       unstable.metals
@@ -111,9 +111,16 @@
       fzf # A command-line fuzzy finder
       bfs #fd # fast find
       difftastic
+      python311Packages.graphtage
+      diffoscopeMinimal # diff everything!
       htop
+      httpie
+      diffoci # container diffing
+
+      shellcheck
 
       # networking tools
+      # mtpfs # FUSE Filesystem providing access to MTP devices (android)
       mtr # A network diagnostic tool
       iperf3
       dnsutils # `dig` + `nslookup`
@@ -143,6 +150,8 @@
       nix-output-monitor
       nvd
 
+      ianny # Break notifications
+
       # productivity
       glow # markdown previewer in terminal
 
@@ -166,6 +175,8 @@
 
   # https://github.com/nix-community/home-manager/tree/master/modules/programs
 
+  # TODO
+  # services.dropbox.enable = true;
 
   programs.java = {
     enable = true;
@@ -200,6 +211,27 @@
     # Error was: gpg: signing failed: No pinentry
     pinentryPackage = pkgs.pinentry-gnome3;
   };
+
+  programs.mpv = {
+    enable = true;
+    scripts = [
+      pkgs.mpvScripts.uosc
+      pkgs.mpvScripts.mpris
+    ];
+  };
+
+  services.gammastep = {
+    enable = true;
+    # provider = "geoclue2"; # TODO check if geoclue service works
+    latitude = "59.913868";
+    longitude = "10.752245";
+  };
+  #services.wlsunset = {
+  #  enable = true;
+  #  # Oslo
+  #  latitude = "59.913868";
+  #  longitude = "10.752245";
+  #};
 
 
   #programs.git = {

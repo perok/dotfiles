@@ -3,14 +3,16 @@
 
   inputs = {
     # NixOS official package source, using the nixos-23.11 branch here
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    #nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable/c75037bbf9093a2acb617804ee46320d6d1fea5a";
+    nixpkgs.url = "github:NixOS/nixpkgs/c75037bbf9093a2acb617804ee46320d6d1fea5a";
     # nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
 
-    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    #nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable/c75037bbf9093a2acb617804ee46320d6d1fea5a";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/c75037bbf9093a2acb617804ee46320d6d1fea5a";
 
     # home-manager, used for managing user configuration
     home-manager = {
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/7b3fca5adcf6c709874a8f2e0c364fe9c58db989";
       #url = "github:nix-community/home-manager/release-23.11";
       # The `follows` keyword in inputs is used for inheritance.
       # Here, `inputs.nixpkgs` of home-manager is kept consistent with
@@ -20,7 +22,7 @@
     };
 
     auto-cpufreq = {
-      url = "github:AdnanHodzic/auto-cpufreq";
+      url = "github:AdnanHodzic/auto-cpufreq/971f40f0ca2dad2ab79aeb5ddf1beb818bb68bed";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -57,7 +59,7 @@
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
 
-              home-manager.users.perok = import ./home-manager;
+              home-manager.users.perok = import ./home;
 
               # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
               home-manager.extraSpecialArgs = { inherit inputs outputs; };

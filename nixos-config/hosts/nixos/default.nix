@@ -100,7 +100,8 @@
     driSupport32Bit = true;
     extraPackages = with pkgs; [
       intel-media-driver
-      vaapiIntel
+      intel-vaapi-driver
+      #vaapiIntel
       nvidia-vaapi-driver
       vaapiVdpau
       libvdpau-va-gl
@@ -143,6 +144,7 @@
     # Note: sync and offload can't be enabled at the same time.
     #sync.enable = true;
     # TODO test reverse sync
+    #reverseSync.enable = true;
     offload = {
       enable = true;
       enableOffloadCmd = true; # Add convenience script nvidia-offload

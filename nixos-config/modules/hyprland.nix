@@ -23,10 +23,25 @@
     #sessionVariables.WLR_NO_HARDWARE_CURSORS = "1";
     #sessionVariables.NIXOS_OZONE_WL = "1";
     systemPackages = with pkgs; [
-      lxqt.lxqt-policykit
+      kdePackages.polkit-kde-agent-1
+
+      # For qt6 wayland support. Needed?
+      kdePackages.qtwayland
+
       # Expected by apps like firefox
       gnome.adwaita-icon-theme
     ];
+  };
+
+  services.xserver.displayManager.sddm = {
+    package = pkgs.kdePackages.sddm;
+    # TODO not working??
+    #theme = lib.mkDefault "breeze";
+    #extraPackages = with pkgs.kdePackages; [
+    #  breeze-icons
+    #  kirigami
+    #  qtsvg
+    #];
   };
 
   xdg.portal = {
@@ -40,6 +55,10 @@
     };
     extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
   };
+
+  # For thunar
+  services.gvfs.enable = true; # Mount, trash, and other functionalities
+  services.tumbler.enable = true; # Thumbnail support for images
 
   #programs.ssh.askPassword = mkDefault "${kdePackages.ksshaskpass.out}/bin/ksshaskpass";
 

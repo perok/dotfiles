@@ -121,7 +121,7 @@ in
       memory = { format = "{}%  "; };
 
       "custom/exit" = {
-        format = "Exit";
+        format = "Exit"; # 🖥️
         # TODO not working
         on-click = "${pkgs.wlogout}/bin/wlogout";
       };
@@ -185,6 +185,14 @@ in
           clickfinger_behavior = 1
         }
       }
+
+      # Enable touchpad gestures
+      gestures {
+          workspace_swipe = true
+          workspace_swipe_fingers = 3
+          workspace_swipe_forever = true
+      }
+
       master {
         # See https://wiki.hyprland.org/Configuring/Master-Layout/ for more
         new_is_master = true
@@ -195,14 +203,14 @@ in
       }
 
       misc {
-        # disable_hyprland_logo = true
-        # disable_splash_rendering = true
+        disable_hyprland_logo = true
         disable_autoreload = true
       }
 
-      # Wayland fix vscode
+      # Wayland fix vscode, chromium, slack, etc
       # TODO https://forums.developer.nvidia.com/t/550-54-14-cannot-create-sg-table-for-nvkmskapimemory-spammed-when-launching-chrome-on-wayland/284775
       # env = NIXOS_OZONE_WL,1
+      # env = WLR_DRM_DEVICES,/dev/dri/card1:/dev/dri/card0
       # unscale XWayland
       xwayland {
         force_zero_scaling = true
@@ -211,14 +219,14 @@ in
       # nvidia multi monitor
       env = WLR_NO_HARDWARE_CURSORS,1
 
-      #exec-once=${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1 &
-      exec-once=${pkgs.lxqt.lxqt-policykit}/bin/lxqt-policykit-agent
-      exec-once=hypridle
-      # Notificatio engine
-      exec-once=mako &
-      exec-once=hyprpaper
-      exec-once=blueman-applet
-      exec-once=nm-applet --indicator &
+      exec-once=${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1
+
+      exec-once=ianny # Break notifications
+      exec-once=hypridle # Idle configuration
+      exec-once=mako # Notificatio engine
+      exec-once=hyprpaper # Background image
+      exec-once=blueman-applet # Bluetooth
+      exec-once=nm-applet --indicator # Wifi
     '';
     # Inspiration https://github.com/ryan4yin/nix-config/blob/main/home/linux/desktop/hyprland/conf/hyprland.conf
     # https://github.com/hyprwm/Hyprland/blob/main/example/hyprland.conf
@@ -290,7 +298,7 @@ in
               in
               [
                 "$mod, ${n}, workspace, ${n}"
-                "$mod SHIFT, ${n}, movetoworkspace, ${n}"
+                "$mod SHIFT, ${n}, movetoworkspacesilent, ${n}"
               ]
             )
             9)
