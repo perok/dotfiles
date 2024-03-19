@@ -323,15 +323,6 @@ require('lazy').setup({
       require('luatab').setup {}
     end
   },
-
-  {
-    --  TODO remove fzf because of telescope. But how to install for shell?
-    'junegunn/fzf',
-    build = function() vim.fn['fzf#install']() end,
-    -- dependencies = {
-    --   { 'junegunn/fzf.vim' }
-    -- }
-  },
   {
     'nvim-telescope/telescope.nvim',
     config = function()
@@ -716,6 +707,9 @@ require('lazy').setup({
               on_attach = on_attach,
             }
           end,
+          ["nil_ls"] = function()
+            require('lspconfig').nil_ls.setup {}
+          end,
           ["sqlls"] = function()
             require('lspconfig').sqlls.setup {
               -- ? https://github.com/LunarVim/LunarVim/discussions/4210#discussioncomment-6083169
@@ -802,6 +796,10 @@ require('lazy').setup({
         -- on_attach = on_attach, -- TODO why not working here?
         capabilities = require('cmp_nvim_lsp').default_capabilities(),
       })
+
+      require('lspconfig').nil_ls.setup {
+        on_attach = on_attach,
+      }
     end
   },
   -- ({
@@ -853,10 +851,10 @@ require('lazy').setup({
     opts = function()
       local metals_config = require('metals').bare_config()
       metals_config.capabilities = require("cmp_nvim_lsp").default_capabilities()
-      metals_config.serverVersion = 'latest.snapshot'
 
       metals_config.settings = {
-        showImplicitArguments = true
+        showImplicitArguments = true,
+        useGlobalExecutable = true -- Practical for nix
       }
 
       -- Enables `metals#status()`

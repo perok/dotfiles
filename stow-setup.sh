@@ -34,15 +34,13 @@ declare -a useronly=(
   rofi
   latex
   alacritty
-  pulseaudio
-  pipewire
   kde
   zathura
   firefox
   idea
   ctags
   mopidy
-  kmonad
+  neovide
 )
 
 stowit() {

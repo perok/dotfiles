@@ -1,0 +1,72 @@
+############################################################################
+#
+#  Nix commands related to the local machine
+#
+############################################################################
+
+build:
+  nixos-rebuild build --flake . && nvd diff /run/current-system result
+
+deploy:
+  #--use-remote-sudo
+  sudo nixos-rebuild switch --flake . |& nom
+  systemctl --user restart waybar
+  # https://github.com/NixOS/nixpkgs/pull/286522#issuecomment-1973797174
+
+deploy-trace:
+  nixos-rebuild switch --flake . --use-remote-sudo --show-trace
+
+debug:
+  nixos-rebuild switch --flake . --use-remote-sudo --show-trace --verbose
+
+up:
+  nix flake update
+
+fmt:
+  nix fmt
+
+show:
+  nix flake show .
+
+# See https://discourse.nixos.org/t/tips-tricks-for-nixos-desktop/28488/2
+make-current-default-boot:
+  /run/current-system/bin/switch-to-configuration boot
+
+# TODO nvd diff /nix/var/nix/profiles/system-{103,110}-link
+diff-closure since='1':
+ #!/usr/bin/env bash
+ set -euo pipefail
+
+ function num2file() {
+   find /nix/var/nix/profiles -type l -name "*$1*"
+     # TODO propagate error when not found
+     #| awk '{print} END {if (NR == 0) {exit(1)}}'
+ }
+
+ current=$(readlink /nix/var/nix/profiles/system | cut -d- -f2)
+ last=$(($current-{{since}}))
+
+ echo "💻 $last -> $current"
+
+ nix store diff-closures $(num2file $last) $(num2file $current)
+
+# Update specific input
+# usage: make upp i=home-manager
+upp:
+  nix flake lock --update-input $(i)
+
+history:
+  nix profile history --profile /nix/var/nix/profiles/system
+
+repl:
+  nix repl -f flake:nixpkgs
+
+clean:
+  # remove all generations older than 7 days
+  sudo nix profile wipe-history --profile /nix/var/nix/profiles/system  --older-than 7d
+
+gc:
+  # garbage collect all unused nix store entries
+  sudo nix store gc --debug
+  sudo nix-collect-garbage --delete-old
+

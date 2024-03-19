@@ -13,15 +13,15 @@
 
 
 (defsrc
-    ;;caps a    s    d    f    g    h    j    k    l    ;
-      a    s    d    f    g    h    j    k    l    ;
+    caps a    s    d    f    g    h    j    k    l    ;
+    ;;a    s    d    f    g    h    j    k    l    ;
 )
 
 (defalias
     ;; tap and hold repeat issue?
     ;; https://github.com/david-janssen/kmonad/issues/163
     ;; or multi-tap https://github.com/kmonad/kmonad/issues/133#issuecomment-788832914
-  ;;  caps_is_escape caps esc
+    ;; caps_is_escape caps esc
     home_a (tap-hold-next-release 200 a lmet)
     home_s (tap-hold-next-release 200 s lalt)
     home_d (tap-hold-next-release 200 d lsft)
@@ -34,7 +34,7 @@
 )
 
 (deflayer homerowmods
-  @home_a   @home_s   @home_d   @home_f   g   h   @home_j   @home_k   @home_l   @home_;
+  esc @home_a   @home_s   @home_d   @home_f   g   h   @home_j   @home_k   @home_l   @home_;
   ;; @caps_is_escape @home_a   @home_s   @home_d   @home_f   g   h   @home_j   @home_k   @home_l   @home_;
   )
 

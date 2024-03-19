@@ -37,10 +37,14 @@ zmodule zsh-users/zsh-syntax-highlighting
 # zsh-users/zsh-history-substring-search must be sourced after zsh-users/zsh-syntax-highlighting
 zmodule zsh-users/zsh-history-substring-search
 
+zmodule https://github.com/junegunn/fzf.git --name fzf-bindings --source shell/completion.zsh --source shell/key-bindings.zsh
+
 zmodule fasd
 zmodule archive
 zmodule ssh
 zmodule b4b4r07/enhancd --source init.sh
+zmodule fzf # better caching, use rg or similar, etc
+zmodule exa # aliases for exa
 
 # TODO issues with git branche tagging? :: autosuggestions
 # history-substring-search => use fzf instead. If activate add after

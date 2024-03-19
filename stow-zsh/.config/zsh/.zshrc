@@ -1,3 +1,10 @@
+# Download zimfw plugin manager if missing.
+if [[ ! -e ${ZIM_HOME}/zimfw.zsh ]]; then
+  curl -fsSL --create-dirs -o ${ZIM_HOME}/zimfw.zsh \
+      https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
+fi
+
+
 #
 # User configuration sourced by interactive shells
 #
@@ -179,10 +186,7 @@ fi
 #start_tmux
 
 # Broot launcher
-source ~/.config/broot/launcher/bash/br
-
-# Utility tools
-source ~/.fzf.zsh # Load after personal settings
+#source ~/.config/broot/launcher/bash/br
 
 # GHCUp
 [ -f "/home/perok/.ghcup/env" ] && source "/home/perok/.ghcup/env" # ghcup-env
@@ -205,17 +209,10 @@ source "$ZDOTDIR/user/alias.zsh"
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 #export PATH="$PATH:$HOME/.rvm/bin"
 
-# >>> .scala-cli.aux completions >>>
-fpath=("/home/perok/.local/share/scalacli/completions/zsh" $fpath)
-compinit
-# <<< .scala-cli.aux completions <<<
-
 # >>> scala-cli completions >>>
 fpath=("/home/perok/.local/share/scalacli/completions/zsh" $fpath)
 compinit
 # <<< scala-cli completions <<<
 
-# zsh-users/zsh-completions adds an alias overriding gh
-unalias gh
 export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
